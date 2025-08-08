@@ -72,7 +72,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">1</td>
-                    <td data-label="Name">Who We Are</td>
+                    <td data-label="Name">Home</td>
                     <td data-label="Company">Some Description</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -105,7 +105,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">2</td>
-                    <td data-label="Name">View Homes</td>
+                    <td data-label="Name">Newcomers</td>
                     <td data-label="Company">Some Description</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -138,7 +138,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">3</td>
-                    <td data-label="Name">How It Works</td>
+                    <td data-label="Name">VOD</td>
                     <td data-label="Company">Some Description</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -171,7 +171,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">4</td>
-                    <td data-label="Name">List Your Home</td>
+                    <td data-label="Name">Contact Us</td>
                     <td data-label="Company">Some Description</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -204,7 +204,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">5</td>
-                    <td data-label="Name">FAQ</td>
+                    <td data-label="Name">Biography</td>
                     <td data-label="Company">Some Description</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">

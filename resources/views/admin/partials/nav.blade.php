@@ -22,12 +22,12 @@
     </ul>
     <p class="menu-label">Utilities</p>
     <ul class="menu-list">
-      <li class="--set-active-tables-html {{ request()->routeIs('admin.homes') ? 'active' : '' }}">
+      {{-- <li class="--set-active-tables-html {{ request()->routeIs('admin.homes') ? 'active' : '' }}">
         <a href="{{ route('admin.homes') }}">
           <span class="icon"><i class="mdi mdi-home"></i></span>
           <span class="menu-item-label">Homes</span>
         </a>
-      </li>
+      </li> --}}
       <li class="--set-active-forms-html {{ request()->routeIs('admin.pages') ? 'active' : '' }}">
         <a href="{{ route('admin.pages') }}">
           <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
