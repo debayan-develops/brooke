@@ -1,7 +1,7 @@
 <aside class="aside is-placed-left is-expanded">
   <div class="aside-tools">
     <div>
-      Admin <b class="font-black">CHE</b>
+      Admin <b class="font-black">Brook</b>
     </div>
   </div>
   <div class="menu is-menu-main">
@@ -34,31 +34,32 @@
           <span class="menu-item-label">Pages</span>
         </a>
       </li>
+      
+      <li class="--set-active-content-manager-html {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.contents')) ? 'active' : '' }}">
+        <a class="dropdown">
+          <span class="icon"><i class="mdi mdi-view-list"></i></span>
+          <span class="menu-item-label">Content Manager</span>
+          <span class="icon"><i class="mdi mdi-plus"></i></span>
+        </a>
+        <ul>
+          <li class="{{ (request()->routeIs('admin.contentCategory')) ? 'active' : '' }}">
+            <a href="{{ route('admin.contentCategory') }}">
+              <span>Content Category</span>
+            </a>
+          </li>
+          <li class="{{ request()->routeIs('admin.contents') ? 'active' : '' }}">
+            <a href="{{ route('admin.contents') }}">
+              <span>Contents</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li class="--set-active-profile-html">
         <a href="#">
           <span class="icon"><i class="mdi mdi-cog"></i></span>
           <span class="menu-item-label">Settings</span>
         </a>
       </li>
-      {{-- <li>
-        <a class="dropdown">
-          <span class="icon"><i class="mdi mdi-view-list"></i></span>
-          <span class="menu-item-label">Submenus</span>
-          <span class="icon"><i class="mdi mdi-plus"></i></span>
-        </a>
-        <ul>
-          <li>
-            <a href="#void">
-              <span>Sub-item One</span>
-            </a>
-          </li>
-          <li>
-            <a href="#void">
-              <span>Sub-item Two</span>
-            </a>
-          </li>
-        </ul>
-      </li> --}}
     </ul>
     
   </div>
