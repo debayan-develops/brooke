@@ -47,9 +47,29 @@
               <span>Content Category</span>
             </a>
           </li>
+          <li class="{{ request()->routeIs('admin.tags') ? 'active' : '' }}">
+            <a href="{{ route('admin.tags') }}">
+              <span>Tags</span>
+            </a>
+          </li>
           <li class="{{ request()->routeIs('admin.contents') ? 'active' : '' }}">
             <a href="{{ route('admin.contents') }}">
               <span>Contents</span>
+            </a>
+          </li>
+          <li class="{{ request()->routeIs('admin.novels') ? 'active' : '' }}">
+            <a href="{{ route('admin.novels') }}">
+              <span>Novels</span>
+            </a>
+          </li>
+          <li class="{{ request()->routeIs('admin.blogs') ? 'active' : '' }}">
+            <a href="{{ route('admin.blogs') }}">
+              <span>Blog</span>
+            </a>
+          </li>
+          <li class="{{ request()->routeIs('admin.shortStories') ? 'active' : '' }}">
+            <a href="{{ route('admin.shortStories') }}">
+              <span>Short Stories</span>
             </a>
           </li>
         </ul>

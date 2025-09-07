@@ -1,5 +1,8 @@
 "use strict";
 
+import $ from 'jquery';
+window.$ = window.jQuery = $; // make it globally available
+import Choices from 'choices.js';
 /* Aside & Navbar: dropdowns */
 Array.from(document.getElementsByClassName('dropdown')).forEach(function (elA) {
   elA.addEventListener('click', function (e) {
