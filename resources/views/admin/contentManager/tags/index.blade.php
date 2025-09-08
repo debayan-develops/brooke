@@ -175,9 +175,9 @@
                             <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                         </button> --}}
                         <button type="button" data-target="edit-features-modal" class="button small blue --jb-modal"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
-                        {{-- <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button> --}}
+                        </button>
                     </div>
                     </td>
                 </tr>
@@ -208,9 +208,9 @@
                         <button class=" button small blue --jb-modal" data-id="" type="button">
                             <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                         </button>
-                        {{-- <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button> --}}
+                        </button>
                     </div>
                     </td>
                 </tr>
@@ -241,9 +241,9 @@
                         <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
                             <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                         </button>
-                        {{-- <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button> --}}
+                        </button>
                     </div>
                     </td>
                 </tr>
@@ -274,9 +274,9 @@
                         <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
                             <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                         </button>
-                        {{-- <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button> --}}
+                        </button>
                     </div>
                     </td>
                 </tr>

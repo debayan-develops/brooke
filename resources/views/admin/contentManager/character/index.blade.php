@@ -27,7 +27,7 @@
                 <h1 class="title">
                 {{$title}}
                 </h1>
-                <button type="button" data-target="add-features-modal" class="button blue --jb-modal">Add Category</button>
+                <button type="button" data-target="add-features-modal" class="button blue --jb-modal">Add Characters</button>
             </div>
         </section>
 
@@ -37,11 +37,11 @@
             <form method="POST" action="">
                 @csrf
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Add New Category</p>
+                    <p class="modal-card-title">Add New Characters</p>
                 </header>
                 <section class="modal-card-body">
                     <div class="field">
-                        <label class="label">Category Name</label>
+                        <label class="label">Character  Name</label>
                         <div class="field-body">
                             <div class="field">
                                 <div class="control icons-left">
@@ -54,10 +54,10 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Category Type</label>
+                                <label class="label">Character  Type</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="categoryType" multiple name="categoryType[]">
+                                        <select id="characterType" multiple name="characterType[]">
                                             {{-- @foreach($facilities as $facility)
                                                 <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                             @endforeach --}}
@@ -91,7 +91,7 @@
                 @csrf
                 <input type="hidden" name="id" value="">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Edit Category</p>
+                    <p class="modal-card-title">Edit Character</p>
                 </header>
                 <section class="modal-card-body">
                     <div class="field">
@@ -138,8 +138,8 @@
                     </th> --}}
                     {{-- <th class="image-cell"></th> --}}
                     <th>#</th>
-                    <th>Category Name</th>
-                    <th>Category Type</th>
+                    <th>Characters Name</th>
+                    <th>Characters Type</th>
                     {{-- <th>City</th>
                     <th>Progress</th>
                     <th>Created</th> --}}
@@ -160,7 +160,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">1</td>
-                    <td data-label="Name">category 1</td>
+                    <td data-label="Name">Character  1</td>
                     <td data-label="Company">Novels</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -194,7 +194,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">2</td>
-                    <td data-label="Name">category 2</td>
+                    <td data-label="Name">Character  2</td>
                     <td data-label="Company">Novels</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -227,7 +227,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">3</td>
-                    <td data-label="Name">category 3</td>
+                    <td data-label="Name">Character  3</td>
                     <td data-label="Company">Short Stories</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -260,7 +260,7 @@
                     </div>
                     </td> --}}
                     <td data-label="Name">4</td>
-                    <td data-label="Name">category 4</td>
+                    <td data-label="Name">Character  4</td>
                     <td data-label="Company">Blog</td>
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -302,7 +302,7 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            new Choices('#categoryType', { removeItemButton: true, searchEnabled: true });
+            new Choices('#characterType', { removeItemButton: true, searchEnabled: true });
         });
 
     </script>

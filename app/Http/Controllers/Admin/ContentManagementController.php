@@ -27,6 +27,14 @@ class ContentManagementController extends Controller {
         ]);
     }
 
+    public function character(Request $request)
+    {
+        return view('admin.contentManager.character.index')->with([
+            'title' => 'Characters',
+            // You can pass additional data here if needed
+        ]);
+    }
+
     public function contents(Request $request)
     {
         return view('admin.contentManager.contents')->with([

@@ -23,6 +23,7 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/homes', [HomesController::class, 'index'])->name('homes');
     Route::get('/content-category', [ContentManagementController::class, 'contentCategory'])->name('contentCategory');
     Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags');
+    Route::get('/character', [ContentManagementController::class, 'character'])->name('character');
     Route::get('/contents', [ContentManagementController::class, 'contents'])->name('contents');
     Route::get('/novels', [ContentManagementController::class, 'novels'])->name('novels');
     Route::get('/blogs', [ContentManagementController::class, 'blogs'])->name('blogs');

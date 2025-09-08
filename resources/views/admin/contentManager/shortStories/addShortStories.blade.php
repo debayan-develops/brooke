@@ -187,6 +187,31 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
+                                <label class="label">Characters</label>
+                                <div class="control icons-left icons-right">
+                                    <div class="select">
+                                        <select id="characters" multiple name="characters[]">
+                                            {{-- @foreach($facilities as $facility)
+                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                            @endforeach --}}
+                                            <option value="1">Character 1</option>
+                                            <option value="2">Character 2</option>
+                                            <option value="3">Character 3</option>
+                                            <option value="4">Character 4</option>
+                                            <option value="5">Character 5</option>
+                                            <option value="6">Character 6</option>
+                                        </select>
+                                        @error('home_nearby_facilities_id')
+                                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="grid gap-6 grid-cols-1">
+                            <div class="field">
                                 <label class="label">Suggested Stories</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
@@ -310,6 +335,7 @@
             new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
             new Choices('#categoryType', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedStories', { removeItemButton: true, searchEnabled: true });
+            new Choices('#characters', { removeItemButton: true, searchEnabled: true });
         });
     </script>
 

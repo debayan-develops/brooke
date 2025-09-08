@@ -44,7 +44,7 @@
         <ul>
           <li class="{{ (request()->routeIs('admin.contentCategory')) ? 'active' : '' }}">
             <a href="{{ route('admin.contentCategory') }}">
-              <span>Content Category</span>
+              <span>Category</span>
             </a>
           </li>
           <li class="{{ request()->routeIs('admin.tags') ? 'active' : '' }}">
@@ -52,11 +52,16 @@
               <span>Tags</span>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.contents') ? 'active' : '' }}">
+          <li class="{{ request()->routeIs('admin.character') ? 'active' : '' }}">
+            <a href="{{ route('admin.character') }}">
+              <span>Characters</span>
+            </a>
+          </li>
+          {{-- <li class="{{ request()->routeIs('admin.contents') ? 'active' : '' }}">
             <a href="{{ route('admin.contents') }}">
               <span>Contents</span>
             </a>
-          </li>
+          </li> --}}
           <li class="{{ request()->routeIs('admin.novels') ? 'active' : '' }}">
             <a href="{{ route('admin.novels') }}">
               <span>Novels</span>
