@@ -50,10 +50,6 @@
     margin-top: 0.25rem;
     }
 
-    .ck-editor__editable_inline {
-    min-height: 400px;
-    }
-
 </style>
     <div id="app">
         @include('admin.partials.top_nav')
@@ -81,41 +77,13 @@
             <header class="card-header">
                 <p class="card-header-title">
                 <span class="icon"><i class="mdi mdi-ballot"></i></span>
-                    Enter Novel Details
+                    Enter Blog Details
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addChapter') }}">
+                <form method="POST" action="{{ route('admin.addBlogs') }}">
                     @csrf
                     <input type="hidden" name="home_id" value="">
-                    <div class="field" style="margin-top: 20px">
-                        <label class="label">Content View Permission</label>
-                        <div class="field-body">
-                            <div class="field grouped multiline">
-                                <div class="control">
-                                    <label class="radio">
-                                    <input type="radio" name="is_active" value="1" checked>
-                                    <span class="check"></span>
-                                    <span class="control-label">Public</span>
-                                    </label>
-                                </div>
-                                <div class="control">
-                                    <label class="radio">
-                                    <input type="radio" name="is_active" value="0">
-                                    <span class="check"></span>
-                                    <span class="control-label">Registered User</span>
-                                    </label>
-                                </div>
-                                <div class="control">
-                                    <label class="radio">
-                                    <input type="radio" name="is_active" value="0">
-                                    <span class="check"></span>
-                                    <span class="control-label">Paid User</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="field">
                         <label class="label">Title</label>
                         <div class="field-body">
@@ -166,16 +134,6 @@
                         <p id="thumbnailError" class="error-text hidden"></p>
                     </div>
 
-                    <!-- Banner Photo -->
-                    <div class="form-group">
-                        <label for="bannerPhoto" class="label">
-                            Upload Banner Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
-                        </label>
-                        <input id="bannerPhoto" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
-                        <div id="bannerPreview" class="preview-box"></div>
-                        <p id="bannerError" class="error-text hidden"></p>
-                    </div>
-
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
@@ -201,14 +159,16 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="field">
+                    <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
                                 <label class="label">Category Type</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="categoryType" multiple name="categoryType[]">
-                                            
+                                            {{-- @foreach($facilities as $facility)
+                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                            @endforeach --}}
                                             <option value="1">Category 1</option>
                                             <option value="2">Category 2</option>
                                             <option value="3">Category 3</option>
@@ -223,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
@@ -231,8 +191,10 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="characters" multiple name="characters[]">
-                                            
-                                            <option value="1">Novel</option>
+                                            {{-- @foreach($facilities as $facility)
+                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                            @endforeach --}}
+                                            <option value="1">Blog</option>
                                             <option value="2">Journal</option>
                                             <option value="3">Type 3</option>
                                             <option value="4">Type 4</option>
@@ -246,23 +208,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>--}}
+                    </div>
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Suggested Novels</label>
+                                <label class="label">Suggested Articles</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="suggestedNovels" multiple name="suggestedNovels[]">
+                                        <select id="suggestedArticles" multiple name="suggestedArticles[]">
                                             {{-- @foreach($facilities as $facility)
                                                 <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                             @endforeach --}}
-                                            <option value="1">Suggested Novels 1</option>
-                                            <option value="2">Suggested Novels 2</option>
-                                            <option value="3">Suggested Novels 3</option>
-                                            <option value="4">Suggested Novels 4</option>
-                                            <option value="5">Suggested Novels 5</option>
-                                            <option value="6">Suggested Novels 6</option>
+                                            <option value="1">Suggested Articles 1</option>
+                                            <option value="2">Suggested Articles 2</option>
+                                            <option value="3">Suggested Articles 3</option>
+                                            <option value="4">Suggested Articles 4</option>
+                                            <option value="5">Suggested Articles 5</option>
+                                            <option value="6">Suggested Articles 6</option>
                                         </select>
                                         @error('home_nearby_facilities_id')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -274,9 +236,9 @@
                     </div>
 
                     <div class="field">
-                        <label class="label">Short Description</label>
+                        <label class="label">Blog Details</label>
                         <div class="control">
-                        <textarea class="textarea introducing" placeholder="Enter Text" name="introducing" row="4">{{old('introducing')}}</textarea>
+                        <textarea class="textarea introducing" placeholder="Enter Text" name="introducing">{{old('introducing')}}</textarea>
                         </div>
                         @error('introducing')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -344,20 +306,37 @@
             </div>
         </section>
     </div>
+        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
     <script>
-        
-        document.addEventListener('DOMContentLoaded', function () {
-            new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
-            new Choices('#suggestedNovels', { removeItemButton: true, searchEnabled: true });
-            ClassicEditor
-                .create( document.querySelector( '.textarea.introducing' ) )
-                .catch( error => {
-                    console.error( error );
-                } );
-        });
+        document.addEventListener('DOMContentLoaded', () => {
+            new Choices('#Features-multiple', { removeItemButton: true, searchEnabled: true });
+            new Choices('#facilities-multiple', { removeItemButton: true, searchEnabled: true });
+            new Choices('#country-select', { searchEnabled: true });
+            new Choices('#available-select', { searchEnabled: true, shouldSort: false });
+            const stateChoices = new Choices('#state-select', { searchEnabled: true });
+            $('#country-select').on('change', function () {
+                stateChoices.clearChoices();
+                let countryId = $(this).val();
+                stateChoices.setChoices([{ value: '', label: 'Loading...', selected: true }], 'value', 'label', false);
 
+
+                $.get(`countries/${countryId}/states`, function (data) {
+                    stateChoices.setChoices([{ value: '', label: 'Select State', selected: true }], 'value', 'label', false);
+                    let stateOptions = data.map(state => ({
+                        value: state.id,
+                        label: state.name
+                    }));
+                    stateChoices.setChoices(stateOptions, 'value', 'label', true);
+                });
+            });
+        });
+         document.addEventListener('DOMContentLoaded', function () {
+            new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
+            new Choices('#categoryType', { removeItemButton: true, searchEnabled: true });
+            new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
+            new Choices('#characters', { removeItemButton: true, searchEnabled: true });
+        });
     </script>
 
 @endsection

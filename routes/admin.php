@@ -30,9 +30,14 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/short-stories', [ContentManagementController::class, 'shortStories'])->name('shortStories');
     Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags');
     Route::get('/add-novels', [ContentManagementController::class, 'addNovels'])->name('addNovels');
+    Route::get('/add-chapter', [ContentManagementController::class, 'addChapter'])->name('addChapter');
+    Route::post('/add-chapter', [ContentManagementController::class, 'addChapter'])->name('addChapter');
     Route::get('/add-short-stories', [ContentManagementController::class, 'addShortStories'])->name('addShortStories');
     Route::post('/add-short-stories', [ContentManagementController::class, 'addShortStories'])->name('addShortStories');
     Route::get('/short-stories/image-upload', [ContentManagementController::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
+    Route::get('/add-blog', [ContentManagementController::class, 'addBlogs'])->name('addBlogs');
+    Route::post('/add-blog', [ContentManagementController::class, 'addBlogs'])->name('addBlogs');
+    Route::get('/blogs/image-upload', [ContentManagementController::class, 'blogImageUpload'])->name('blogImageUpload');
     // Add more admin routes here
 });
 ?>

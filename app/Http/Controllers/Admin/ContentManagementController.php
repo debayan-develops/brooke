@@ -77,6 +77,15 @@ class ContentManagementController extends Controller {
         ]);
     }
 
+    public function addChapter(Request $request)
+    {
+        return view('admin.contentManager.novels.addChapter')->with([
+            'title' => 'Add Chapter',
+            'images' => [], // Assuming images are passed as a query parameter
+            // You can pass additional data here if needed
+        ]);
+    }
+
     public function addShortStories(Request $request)
     {
         if ($request->isMethod('post')) {
@@ -107,6 +116,41 @@ class ContentManagementController extends Controller {
     {
         return view('admin.contentManager.shortStories.imageUpload')->with([
             'title' => 'Upload Short Story Image',
+            'images' => [], // Assuming images are passed as a query parameter
+            // You can pass additional data here if needed
+        ]);
+    }
+
+    public function addBlogs(Request $request)
+    {
+        if ($request->isMethod('post')) {
+        // Handle POST logic
+            // $validatedData = $request->validate([
+            //     'title' => 'required|string|max:255',
+            //     'author' => 'required|string|max:255',
+            //     'category' => 'required|string|max:255',
+            //     'status' => 'required|in:published,draft',
+            //     'about_home' => 'nullable|string',
+            //     'introducing' => 'nullable|string',
+            //     // Add other fields and their validation rules as needed
+            // ]);
+
+            // Process the validated data (e.g., save to database)
+            // ...
+
+            // Redirect or return a response after processing
+            return redirect()->route('admin.blogImageUpload')->with('success', 'Blog added successfully!');
+        }
+        return view('admin.contentManager.blogs.addBlogs')->with([
+            'title' => 'Add Blog',
+            // You can pass additional data here if needed
+        ]);
+    }
+
+    public function blogImageUpload(Request $request)
+    {
+        return view('admin.contentManager.blogs.imageUpload')->with([
+            'title' => 'Upload Blog Image',
             'images' => [], // Assuming images are passed as a query parameter
             // You can pass additional data here if needed
         ]);

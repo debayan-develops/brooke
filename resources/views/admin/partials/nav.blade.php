@@ -34,12 +34,12 @@
           <span class="menu-item-label">Pages</span>
         </a>
       </li>
-      
-      <li class="--set-active-content-manager-html {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.contents')) ? 'active' : '' }}">
+
+      <li class="--set-active-content-manager-html {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.tags') || request()->routeIs('admin.character') || request()->routeIs('admin.novels') || request()->routeIs('admin.blogs') || request()->routeIs('admin.shortStories')) ? 'active' : '' }}">
         <a class="dropdown">
           <span class="icon"><i class="mdi mdi-view-list"></i></span>
           <span class="menu-item-label">Content Manager</span>
-          <span class="icon"><i class="mdi mdi-plus"></i></span>
+          <span class="icon"><i class="mdi {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.tags') || request()->routeIs('admin.character') || request()->routeIs('admin.novels') || request()->routeIs('admin.blogs') || request()->routeIs('admin.shortStories')) ? 'mdi-minus' : 'mdi-plus' }}"></i></span>
         </a>
         <ul>
           <li class="{{ (request()->routeIs('admin.contentCategory')) ? 'active' : '' }}">
