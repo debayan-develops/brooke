@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomesController;
 use App\Http\Controllers\Admin\ContentManagementController;
+use App\Admin\Content\Presentation\Http\Controllers\ContentCategoryController;
+
 
 Route::middleware('admin.guest')->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -21,7 +23,11 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::get('/pages', [PageController::class, 'index'])->name('pages');
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/homes', [HomesController::class, 'index'])->name('homes');
-    Route::get('/content-category', [ContentManagementController::class, 'contentCategory'])->name('contentCategory');
+    Route::get('/content-category', [ContentCategoryController::class, 'index'])->name('contentCategory');
+    Route::post('/content-category/create', [ContentCategoryController::class, 'store'])->name('contentCategory.create');
+    Route::get('/content-category/{contentCategory}/edit', [ContentCategoryController::class, 'edit'])->name('contentCategory.edit');
+    Route::post('/content-category/{contentCategory}/edit', [ContentCategoryController::class, 'update'])->name('contentCategory.update');
+    Route::delete('/content-category/{contentCategory}', [ContentCategoryController::class, 'destroy'])->name('contentCategory.destroy');
     Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags');
     Route::get('/character', [ContentManagementController::class, 'character'])->name('character');
     Route::get('/contents', [ContentManagementController::class, 'contents'])->name('contents');
