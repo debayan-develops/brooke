@@ -21,4 +21,9 @@ class CategoryType extends Model
         return $this->belongsToMany(ContentCategory::class, 'category_type_map', 'category_type_id', 'content_category_id')->withTimestamps();
     }
 
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(ContentCategory::class, 'tags_type_map', 'category_type_id', 'tag_id')->withTimestamps();
+    }
+
 }

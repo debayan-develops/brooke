@@ -29,6 +29,10 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::post('/content-category/{contentCategory}/edit', [ContentCategoryController::class, 'update'])->name('contentCategory.update');
     Route::delete('/content-category/{contentCategory}', [ContentCategoryController::class, 'destroy'])->name('contentCategory.destroy');
     Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags');
+    Route::post('/tags/add/{id?}', [ContentManagementController::class, 'addUpdateTags'])->name('tags.add');
+    Route::get('/tags/edit/{id}', [ContentManagementController::class, 'editTags'])->name('tags.edit');
+    Route::delete('/tags/delete/{id}', [ContentManagementController::class, 'deleteTags'])->name('tags.destroy');
+
     Route::get('/character', [ContentManagementController::class, 'character'])->name('character');
     Route::get('/contents', [ContentManagementController::class, 'contents'])->name('contents');
     Route::get('/novels', [ContentManagementController::class, 'novels'])->name('novels');

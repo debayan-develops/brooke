@@ -47,6 +47,9 @@
                                     <div class="control icons-left">
                                         <input class="input" type="text" placeholder="Name" name="name">
                                         <span class="icon left"><i class="mdi mdi-pin"></i></span>
+                                        @error('name')
+                                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +65,7 @@
                                                     <option value="{{ $type->id }}">{{ $type->name }}</option>
                                                 @endforeach
                                             </select>
-                                            @error('home_nearby_facilities_id')
+                                            @error('categoryType')
                                                 <p class="text-red-500 text-sm">{{ $message }}</p>
                                             @enderror
                                         </div>
@@ -113,7 +116,7 @@
                                                 <option value="{{ $type->id }}">{{ $type->name }}</option>
                                             @endforeach
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('categoryType')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -192,19 +195,9 @@
                 <table>
                 <thead>
                 <tr>
-                    {{-- <th class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </th> --}}
-                    {{-- <th class="image-cell"></th> --}}
                     <th>#</th>
                     <th>Category Name</th>
                     <th>Category Type</th>
-                    {{-- <th>City</th>
-                    <th>Progress</th>
-                    <th>Created</th> --}}
                     <th></th>
                 </tr>
                 </thead>
@@ -229,14 +222,14 @@
                 </tbody>
                 </table>
                 <div class="table-pagination">
-                <div class="flex items-center justify-between">
+                {{-- <div class="flex items-center justify-between">
                     <div class="buttons">
                     <button type="button" class="button active">1</button>
                     <button type="button" class="button">2</button>
                     <button type="button" class="button">3</button>
                     </div>
                     <small>Page 1 of 3</small>
-                </div>
+                </div> --}}
                 </div>
             </div>
             </div>

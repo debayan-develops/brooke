@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Tag;
+use App\Http\Requests\StoreTagRequest;
+use App\Admin\Content\Domain\Models\CategoryType;
 
 class ContentManagementController extends Controller {
 
@@ -19,12 +22,49 @@ class ContentManagementController extends Controller {
         ]);
     }
 
-    public function tags(Request $request)
+    public function tags()
     {
+        $categoryTypes = CategoryType::all();
+        $tags = Tag::all();
+
         return view('admin.contentManager.tags.index')->with([
             'title' => 'Tags',
+            'tags' => $tags,
+            'categoryTypes' => $categoryTypes,
             // You can pass additional data here if needed
         ]);
+    }
+
+    public function editTags($id)
+    {
+        $tags = Tag::find($id);
+        return response()->json([$tags->load('types')]);
+    }
+
+    public function addUpdateTags(StoreTagRequest $request, $id = null)
+    {
+        $validated = $request->validated();
+
+        if ($id) {
+            $tag = Tag::find($id);
+            $tag->name = $validated['name'];
+            $tag->save();
+            $tag->types()->sync($validated['tagsType']);
+            return redirect()->back()->with('success', 'Tag updated successfully!');
+        }
+
+        $tagArr['name'] = $validated['name'];
+
+        $tag = Tag::create($tagArr);
+        $tag->types()->attach($validated['tagsType']);
+        return redirect()->back()->with('success', 'Tag added successfully!');
+    }
+
+    public function deleteTags($id)
+    {
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+        return redirect()->back()->with('success', 'Tag deleted successfully!');
     }
 
     public function character(Request $request)
