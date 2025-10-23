@@ -15,7 +15,6 @@ return new class extends Migration
             $table->uuid('category_type_id');
             $table->id('tag_id');
             $table->timestamps();
-            $table->primary(['tag_id']);
         });
     }
 
