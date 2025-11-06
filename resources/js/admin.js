@@ -60,3 +60,11 @@ Array.from(document.getElementsByClassName('--jb-notification-dismiss')).forEach
     e.currentTarget.closest('.notification').classList.add('hidden');
   });
 });
+
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+// ClassicEditor
+// .create(document.querySelector('.editor'))
+// .catch(error => {
+//   console.error(error);
+// });

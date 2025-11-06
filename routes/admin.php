@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HomesController;
 use App\Http\Controllers\Admin\ContentManagementController;
+use App\Http\Controllers\Admin\ShortStories;
 use App\Admin\Content\Presentation\Http\Controllers\ContentCategoryController;
 
 
@@ -34,17 +35,25 @@ Route::middleware(['admin.auth'])->group(function () {
     Route::delete('/tags/delete/{id}', [ContentManagementController::class, 'deleteTags'])->name('tags.destroy');
 
     Route::get('/character', [ContentManagementController::class, 'character'])->name('character');
+    Route::post('/character/add/{id?}', [ContentManagementController::class, 'addUpdateCharacter'])->name('character.add');
+    Route::get('/character/edit/{id}', [ContentManagementController::class, 'editCharacter'])->name('character.edit');
+    Route::delete('/character/delete/{id}', [ContentManagementController::class, 'deleteCharacter'])->name('character.destroy');
     Route::get('/contents', [ContentManagementController::class, 'contents'])->name('contents');
     Route::get('/novels', [ContentManagementController::class, 'novels'])->name('novels');
     Route::get('/blogs', [ContentManagementController::class, 'blogs'])->name('blogs');
-    Route::get('/short-stories', [ContentManagementController::class, 'shortStories'])->name('shortStories');
+
+    // Short Stories Routes start here
+    Route::get('/short-stories', [ShortStories::class, 'index'])->name('shortStories');
+    Route::get('/add-short-stories', [ShortStories::class, 'addShortStories'])->name('addShortStories');
+    Route::post('/add-short-stories', [ShortStories::class, 'storeShortStories'])->name('addShortStories.add');
+    Route::get('/short-stories/image-upload', [ShortStories::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
+    // Short Stories Routes end here
     Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags');
     Route::get('/add-novels', [ContentManagementController::class, 'addNovels'])->name('addNovels');
     Route::get('/add-chapter', [ContentManagementController::class, 'addChapter'])->name('addChapter');
     Route::post('/add-chapter', [ContentManagementController::class, 'addChapter'])->name('addChapter');
-    Route::get('/add-short-stories', [ContentManagementController::class, 'addShortStories'])->name('addShortStories');
-    Route::post('/add-short-stories', [ContentManagementController::class, 'addShortStories'])->name('addShortStories');
-    Route::get('/short-stories/image-upload', [ContentManagementController::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
+    // Route::get('/add-short-stories', [ContentManagementController::class, 'addShortStories'])->name('addShortStories');
+    // Route::get('/short-stories/image-upload', [ContentManagementController::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
     Route::get('/add-blog', [ContentManagementController::class, 'addBlogs'])->name('addBlogs');
     Route::post('/add-blog', [ContentManagementController::class, 'addBlogs'])->name('addBlogs');
     Route::get('/blogs/image-upload', [ContentManagementController::class, 'blogImageUpload'])->name('blogImageUpload');

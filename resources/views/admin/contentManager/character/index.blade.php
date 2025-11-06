@@ -27,14 +27,14 @@
                 <h1 class="title">
                 {{$title}}
                 </h1>
-                <button type="button" data-target="add-features-modal" class="button blue --jb-modal">Add Characters</button>
+                <button type="button" data-target="add-character-modal" class="button blue --jb-modal">Add Characters</button>
             </div>
         </section>
 
-        <div id="add-features-modal" class="modal">
+        <div id="add-character-modal" class="modal">
         <div class="modal-background --jb-modal-close"></div>
         <div class="modal-card">
-            <form method="POST" action="">
+            <form method="POST" action="{{ route('admin.character.add') }}">
                 @csrf
                 <header class="modal-card-head">
                     <p class="modal-card-title">Add New Characters</p>
@@ -58,12 +58,9 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="characterType" multiple name="characterType[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-                                            <option value="1">Novel</option>
-                                            <option value="2">Blog</option>
-                                            <option value="3">Short Story</option>
+                                            @foreach($categoryTypes as $type)
+                                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                            @endforeach
                                         </select>
                                         @error('home_nearby_facilities_id')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -84,10 +81,10 @@
     <button id="modalShowBtn" class="--jb-modal" data-target=""></button>
 
     {{-- Edit Feature Modal --}}
-    <div id="edit-features-modal" class="modal">
+    <div id="edit-character-modal" class="modal">
         <div class="modal-background --jb-modal-close"></div>
         <div class="modal-card">
-            <form method="POST" action="">
+            <form id="edit-character" method="POST" action="">
                 @csrf
                 <input type="hidden" name="id" value="">
                 <header class="modal-card-head">
@@ -105,6 +102,42 @@
                             </div>
                         </div>
                     </div>
+                    <div class="field">
+                        <div class="grid gap-6 grid-cols-1">
+                            <div class="field">
+                                <label class="label">Tag Type</label>
+                                <div class="control icons-left icons-right">
+                                    <div class="select">
+                                        <select id="editCharacterType" multiple name="characterType[]">
+                                        </select>
+                                        @error('tagsType')
+                                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button green --jb-modal-close">Confirm</button>
+                    <button type="button" class="button --jb-modal-close">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-character-modal" class="modal">
+        <div class="modal-background --jb-modal-close"></div>
+        <div class="modal-card">
+            <form id="deleteCharacter" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Delete {{$title}}</p>
+                </header>
+                <section class="modal-card-body">
+                    <p>Are you sure you want to delete <span class="characterName"></span>?</p>
                 </section>
                 <footer class="modal-card-foot">
                     <button type="submit" class="button green --jb-modal-close">Confirm</button>
@@ -116,6 +149,32 @@
 
 
         <section class="section main-section">
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="notification red">
+                        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+                            
+                            <div>
+                                <span class="icon"><i class="mdi mdi-buffer"></i></span>
+                                <span>{{ $error }}</span>
+                            </div>
+                            
+                            <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+            @if(session('success'))
+                <div class="notification green">
+                    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+                        <div>
+                            <span class="icon"><i class="mdi mdi-buffer"></i></span>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                        <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
+                    </div>
+                </div>
+            @endif
             <div class="card has-table">
             <header class="card-header">
                 <p class="card-header-title">
@@ -130,157 +189,31 @@
                 <table>
                 <thead>
                 <tr>
-                    {{-- <th class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </th> --}}
-                    {{-- <th class="image-cell"></th> --}}
                     <th>#</th>
                     <th>Characters Name</th>
                     <th>Characters Type</th>
-                    {{-- <th>City</th>
-                    <th>Progress</th>
-                    <th>Created</th> --}}
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    {{-- <td class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </td>
-                    <td class="image-cell">
-                    <div class="image">
-                        <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                    </div>
-                    </td> --}}
-                    <td data-label="Name">1</td>
-                    <td data-label="Name">Character  1</td>
-                    <td data-label="Company">Novels</td>
-                    {{-- <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                    <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                    <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td> --}}
-                    <td class="actions-cell">
-                    <div class="buttons right nowrap">
-                        {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                            <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                        </button> --}}
-                        <button type="button" data-target="edit-features-modal" class="button small blue --jb-modal"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
-                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button>
-                    </div>
-                    </td>
-                </tr>
-                <tr>
-                    {{-- <td class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </td>
-                    <td class="image-cell">
-                    <div class="image">
-                        <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                    </div>
-                    </td> --}}
-                    <td data-label="Name">2</td>
-                    <td data-label="Name">Character  2</td>
-                    <td data-label="Company">Novels</td>
-                    {{-- <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                    <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                    <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td> --}}
-                    <td class="actions-cell">
-                    <div class="buttons right nowrap">
-                        <button class=" button small blue --jb-modal" data-id="" type="button">
-                            <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                        </button>
-                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button>
-                    </div>
-                    </td>
-                </tr>
-                <tr>
-                    {{-- <td class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </td>
-                    <td class="image-cell">
-                    <div class="image">
-                        <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                    </div>
-                    </td> --}}
-                    <td data-label="Name">3</td>
-                    <td data-label="Name">Character  3</td>
-                    <td data-label="Company">Short Stories</td>
-                    {{-- <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                    <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                    <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td> --}}
-                    <td class="actions-cell">
-                    <div class="buttons right nowrap">
-                        <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                            <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                        </button>
-                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button>
-                    </div>
-                    </td>
-                </tr>
-                <tr>
-                    {{-- <td class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </td>
-                    <td class="image-cell">
-                    <div class="image">
-                        <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                    </div>
-                    </td> --}}
-                    <td data-label="Name">4</td>
-                    <td data-label="Name">Character  4</td>
-                    <td data-label="Company">Blog</td>
-                    {{-- <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                    <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                    <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td> --}}
-                    <td class="actions-cell">
-                    <div class="buttons right nowrap">
-                        <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                            <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                        </button>
-                        <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                        </button>
-                    </div>
-                    </td>
-                </tr>
-                
+                    @foreach ($characters as $key => $item)
+                        <tr>
+                            <td data-label="Name">{{$key+1}}</td>
+                            <td data-label="Name">{{$item->name}}</td>
+                            <td data-label="Company">{{$item->types->pluck('name')->join(', ')}}</td>
+                            <td class="actions-cell">
+                            <div class="buttons right nowrap">
+                                {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
+                                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                                </button> --}}
+                                <button type="button" data-target="edit-character-modal" data-id="{{$item->id}}" class="button small blue edit-btn"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
+                                <button class="button small red delete-btn" data-target="sample-modal"  data-id="{{$item->id}}" data-name="{{$item->name}}" type="button">
+                                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                </button>
+                            </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
                 </table>
                 <div class="table-pagination">
@@ -303,6 +236,65 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             new Choices('#characterType', { removeItemButton: true, searchEnabled: true });
+
+            const choices = new Choices('#editCharacterType', {
+                removeItemButton: true,
+                searchEnabled: true,
+            });
+
+            $('.edit-btn').on('click', function () {
+                $('#modalShowBtn').attr('data-target', 'edit-character-modal');
+                $('#ajaxLoader').fadeIn();
+                const tagId = $(this).data('id');
+                let routeTemplateEdit = "{{ route('admin.character.edit', ':id') }}";
+                let routeTemplateUpdate = "{{ route('admin.character.add', ':id') }}";
+                $('#edit-character-modal input[name="id"]').val('');
+                $('#edit-character-modal input[name="name"]').val('');
+                choices.clearStore();
+                choices.clearChoices();
+                $.get(routeTemplateEdit.replace(':id', tagId), function (data) {
+                    $('#edit-character-modal input[name="id"]').val(data[0].id);
+                    $('#edit-character-modal input[name="name"]').val(data[0].name);
+                    $('#edit-character').attr('action', routeTemplateUpdate.replace(':id', tagId));
+                    fetchType(data[0].types);
+                    $('#ajaxLoader').fadeOut();
+                    setTimeout(() => {
+                        $('#modalShowBtn').click();
+                    }, 500);
+                }).fail(function () {
+                    $('#ajaxLoader').fadeOut();
+                    alert('Error fetching Category data.');
+                });
+            });
+            let allTypes = @json($categoryTypes);
+            function fetchType(types) {
+                const selectedIds = types.map(type => type.id);
+                // Clear existing options and set new ones
+                choices.clearChoices();
+                choices.setChoices(
+                    allTypes.map(type => ({
+                        value: type.id,
+                        label: type.name,
+                        selected: selectedIds.includes(type.id),
+                        disabled: false,
+                    })),
+                    'value',
+                    'label',
+                    false
+                );
+            }
+
+            $('.delete-btn').on('click', function () {
+                $('#modalShowBtn').attr('data-target', 'delete-character-modal');
+                const tagId = $(this).data('id');
+                $('#delete-character-modal input[name="id"]').val(tagId);
+                let routeTemplateDelete = "{{ route('admin.character.destroy', ':id') }}";
+                $('#deleteCharacter').attr('action', routeTemplateDelete.replace(':id', tagId));
+                const characterName = $(this).data('name');
+                    $('.characterName').text(characterName ? characterName : 'this character');
+                $('#modalShowBtn').click();
+
+            });
         });
 
     </script>

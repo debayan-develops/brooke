@@ -112,9 +112,6 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="editTagsType" multiple name="tagsType[]">
-                                            @foreach($categoryTypes as $type)
-                                                <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                            @endforeach
                                         </select>
                                         @error('tagsType')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>

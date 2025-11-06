@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('image', file);
             formData.append('home_id', form.querySelector('input[name="home_id"]').value);
             $('#ajaxLoader').fadeIn();
-            fetch('{{ route("admin.shortStoryImageUpload") }}', {
+            fetch('', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

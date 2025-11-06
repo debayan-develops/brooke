@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
+use App\Http\Requests\storeCharacterRequest;
 use App\Admin\Content\Domain\Models\CategoryType;
+use App\Models\Character;
 
 class ContentManagementController extends Controller {
 
@@ -63,16 +65,56 @@ class ContentManagementController extends Controller {
     public function deleteTags($id)
     {
         $tag = Tag::findOrFail($id);
+        $tag->types()->detach();
         $tag->delete();
         return redirect()->back()->with('success', 'Tag deleted successfully!');
     }
 
-    public function character(Request $request)
+    public function character()
     {
+        $categoryTypes = CategoryType::all();
+        $characters = Character::all();
         return view('admin.contentManager.character.index')->with([
             'title' => 'Characters',
+            'characters' => $characters,
+            'categoryTypes' => $categoryTypes,
             // You can pass additional data here if needed
         ]);
+    }
+
+    public function addUpdateCharacter(storeCharacterRequest $request, $id = null)
+    {
+        $validated = $request->validated();
+
+        if ($id) {
+            $character = Character::find($id);
+            $character->name = $validated['name'];
+            $character->types()->sync($validated['characterType']);
+            // $character->description = $validated['description'];
+            $character->save();
+            return redirect()->back()->with('success', 'Character updated successfully!');
+        }
+
+        $characterArr['name'] = $validated['name'];
+        // $characterArr['description'] = $validated['description'];
+
+        $character = Character::create($characterArr);
+        $character->types()->attach($validated['characterType']);
+        return redirect()->back()->with('success', 'Character added successfully!');
+    }
+
+    public function editCharacter($id)
+    {
+        $character = Character::find($id);
+        return response()->json([$character->load('types')]);
+    }
+
+    public function deleteCharacter($id)
+    {
+        $character = Character::findOrFail($id);
+        $character->types()->detach();
+        $character->delete();
+        return redirect()->back()->with('success', 'Tag deleted successfully!');
     }
 
     public function contents(Request $request)
@@ -126,31 +168,31 @@ class ContentManagementController extends Controller {
         ]);
     }
 
-    public function addShortStories(Request $request)
-    {
-        if ($request->isMethod('post')) {
-        // Handle POST logic
-            // $validatedData = $request->validate([
-            //     'title' => 'required|string|max:255',
-            //     'author' => 'required|string|max:255',
-            //     'category' => 'required|string|max:255',
-            //     'status' => 'required|in:published,draft',
-            //     'about_home' => 'nullable|string',
-            //     'introducing' => 'nullable|string',
-            //     // Add other fields and their validation rules as needed
-            // ]);
+    // public function addShortStories(Request $request)
+    // {
+    //     if ($request->isMethod('post')) {
+    //     // Handle POST logic
+    //         // $validatedData = $request->validate([
+    //         //     'title' => 'required|string|max:255',
+    //         //     'author' => 'required|string|max:255',
+    //         //     'category' => 'required|string|max:255',
+    //         //     'status' => 'required|in:published,draft',
+    //         //     'about_home' => 'nullable|string',
+    //         //     'introducing' => 'nullable|string',
+    //         //     // Add other fields and their validation rules as needed
+    //         // ]);
 
-            // Process the validated data (e.g., save to database)
-            // ...
+    //         // Process the validated data (e.g., save to database)
+    //         // ...
 
-            // Redirect or return a response after processing
-            return redirect()->route('admin.shortStoryImageUpload')->with('success', 'Short Story added successfully!');
-        }
-        return view('admin.contentManager.shortStories.addShortStories')->with([
-            'title' => 'Add Short Stories',
-            // You can pass additional data here if needed
-        ]);
-    }
+    //         // Redirect or return a response after processing
+    //         return redirect()->route('admin.shortStoryImageUpload')->with('success', 'Short Story added successfully!');
+    //     }
+    //     return view('admin.contentManager.shortStories.addShortStories')->with([
+    //         'title' => 'Add Short Stories',
+    //         // You can pass additional data here if needed
+    //     ]);
+    // }
 
     public function shortStoryImageUpload(Request $request)
     {

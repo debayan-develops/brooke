@@ -18,4 +18,10 @@ class Tag extends Model
     {
         return $this->belongsToMany(CategoryType::class, 'tags_type_map', 'tag_id', 'category_type_id')->withTimestamps();
     }
+
+    public function shortStoryTags(): BelongsToMany
+    {
+        return $this->belongsToMany(ShortStories::class, 'short_story_tags', 'tag_id', 'short_story_id')->withTimestamps();
+    }
+
 }

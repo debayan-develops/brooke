@@ -37,6 +37,8 @@ class EloquentContentCategoryRepository implements ContentCategoryRepositoryInte
 
     public function delete(string $id): bool
     {
-        return ContentCategory::destroy($id);
+        $ContentCategory = ContentCategory::findOrFail($id);
+        $ContentCategory->types()->detach();
+        return $ContentCategory->delete();
     }
 }

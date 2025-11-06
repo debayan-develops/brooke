@@ -5,6 +5,9 @@
     @vite('resources/css/admin.css')
     <!-- Tailwind is included -->
   {{-- <link rel="stylesheet" href="css/main.css?v=1652870200386"> --}}
+  <!-- CKEditor 5 Classic build from CDN -->
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/styles.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 </head>
 <body>
     {{-- @include('partials.admin.nav') --}}

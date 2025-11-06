@@ -15,4 +15,13 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    server: {
+        host: 'brook.site',
+        port: 5173,
+        cors: true,
+        hmr: {
+            host: 'brook.site',
+        },
+    },
+
 });

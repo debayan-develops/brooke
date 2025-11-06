@@ -81,7 +81,7 @@
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addShortStories') }}">
+                <form method="POST" action="{{ route('admin.addShortStories.add') }}">
                     @csrf
                     <input type="hidden" name="home_id" value="">
                     <div class="field">
@@ -98,25 +98,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <label class="label">Author Name</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Name" name="author" value="{{ old('author') }}">
-                                </div>
-                                @error('author')
-                                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                                @enderror
-
-                            </div>
-                        </div>
-                    </div>
                     
                     <div class="field">
                         <label class="label">Short description</label>
                         <div class="control">
-                            <textarea class="textarea" placeholder="Enter Text" name="introducing">{{old('introducing')}}</textarea>
+                            <textarea class="textarea editor" placeholder="Enter Text" name="short_description">{{old('short_description')}}</textarea>
                         </div>
                         @error('introducing')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -140,18 +126,13 @@
                                 <label class="label"> Tags</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="tagType" multiple name="tagType[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-                                            <option value="1">Tag 1</option>
-                                            <option value="2">Tag 2</option>
-                                            <option value="3">Tag 3</option>
-                                            <option value="4">Tag 4</option>
-                                            <option value="5">Tag 5</option>
-                                            <option value="6">Tag 6</option>
+                                        <select id="tags" multiple name="tags[]">
+                                            @foreach($tags as $tag)
+                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                            @endforeach
+                                            
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('tags')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -162,21 +143,16 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Category Type</label>
+                                <label class="label">Category</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="categoryType" multiple name="categoryType[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-                                            <option value="1">Category 1</option>
-                                            <option value="2">Category 2</option>
-                                            <option value="3">Category 3</option>
-                                            <option value="4">Category 4</option>
-                                            <option value="5">Category 5</option>
-                                            <option value="6">Category 6</option>
+                                        <select id="categories" multiple name="categories[]">
+                                           @foreach($categories as $category)
+                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                            
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('categories')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -191,17 +167,12 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="characters" multiple name="characters[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-                                            <option value="1">Character 1</option>
-                                            <option value="2">Character 2</option>
-                                            <option value="3">Character 3</option>
-                                            <option value="4">Character 4</option>
-                                            <option value="5">Character 5</option>
-                                            <option value="6">Character 6</option>
+                                            @foreach($characters as $character)
+                                                <option value="{{ $character->id }}">{{ $character->name }}</option>
+                                            @endforeach
+                                            
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('characters')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -219,12 +190,7 @@
                                             {{-- @foreach($facilities as $facility)
                                                 <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                             @endforeach --}}
-                                            <option value="1">Suggested Stories 1</option>
-                                            <option value="2">Suggested Stories 2</option>
-                                            <option value="3">Suggested Stories 3</option>
-                                            <option value="4">Suggested Stories 4</option>
-                                            <option value="5">Suggested Stories 5</option>
-                                            <option value="6">Suggested Stories 6</option>
+
                                         </select>
                                         @error('home_nearby_facilities_id')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -238,9 +204,9 @@
                     <div class="field">
                         <label class="label">Short Story Details</label>
                         <div class="control">
-                        <textarea class="textarea introducing" placeholder="Enter Text" name="introducing">{{old('introducing')}}</textarea>
+                        <textarea class="textarea editor2" placeholder="Enter Text" name="short_story_details">{{old('short_story_details')}}</textarea>
                         </div>
-                        @error('introducing')
+                        @error('short_story_details')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                     </div>
@@ -260,16 +226,16 @@
                             <div class="field grouped multiline">
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="is_active" value="1" checked>
+                                <input type="radio" name="status" value="1" checked>
                                 <span class="check"></span>
-                                <span class="control-label">Active</span>
+                                <span class="control-label">Publish</span>
                                 </label>
                             </div>
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="is_active" value="0">
+                                <input type="radio" name="status" value="0">
                                 <span class="check"></span>
-                                <span class="control-label">Inactive</span>
+                                <span class="control-label">Draft</span>
                                 </label>
                             </div>
                             </div>
@@ -309,34 +275,26 @@
         <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            new Choices('#Features-multiple', { removeItemButton: true, searchEnabled: true });
-            new Choices('#facilities-multiple', { removeItemButton: true, searchEnabled: true });
-            new Choices('#country-select', { searchEnabled: true });
-            new Choices('#available-select', { searchEnabled: true, shouldSort: false });
-            const stateChoices = new Choices('#state-select', { searchEnabled: true });
-            $('#country-select').on('change', function () {
-                stateChoices.clearChoices();
-                let countryId = $(this).val();
-                stateChoices.setChoices([{ value: '', label: 'Loading...', selected: true }], 'value', 'label', false);
-
-
-                $.get(`countries/${countryId}/states`, function (data) {
-                    stateChoices.setChoices([{ value: '', label: 'Select State', selected: true }], 'value', 'label', false);
-                    let stateOptions = data.map(state => ({
-                        value: state.id,
-                        label: state.name
-                    }));
-                    stateChoices.setChoices(stateOptions, 'value', 'label', true);
-                });
-            });
-        });
          document.addEventListener('DOMContentLoaded', function () {
-            new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
-            new Choices('#categoryType', { removeItemButton: true, searchEnabled: true });
+            new Choices('#tags', { removeItemButton: true, searchEnabled: true });
+            new Choices('#categories', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedStories', { removeItemButton: true, searchEnabled: true });
             new Choices('#characters', { removeItemButton: true, searchEnabled: true });
         });
     </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('.editor'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('.editor2'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 
 @endsection
