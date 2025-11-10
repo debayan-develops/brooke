@@ -60,7 +60,7 @@
                             <td data-label="Name">{{ $item->id }}</td>
                             <td data-label="Name">
                                 <div class="image-wrapper is-48x48">
-                                    <img width="70" src="{{ asset('storage/'.$item->thumbnail_photo) }}" alt="{{ $item->title }}">
+                                    <img width="70" src="{{ asset('public/storage/'.$item->thumbnail_photo) }}" alt="{{ $item->title }}">
                                 </div>
                             </td>
                             <td data-label="Company">{{ $item->title }}</td>
