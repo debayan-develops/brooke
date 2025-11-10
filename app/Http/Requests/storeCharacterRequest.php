@@ -22,7 +22,7 @@ class storeCharacterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|unique:tags,name|max:50',
+            'name' => 'required|string|max:50',
             'characterType' => 'required|array',
             'characterType.*' => 'exists:category_type,id',
         ];

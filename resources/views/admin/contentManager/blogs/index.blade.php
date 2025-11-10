@@ -57,7 +57,7 @@
                     <th>ID</th>
                     <th>Image</th>
                     <th>Title</th>
-                    <th>Description</th>
+                    {{-- <th>Description</th> --}}
                     {{-- <th>Chapters</th> --}}
                     {{-- <th>City</th>
                     <th>Progress</th>
@@ -66,6 +66,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                @foreach ($blogs as $blog)
                 <tr>
                     {{-- <td class="checkbox-cell">
                     <label class="checkbox">
@@ -78,12 +79,12 @@
                         <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
                     </div>
                     </td> --}}
-                    <td data-label="Name">1</td>
+                    <td data-label="Name">{{ $blog->id }}</td>
                     <td data-label="Name">
-                        <img src="https://brookehennen.com/14thjuly/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg" alt="Thumbnail" width="80" height="80" class="w-16 h-16 object-cover rounded-md" />
+                        <img src="{{ asset('storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail" width="80" height="80" class="w-16 h-16 object-cover rounded-md" />
                     </td>
-                    <td data-label="Company">Mystic Everglades</td>
-                    <td data-label="Company">Deep within the enchanted forest...</td>
+                    <td data-label="Company">{{ $blog->title }}</td>
+                    {{-- <td data-label="Company">{{ $blog->short_description }}</td> --}}
                     {{-- <td data-label="Company">50</td> --}}
                     {{-- <td data-label="City">South Cory</td>
                     <td data-label="Progress" class="progress-cell">
@@ -94,16 +95,17 @@
                     </td> --}}
                     <td class="actions-cell">
                         <div class="buttons right nowrap">
-                            <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
+                            {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
                                 <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </button>
-                            <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                            </button> --}}
+                            <a href="{{ route('admin.editBlogs', $blog->id) }}" class="button small blue edit-btn"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></a>
+                            {{-- <button class="button small red --jb-modal" data-target="sample-modal" type="button">
                                 <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                            </button>
+                            </button> --}}
                         </div>
                     </td>
                 </tr>
-                
+                @endforeach
                 </tbody>
                 </table>
                 <div class="table-pagination">

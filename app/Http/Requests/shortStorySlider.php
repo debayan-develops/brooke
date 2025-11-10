@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTagRequest extends FormRequest
+class shortStorySlider extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,9 @@ class StoreTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50',
-            'tagsType' => 'required|array',
-            'tagsType.*' => 'exists:category_type,id',
+            // Define your validation rules here
+            'slider_images' => 'required|array|max:6', // max 6 images
+            'slider_images.*' => 'image|mimes:jpeg,png,webp|max:2048', // max 2MB per image
         ];
     }
 }

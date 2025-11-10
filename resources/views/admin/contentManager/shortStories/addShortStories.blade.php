@@ -81,9 +81,9 @@
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addShortStories.add') }}">
+                <form method="POST" action="{{ route('admin.addShortStories.add') }}" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="home_id" value="">
+                    
                     <div class="field">
                         <label class="label">Title</label>
                         <div class="field-body">
@@ -104,7 +104,7 @@
                         <div class="control">
                             <textarea class="textarea editor" placeholder="Enter Text" name="short_description">{{old('short_description')}}</textarea>
                         </div>
-                        @error('introducing')
+                        @error('short_description')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                         
@@ -115,9 +115,12 @@
                         <label for="thumbnailPhoto" class="label">
                             Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="thumbnailPhoto" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
+                        <input id="thumbnailPhoto" type="file" accept="image/*" class="form-input" name="thumbnail_photo" />
                         <div id="thumbnailPreview" class="preview-box"></div>
                         <p id="thumbnailError" class="error-text hidden"></p>
+                        @error('thumbnail_photo')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="field">
@@ -258,7 +261,7 @@
                     <div class="field grouped">
                         <div class="control">
                         <button type="submit" class="button green">
-                            Next
+                            Submit
                         </button>
                         </div>
                         <div class="control">

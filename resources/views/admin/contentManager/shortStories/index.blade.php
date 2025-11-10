@@ -47,63 +47,39 @@
                 <table>
                 <thead>
                 <tr>
-                    {{-- <th class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </th> --}}
-                    {{-- <th class="image-cell"></th> --}}
                     <th>ID</th>
                     <th>Image</th>
                     <th>Title</th>
                     <th>Description</th>
-                    {{-- <th>Chapters</th> --}}
-                    {{-- <th>City</th>
-                    <th>Progress</th>
-                    <th>Created</th> --}}
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    {{-- <td class="checkbox-cell">
-                    <label class="checkbox">
-                        <input type="checkbox">
-                        <span class="check"></span>
-                    </label>
-                    </td>
-                    <td class="image-cell">
-                    <div class="image">
-                        <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="rounded-full">
-                    </div>
-                    </td> --}}
-                    <td data-label="Name">1</td>
-                    <td data-label="Name">
-                        <img src="https://brookehennen.com/14thjuly/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg" alt="Thumbnail" width="80" height="80" class="w-16 h-16 object-cover rounded-md" />
-                    </td>
-                    <td data-label="Company">Mystic Everglades</td>
-                    <td data-label="Company">Deep within the enchanted forest...</td>
-                    {{-- <td data-label="Company">50</td> --}}
-                    {{-- <td data-label="City">South Cory</td>
-                    <td data-label="Progress" class="progress-cell">
-                    <progress max="100" value="79">79</progress>
-                    </td>
-                    <td data-label="Created">
-                    <small class="text-gray-500" title="Oct 25, 2021">Oct 25, 2021</small>
-                    </td> --}}
-                    <td class="actions-cell">
-                        <div class="buttons right nowrap">
-                            <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                                <span class="icon"><i class="mdi mdi-eye"></i></span>
-                            </button>
-                            <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                                <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                
+                    @foreach ($shortStories as $item)
+                        <tr>
+                            <td data-label="Name">{{ $item->id }}</td>
+                            <td data-label="Name">
+                                <div class="image-wrapper is-48x48">
+                                    <img width="70" src="{{ asset('storage/'.$item->thumbnail_photo) }}" alt="{{ $item->title }}">
+                                </div>
+                            </td>
+                            <td data-label="Company">{{ $item->title }}</td>
+                            <td data-label="Company"> @php
+                                echo $item->short_description;
+                            @endphp</td>
+                            <td class="actions-cell">
+                                <div class="buttons right nowrap">
+                                    {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
+                                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                    </button> --}}
+                                    <a href="{{ route('admin.editShortStories', $item->id) }}" class="button small blue edit-btn"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></a>
+                                    <button class="button small red --jb-modal" data-target="sample-modal" type="button">
+                                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
                 </table>
                 <div class="table-pagination">

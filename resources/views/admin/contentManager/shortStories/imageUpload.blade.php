@@ -117,7 +117,15 @@
 
     <section class="section main-section">
         @if(session('success'))
-            <!-- ...success notification unchanged... -->
+            <div class="notification green">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
+                    <div>
+                        <span class="icon"><i class="mdi mdi-buffer"></i></span>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                    <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
+                </div>
+            </div>
         @endif
         <div class="card mb-6">
             <header class="card-header">
@@ -145,10 +153,11 @@
                 </form> --}}
 
                 <!-- Gallery Images AJAX Form -->
-                <form id="galleryImagesForm" enctype="multipart/form-data">
+                <form id="galleryImagesForm" method="POST" action="{{ route('admin.shortStoryImageUpload.store', ['id' => $id]) }}" enctype="multipart/form-data">
+                    @csrf
                     <div class="uploader">
-                        <h2>Gallery Images</h2>
-                        <p class="hint">Select one or more images (Max: 6)</p>
+                        <h2>Slider Images</h2>
+                        <p class="hint">Select one or more images </p>
                         <div id="drop2" class="dropzone" onclick="document.getElementById('galleryImagesInput').click();">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <polyline points="17 8 12 3 7 8"/>
@@ -156,12 +165,16 @@
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                             </svg>
                             <small>click to Upload Images</small>
-                            <input type="file" accept="image/*" multiple id="galleryImagesInput" name="images[]" hidden>
+                            <input type="file" accept="image/*" multiple id="galleryImagesInput" name="slider_images[]" hidden>
                         </div>
                         <div class="grid-1" id="galleryImagesPreview">
                             <!-- Previews will be inserted here -->
                         </div>
                         <div class="error" id="galleryImagesError"></div>
+                        @error('slider_images')
+                            <div class="text-red-500 text-sm">{{ $message }}</div>
+                            
+                        @enderror
                         <input type="hidden" name="home_id" value="">
                         <button type="submit" class="btn mt-2">Upload Slider Images</button>
                     </div>
@@ -178,14 +191,14 @@
                     <span class="icon"><i class="mdi mdi-reload"></i></span>
                     </a>
                 </header>
-                @if ($images)
+                @if ($images && count($images) > 0)
                 <div class="card-content">
                     <table>
                         <thead>
                             <tr>
                                 <th>SL no.</th>
                                 <th>Image</th>
-                                <th>Is Featured</th>
+                                {{-- <th>Is Featured</th> --}}
                                 <th></th>
                             </tr>
                         </thead>
@@ -198,12 +211,12 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td> 
                                     <div class="thumb" style="width: 120px; height: 80px;">
-                                        <img src="{{ $row['url'] }}" class="preview">
+                                        <img src="{{ asset('storage/'.$row['image_path']) }}" class="preview">
                                     </div>
                                 </td>
-                                <td> 
+                                {{-- <td> 
                                     <div class="field">
-                                    {{-- <label class="label">Select</label> --}}
+                                    
                                         <div class="field-body">
                                             <div class="field">
                                             <label class="switch">
@@ -215,11 +228,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                </td>
+                                </td> --}}
                                 <td class="actions-cell">
                                     <div class="buttons right nowrap">
                                         
-                                        <button class="delete-btn button small red" data-id="{{$row['id']}}" onclick="deleteGalleryImage('{{$row['id']}}', this)" type="button">
+                                        <button class="delete-btn button small red" data-id="{{$row['id']}}" type="button">
                                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                                         </button>
                                     </div>
@@ -264,6 +277,27 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            if (!confirm('Delete this image?')) return;
+            $('#ajaxLoader').fadeIn();
+            let btn = e.target.closest('.delete-btn');
+            let id = btn.getAttribute('data-id');
+            fetch(`{{ url('admin/short-stories/image-upload/delete') }}/${id}`, {
+            method: 'DELETE',
+            headers: { 'X-CSRF-TOKEN': document.querySelector('input[name=_token]').value }
+            })
+            .then(res => res.json())
+            .then(data => {
+                $('#ajaxLoader').fadeOut();
+                if (data.success) {
+                    btn.parentElement.parentElement.parentElement.remove();
+                    alert('Image deleted successfully');
+                }
+                window.location.reload();
+            });
+        });
+    });
     // Featured Image Preview
     // document.getElementById('featuredImageInput').addEventListener('change', function(e) {
     //     let previewDiv = document.getElementById('featuredImagePreview');
@@ -301,58 +335,58 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     // Gallery Images AJAX Submit
-    document.getElementById('galleryImagesForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let form = e.target;
-        let input = form.querySelector('input[type="file"]');
-        let errorDiv = document.getElementById('galleryImagesError');
-        let previewDiv = document.getElementById('galleryImagesPreview');
-        errorDiv.textContent = '';
-        // Do not clear previewDiv.innerHTML here, so previews stay visible
-        if (!input.files.length) {
-            errorDiv.textContent = 'Please select images.';
-            return;
-        }
-        let files = input.files;
-        if (files.length > 6) {
-            errorDiv.textContent = 'You can upload a maximum of 6 images.';
-            return;
-        }
-        let uploadedCount = 0;
-        Array.from(files).forEach(file => {
-            let formData = new FormData();
-            formData.append('image', file);
-            formData.append('home_id', form.querySelector('input[name="home_id"]').value);
-            $('#ajaxLoader').fadeIn();
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                $('#ajaxLoader').fadeOut();
-                if (data.success) {
-                    let thumb = document.createElement('div');
-                    // thumb.className = 'thumb';
-                    // thumb.innerHTML = `<img src="${data.url}" class="preview"><button type="button" class="remove" onclick="deleteGalleryImage(${data.id}, this)">✕</button>`;
-                    // previewDiv.appendChild(thumb);
-                    uploadedCount++;
-                    if (uploadedCount === files.length) {
-                        alert('Images uploaded successfully');
-                        window.location.reload();
-                    }
-                } else {
-                    errorDiv.textContent = data.errors?.image?.[0] || 'Upload failed';
-                }
+//     document.getElementById('galleryImagesForm').addEventListener('submit', function(e) {
+//         e.preventDefault();
+//         let form = e.target;
+//         let input = form.querySelector('input[type="file"]');
+//         let errorDiv = document.getElementById('galleryImagesError');
+//         let previewDiv = document.getElementById('galleryImagesPreview');
+//         errorDiv.textContent = '';
+//         // Do not clear previewDiv.innerHTML here, so previews stay visible
+//         if (!input.files.length) {
+//             errorDiv.textContent = 'Please select images.';
+//             return;
+//         }
+//         let files = input.files;
+//         if (files.length > 6) {
+//             errorDiv.textContent = 'You can upload a maximum of 6 images.';
+//             return;
+//         }
+//         let uploadedCount = 0;
+//         Array.from(files).forEach(file => {
+//             let formData = new FormData();
+//             formData.append('image', file);
+//             formData.append('home_id', form.querySelector('input[name="home_id"]').value);
+//             $('#ajaxLoader').fadeIn();
+//             fetch('', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Accept': 'application/json',
+//                     'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+//                 },
+//                 body: formData
+//             })
+//             .then(res => res.json())
+//             .then(data => {
+//                 $('#ajaxLoader').fadeOut();
+//                 if (data.success) {
+//                     let thumb = document.createElement('div');
+//                     // thumb.className = 'thumb';
+//                     // thumb.innerHTML = `<img src="${data.url}" class="preview"><button type="button" class="remove" onclick="deleteGalleryImage(${data.id}, this)">✕</button>`;
+//                     // previewDiv.appendChild(thumb);
+//                     uploadedCount++;
+//                     if (uploadedCount === files.length) {
+//                         alert('Images uploaded successfully');
+//                         window.location.reload();
+//                     }
+//                 } else {
+//                     errorDiv.textContent = data.errors?.image?.[0] || 'Upload failed';
+//                 }
                 
-            });
-        });
-    });
-});
+//             });
+//         });
+//     });
+// });
 
 // Delete Featured Image AJAX
 // function deleteFeaturedImage(id) {
@@ -372,51 +406,52 @@ document.addEventListener('DOMContentLoaded', function() {
 //     });
 // }
 
-// Delete Gallery Image AJAX
-function deleteGalleryImage(id, btn) {
-    if (!confirm('Delete this image?')) return;
-    $('#ajaxLoader').fadeIn();
-    fetch(`{{ url('/admin/homes/delete-image') }}/${id}`, {
-        method: 'DELETE',
-        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }
-    })
-    .then(res => res.json())
-    .then(data => {
-        $('#ajaxLoader').fadeOut();
-        if (data.success) {
-            btn.parentElement.remove();
-            alert('Image deleted successfully');
-        }
-        window.location.reload();
-    });
-}
-document.querySelectorAll('input[name="featured"]').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        let row = this.closest('tr');
-        let imageId = row.querySelector('.delete-btn').getAttribute('data-id');
-        let isFeatured = this.checked ? 1 : 0;
-        //$('#ajaxLoader').fadeIn();
-        fetch(`{{ url('/admin/homes/set-featured') }}/${imageId}`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ featured: isFeatured })
-        })
-        .then(res => res.json())
-        .then(data => {
-            //$('#ajaxLoader').fadeOut();
-            if (data.success) {
-                alert('Featured status updated');
-                window.location.reload();
-            } else {
-                alert('Failed to update featured status');
-                window.location.reload();
-            }
-        });
-    });
+    // Delete Gallery Image AJAX
+    // function deleteGalleryImage(id, btn) {
+    //     if (!confirm('Delete this image?')) return;
+    //     $('#ajaxLoader').fadeIn();
+    //     fetch(`{{ url('admin/short-stories/image-upload/delete') }}/${id}`, {
+    //         method: 'DELETE',
+    //         headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content }
+    //     })
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         $('#ajaxLoader').fadeOut();
+    //         if (data.success) {
+    //             btn.parentElement.remove();
+    //             alert('Image deleted successfully');
+    //         }
+    //         window.location.reload();
+    //     });
+    // }
+    // document.querySelectorAll('input[name="featured"]').forEach(function(checkbox) {
+    //     checkbox.addEventListener('change', function() {
+    //         let row = this.closest('tr');
+    //         let imageId = row.querySelector('.delete-btn').getAttribute('data-id');
+    //         let isFeatured = this.checked ? 1 : 0;
+    //         //$('#ajaxLoader').fadeIn();
+    //         fetch(`{{ url('/admin/homes/set-featured') }}/${imageId}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ featured: isFeatured })
+    //         })
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             //$('#ajaxLoader').fadeOut();
+    //             if (data.success) {
+    //                 alert('Featured status updated');
+    //                 window.location.reload();
+    //             } else {
+    //                 alert('Failed to update featured status');
+    //                 window.location.reload();
+    //             }
+    //         });
+    //     });
+    // });
 });
 </script>
 @endsection

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('character_type_map', function (Blueprint $table) {
-            $table->uuid('category_type_id');
-            $table->integer('character_id');
+        Schema::create('blog_type_map', function (Blueprint $table) {
+            $table->integer('blog_id');
+            $table->integer('type_id');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('character_type_map');
+        Schema::dropIfExists('blog_type_map');
     }
 };

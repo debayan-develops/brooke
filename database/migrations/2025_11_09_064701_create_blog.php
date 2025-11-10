@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('short_story', function (Blueprint $table) {
+        Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('short_description');
-            $table->text('thumbnail_photo')->default(null);
-            $table->text('short_story_details');
+            $table->text('short_description')->nullable();
+            $table->string('thumbnail_photo')->nullable();
+            $table->longText('blog_details');
             $table->boolean('status')->default(false)->comment('0 = Draft, 1 = Published');
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('short_story');
+        Schema::dropIfExists('blogs');
     }
 };

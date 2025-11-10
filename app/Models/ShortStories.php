@@ -9,6 +9,7 @@ use App\Admin\Content\Domain\Models\ContentCategory;
 
 class ShortStories extends Model
 {
+    protected $table = 'short_story';
     protected $fillable = [
         'title',
         'short_description',

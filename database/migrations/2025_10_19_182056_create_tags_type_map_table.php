@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tags_type_map', function (Blueprint $table) {
             $table->uuid('category_type_id');
-            $table->id('tag_id');
+            $table->integer('tag_id');
             $table->timestamps();
         });
     }

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->uuid('content_category_id');
             $table->timestamps();
 
-            $table->primary(['category_type_id', 'content_category_id']);
+            //$table->primary(['category_type_id', 'content_category_id']);
 
-            $table->foreign('category_type_id')->references('id')->on('category_types')->onDelete('cascade');
-            $table->foreign('content_category_id')->references('id')->on('content_categories')->onDelete('cascade');
+            //$table->foreign('category_type_id')->references('id')->on('category_types')->onDelete('cascade');
+            //$table->foreign('content_category_id')->references('id')->on('content_categories')->onDelete('cascade');
         });
     }
 

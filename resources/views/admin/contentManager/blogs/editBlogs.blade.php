@@ -81,14 +81,14 @@
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addBlogs.add') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.editBlogs.update', $blog->id) }}" enctype="multipart/form-data">
                     @csrf
                     <div class="field">
                         <label class="label">Title</label>
                         <div class="field-body">
                             <div class="field">
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Blog title" name="title" value="{{ old('title') }}">
+                                    <input class="input" type="text" placeholder="Blog title" name="title" value="{{ old('title', $blog->title) }}">
                                 </div>
                                 @error('title')
                                     <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -128,7 +128,9 @@
                             Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
                         <input id="thumbnailPhoto" name="thumbnail_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
-                        <div id="thumbnailPreview" class="preview-box"></div>
+                        <div id="thumbnailPreview" class="preview-box">
+                            <img src="{{ asset('storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail Preview" width="200" />
+                        </div>
                         <p id="thumbnailError" class="error-text hidden"></p>
                     </div>
 
@@ -140,7 +142,9 @@
                                     <div class="select">
                                         <select id="tags" multiple name="tags[]">
                                             @foreach ($tags as $tag)
-                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                                <option 
+                                                @selected(in_array($tag->id, old('tags', $blog->blogTags->pluck('id')->toArray())))
+                                                 value="{{ $tag->id }}">{{ $tag->name }}</option>
                                             @endforeach
                                             
                                         </select>
@@ -160,7 +164,7 @@
                                     <div class="select">
                                         <select id="categories" multiple name="categories[]">
                                             @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                <option @selected(in_array($category->id, old('categories', $blog->blogCategories->pluck('id')->toArray()))) value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         </select>
                                         @error('categories')
@@ -179,7 +183,7 @@
                                     <div class="select">
                                         <select id="blogTypes" multiple name="blogTypes[]">
                                             @foreach ($blogTypes as $type)
-                                                <option value="{{ $type->id }}">{{ $type->type_name }}</option>
+                                                <option @selected(in_array($type->id, old('blogTypes', $blog->blogTypes->pluck('id')->toArray()))) value="{{ $type->id }}">{{ $type->type_name }}</option>
                                             @endforeach
                                         </select>
                                         @error('blogTypes')
@@ -198,7 +202,7 @@
                                     <div class="select">
                                         <select id="suggestedArticles" multiple name="suggestedArticles[]">
                                             @foreach ($suggestedBlogs as $blog)
-                                                <option value="{{ $blog->id }}">{{ $blog->title }}</option>
+                                                <option @selected(in_array($blog->id, old('suggestedArticles', $blog->suggestedBlogs->pluck('id')->toArray()))) value="{{ $blog->id }}">{{ $blog->title }}</option>
                                             @endforeach
                                         </select>
                                         @error('suggestedArticles')
@@ -213,7 +217,7 @@
                     <div class="field">
                         <label class="label">Blog Details</label>
                         <div class="control">
-                        <textarea class="textarea editor" placeholder="Enter Text" name="blog_details">{{old('blog_details')}}</textarea>
+                        <textarea class="textarea editor" placeholder="Enter Text" name="blog_details">{{old('blog_details', $blog->blog_details)}}</textarea>
                         </div>
                         @error('blog_details')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -266,14 +270,19 @@
                     
                     <div class="field grouped">
                         <div class="control">
-                        <button type="submit" class="button green">
-                            Submit
-                        </button>
+                            <button type="submit" class="button green">
+                                Submit
+                            </button>
                         </div>
                         <div class="control">
-                        <button type="reset" class="button red">
-                            Reset
-                        </button>
+                            <button type="reset" class="button red">
+                                Reset
+                            </button>
+                        </div>
+                        <div>
+                            <a href="{{ route('admin.blogImageUpload', ['id' => $blog->id]) }}" class="button blue">
+                                Upload Slider Images
+                            </a>
                         </div>
                     </div>
                 </form>

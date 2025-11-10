@@ -77,72 +77,66 @@
             <header class="card-header">
                 <p class="card-header-title">
                 <span class="icon"><i class="mdi mdi-ballot"></i></span>
-                    Enter Blog Details
+                    Enter Short Story
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addBlogs.add') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admin.editShortStories.update', $shortStory->id) }}" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="home_id" value="">
                     <div class="field">
                         <label class="label">Title</label>
                         <div class="field-body">
                             <div class="field">
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Blog title" name="title" value="{{ old('title') }}">
+                                    <input class="input" type="text" placeholder="Story Name" name="title" value="{{ old('title', $shortStory->title) }}">
                                 </div>
                                 @error('title')
                                     <p class="text-red-500 text-sm">{{ $message }}</p>
                                 @enderror
-                            </div>
-                        </div>
-                    </div>
-                    {{-- <div class="field">
-                        <label class="label">Author Name</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input" type="text" placeholder="Name" name="author" value="{{ old('author') }}">
-                                </div>
-                                @error('author')
-                                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                                @enderror
 
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     
-                    {{-- <div class="field">
+                    <div class="field">
                         <label class="label">Short description</label>
                         <div class="control">
-                            <textarea class="textarea" placeholder="Enter Text" name="introducing">{{old('introducing')}}</textarea>
+                            <textarea class="textarea editor" placeholder="Enter Text" name="short_description">{{ old('short_description', $shortStory->short_description) }}</textarea>
                         </div>
-                        @error('introducing')
+                        @error('short_description')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                         
-                    </div> --}}
+                    </div>
 
                     <!-- Thumbnail Photo -->
                     <div class="form-group">
                         <label for="thumbnailPhoto" class="label">
-                            Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
+                            Change Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="thumbnailPhoto" name="thumbnail_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
-                        <div id="thumbnailPreview" class="preview-box"></div>
+                        <input id="thumbnailPhoto" type="file" accept="image/*" class="form-input" name="thumbnail_photo" />
+                        <div id="thumbnailPreview" class="preview-box">
+                            @if($shortStory->thumbnail_photo)
+                                <img src="{{ asset('storage/'.$shortStory->thumbnail_photo) }}" alt="Thumbnail" width="200">
+                            @endif
+                        </div>
                         <p id="thumbnailError" class="error-text hidden"></p>
+                        @error('thumbnail_photo')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label"> Tags </label>
+                                <label class="label"> Tags</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="tags" multiple name="tags[]">
-                                            @foreach ($tags as $tag)
-                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                            @foreach($tags as $tag)
+                                                <option value="{{ $tag->id }}" @selected( in_array($tag->id, old('tags', $shortStory->shortStoryTags->pluck('id')->toArray())) )>{{ $tag->name }}</option>
                                             @endforeach
-                                            
                                         </select>
                                         @error('tags')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -155,13 +149,14 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Category Type</label>
+                                <label class="label">Category</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="categories" multiple name="categories[]">
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                           @foreach($categories as $category)
+                                                <option value="{{ $category->id }}" {{ in_array($category->id, old('categories', $shortStory->shortStoryCategories->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $category->name }}</option>
                                             @endforeach
+                                            
                                         </select>
                                         @error('categories')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -174,15 +169,16 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Article Type </label>
+                                <label class="label">Characters</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="blogTypes" multiple name="blogTypes[]">
-                                            @foreach ($blogTypes as $type)
-                                                <option value="{{ $type->id }}">{{ $type->type_name }}</option>
+                                        <select id="characters" multiple name="characters[]">
+                                            @foreach($characters as $character)
+                                                <option value="{{ $character->id }}" {{ in_array($character->id, old('characters', $shortStory->shortStoryCharacters->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $character->name }}</option>
                                             @endforeach
+                                            
                                         </select>
-                                        @error('blogTypes')
+                                        @error('characters')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -193,15 +189,20 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Suggested Articles</label>
+                                <label class="label">Suggested Stories</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="suggestedArticles" multiple name="suggestedArticles[]">
-                                            @foreach ($suggestedBlogs as $blog)
-                                                <option value="{{ $blog->id }}">{{ $blog->title }}</option>
+                                        <select id="suggestedStories" multiple name="suggestedStories[]">
+                                            {{-- @foreach($facilities as $facility)
+                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
+                                            @endforeach --}}
+                                            @foreach($suggestedStories as $story)   
+                                                <option value="{{ $story->id }}" {{ in_array($story->id, old('suggestedStories', $shortStory->suggestedStories->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $story->title }}</option>
                                             @endforeach
+                                            
+
                                         </select>
-                                        @error('suggestedArticles')
+                                        @error('suggestedStories')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -211,11 +212,11 @@
                     </div>
 
                     <div class="field">
-                        <label class="label">Blog Details</label>
+                        <label class="label">Short Story Details</label>
                         <div class="control">
-                        <textarea class="textarea editor" placeholder="Enter Text" name="blog_details">{{old('blog_details')}}</textarea>
+                        <textarea class="textarea editor2" placeholder="Enter Text" name="short_story_details">{{old('short_story_details', $shortStory->short_story_details)}}</textarea>
                         </div>
-                        @error('blog_details')
+                        @error('short_story_details')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                     </div>
@@ -235,14 +236,14 @@
                             <div class="field grouped multiline">
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="status" value="1" checked>
+                                <input type="radio" name="status" value="1" {{ old('status', $shortStory->status) == 1 ? 'checked' : '' }}>
                                 <span class="check"></span>
                                 <span class="control-label">Publish</span>
                                 </label>
                             </div>
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="status" value="0">
+                                <input type="radio" name="status" value="0" {{ old('status', $shortStory->status) == 0 ? 'checked' : '' }}>
                                 <span class="check"></span>
                                 <span class="control-label">Draft</span>
                                 </label>
@@ -266,14 +267,19 @@
                     
                     <div class="field grouped">
                         <div class="control">
-                        <button type="submit" class="button green">
-                            Submit
-                        </button>
+                            <button type="submit" class="button green">
+                                Next
+                            </button>
                         </div>
                         <div class="control">
-                        <button type="reset" class="button red">
-                            Reset
-                        </button>
+                            <button type="reset" class="button red">
+                                Reset
+                            </button>
+                        </div>
+                        <div>
+                            <a href="{{ route('admin.shortStoryImageUpload', ['id' => $shortStory->id]) }}" class="button blue">
+                                Upload Slider Images
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -284,19 +290,26 @@
         <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script>
-        
          document.addEventListener('DOMContentLoaded', function () {
             new Choices('#tags', { removeItemButton: true, searchEnabled: true });
             new Choices('#categories', { removeItemButton: true, searchEnabled: true });
-            new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
-            new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            new Choices('#suggestedStories', { removeItemButton: true, searchEnabled: true });
+            new Choices('#characters', { removeItemButton: true, searchEnabled: true });
+        });
+    </script>
 
-            ClassicEditor
+    <script>
+        ClassicEditor
             .create(document.querySelector('.editor'))
             .catch(error => {
                 console.error(error);
             });
-        });
+        ClassicEditor
+            .create(document.querySelector('.editor2'))
+            .catch(error => {
+                console.error(error);
+            });
     </script>
+
 
 @endsection
