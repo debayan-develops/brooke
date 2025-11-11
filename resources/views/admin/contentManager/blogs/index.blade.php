@@ -81,7 +81,7 @@
                     </td> --}}
                     <td data-label="Name">{{ $blog->id }}</td>
                     <td data-label="Name">
-                        <img src="{{ asset('public/storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail" width="80" height="80" class="w-16 h-16 object-cover rounded-md" />
+                        <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" alt="Thumbnail" width="80" height="80" class="w-16 h-16 object-cover rounded-md" />
                     </td>
                     <td data-label="Company">{{ $blog->title }}</td>
                     {{-- <td data-label="Company">{{ $blog->short_description }}</td> --}}

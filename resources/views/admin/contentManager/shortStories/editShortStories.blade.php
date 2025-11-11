@@ -118,7 +118,7 @@
                         <input id="thumbnailPhoto" type="file" accept="image/*" class="form-input" name="thumbnail_photo" />
                         <div id="thumbnailPreview" class="preview-box">
                             @if($shortStory->thumbnail_photo)
-                                <img src="{{ asset('public/storage/'.$shortStory->thumbnail_photo) }}" alt="Thumbnail" width="200">
+                                <img src="{{ asset(config('app.assets_path') . $shortStory->thumbnail_photo) }}" alt="Thumbnail" width="200">
                             @endif
                         </div>
                         <p id="thumbnailError" class="error-text hidden"></p>

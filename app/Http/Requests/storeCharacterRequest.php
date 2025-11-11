@@ -23,6 +23,7 @@ class storeCharacterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:50',
+            'description' => 'nullable|string',
             'characterType' => 'required|array',
             'characterType.*' => 'exists:category_type,id',
         ];

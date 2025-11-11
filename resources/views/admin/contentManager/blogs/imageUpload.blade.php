@@ -211,7 +211,7 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td> 
                                     <div class="thumb" style="width: 120px; height: 80px;">
-                                        <img src="{{ asset('public/storage/'.$row['image_path']) }}" class="preview">
+                                        <img src="{{ asset(config('app.assets_path') . $row['image_path']) }}" class="preview">
                                     </div>
                                 </td>
                                 {{-- <td> 

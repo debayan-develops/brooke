@@ -52,6 +52,17 @@
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label">Description</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control icons-left">
+                                    <textarea class="input editor" placeholder="Description" name="description"></textarea>
+                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
                                 <label class="label">Character  Type</label>
@@ -103,9 +114,20 @@
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label">Description</label>
+                        <div class="field-body">
+                            <div class="field">
+                                <div class="control icons-left">
+                                    <textarea class="input editor2" placeholder="Description" name="description"></textarea>
+                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Tag Type</label>
+                                <label class="label">Character Type</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="editCharacterType" multiple name="characterType[]">
@@ -191,6 +213,7 @@
                 <tr>
                     <th>#</th>
                     <th>Characters Name</th>
+                    <th>Description</th>
                     <th>Characters Type</th>
                     <th></th>
                 </tr>
@@ -200,6 +223,7 @@
                         <tr>
                             <td data-label="Name">{{$key+1}}</td>
                             <td data-label="Name">{{$item->name}}</td>
+                            <td data-label="Company">{!! Str::limit($item->description, 50) !!}</td>
                             <td data-label="Company">{{$item->types->pluck('name')->join(', ')}}</td>
                             <td class="actions-cell">
                             <div class="buttons right nowrap">
@@ -242,7 +266,19 @@
                 searchEnabled: true,
             });
 
+            let editor1 = ClassicEditor
+            .create(document.querySelector('.editor'))
+            .catch(error => {
+                console.error(error);
+            });
+            let editor2 = ClassicEditor
+            .create(document.querySelector('.editor2'))
+            .catch(error => {
+                console.error(error);
+            });
+
             $('.edit-btn').on('click', function () {
+                console.log(editor2);
                 $('#modalShowBtn').attr('data-target', 'edit-character-modal');
                 $('#ajaxLoader').fadeIn();
                 const tagId = $(this).data('id');
@@ -250,11 +286,17 @@
                 let routeTemplateUpdate = "{{ route('admin.character.add', ':id') }}";
                 $('#edit-character-modal input[name="id"]').val('');
                 $('#edit-character-modal input[name="name"]').val('');
+                $('#edit-character-modal textarea[name="description"]').val('');
                 choices.clearStore();
                 choices.clearChoices();
                 $.get(routeTemplateEdit.replace(':id', tagId), function (data) {
                     $('#edit-character-modal input[name="id"]').val(data[0].id);
                     $('#edit-character-modal input[name="name"]').val(data[0].name);
+                    // $('#edit-character-modal textarea[name="description"]').val(data[0].description);
+                    editor2.then( editor => {
+                        editor.setData(data[0].description);
+                    } );
+                    // alert(data[0].description);
                     $('#edit-character').attr('action', routeTemplateUpdate.replace(':id', tagId));
                     fetchType(data[0].types);
                     $('#ajaxLoader').fadeOut();
@@ -295,6 +337,7 @@
                 $('#modalShowBtn').click();
 
             });
+            
         });
 
     </script>

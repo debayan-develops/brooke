@@ -89,14 +89,14 @@ class ContentManagementController extends Controller {
         if ($id) {
             $character = Character::find($id);
             $character->name = $validated['name'];
+            $character->description = $validated['description'];
             $character->types()->sync($validated['characterType']);
-            // $character->description = $validated['description'];
             $character->save();
             return redirect()->back()->with('success', 'Character updated successfully!');
         }
 
         $characterArr['name'] = $validated['name'];
-        // $characterArr['description'] = $validated['description'];
+        $characterArr['description'] = $validated['description'];
 
         $character = Character::create($characterArr);
         $character->types()->attach($validated['characterType']);

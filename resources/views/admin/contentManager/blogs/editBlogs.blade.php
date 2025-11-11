@@ -129,7 +129,7 @@
                         </label>
                         <input id="thumbnailPhoto" name="thumbnail_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
                         <div id="thumbnailPreview" class="preview-box">
-                            <img src="{{ asset('public/storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail Preview" width="200" />
+                            <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" alt="Thumbnail Preview" width="200" />
                         </div>
                         <p id="thumbnailError" class="error-text hidden"></p>
                     </div>
