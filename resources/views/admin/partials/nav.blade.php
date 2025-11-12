@@ -1,7 +1,7 @@
 <aside class="aside is-placed-left is-expanded">
   <div class="aside-tools">
     <div>
-      Admin <b class="font-black">Brook</b>
+      Admin <b class="font-black">Brooke`</b>
     </div>
   </div>
   <div class="menu is-menu-main">
