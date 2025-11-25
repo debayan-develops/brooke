@@ -181,7 +181,7 @@
                                 <td> 
                                     <div class="thumb" style="width: 120px; height: 80px;">
                                         {{-- FIX: Changed asset path to storage --}}
-                                        <img src="{{ asset('storage/' . $row['image_path']) }}" class="preview">
+                                        <img src="{{ asset(config('app.assets_path') . $row['image_path']) }}" class="preview">
                                     </div>
                                 </td>
                                 <td class="actions-cell">

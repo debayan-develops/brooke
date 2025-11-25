@@ -81,7 +81,7 @@
                         <td data-label="Image">
                             {{-- FIX: Using storage path --}}
                             @if($blog->thumbnail_photo)
-                                <img src="{{ asset('storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail" class="thumb-img" />
+                                <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" alt="Thumbnail" class="thumb-img" />
                             @else
                                 <span class="text-gray-400">No Image</span>
                             @endif
