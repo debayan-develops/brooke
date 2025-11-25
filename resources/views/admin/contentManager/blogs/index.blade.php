@@ -2,31 +2,25 @@
 
 @section('title', $title)
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <style>
-    /* Custom DataTables Styling */
-    .dataTables_wrapper { padding: 20px; }
-    .dataTables_wrapper .dataTables_length select { padding-right: 30px; border-radius: 4px; border: 1px solid #ddd; }
-    .dataTables_wrapper .dataTables_filter input { border-radius: 4px; border: 1px solid #ddd; padding: 5px; margin-left: 5px; }
-    
-    /* Table Styling */
-    table.dataTable { border-collapse: collapse !important; width: 100% !important; margin-top: 10px !important; }
-    table.dataTable th, table.dataTable td { padding: 12px 10px; border-bottom: 1px solid #eee; }
-    table.dataTable thead th { background-color: #f9fafb; font-weight: 600; text-align: left; vertical-align: middle; }
-    
-    /* Pagination */
-    .dataTables_paginate .paginate_button { padding: 5px 10px !important; border-radius: 4px !important; }
-    .dataTables_paginate .paginate_button.current { background: #3b82f6 !important; color: white !important; border: none !important; }
-
-    /* Image Thumb */
-    .thumb-img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 6px;
-        border: 1px solid #eee;
+    /* Filter Section Styling */
+    .filter-section {
+        background: #f9fafb;
+        padding: 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin: 0 20px 20px 20px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-end;
     }
+    .filter-group { flex: 1; }
+    .filter-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 5px; color: #374151; }
+    .filter-input { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; }
+    .filter-actions { display: flex; gap: 10px; }
+    
+    /* Image Thumb */
+    .thumb-img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
 </style>
 
 @section('content')
@@ -45,83 +39,135 @@
 
         <section class="is-hero-bar">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-                <h1 class="title">
-                {{$title}}
-                </h1>
+                <h1 class="title">{{$title}}</h1>
                 <a href="{{ route('admin.addBlogs') }}" class="button green">Add Blog</a>
+            </div>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="section main-section" style="padding-bottom: 0;">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label>Search Title</label>
+                    <input type="text" id="filterTitle" class="filter-input" placeholder="Type Blog Title...">
+                </div>
+                <div class="filter-actions">
+                    <button type="button" id="btnReset" class="button red">Reset</button>
+                </div>
             </div>
         </section>
 
         <section class="section main-section">
             <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                    Blog List
-                </p>
-                <a href="#" onclick="window.location.reload()" class="card-header-icon">
-                    <span class="icon"><i class="mdi mdi-reload"></i></span>
-                </a>
-            </header>
-            <div class="card-content">
-                <table id="blogTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Image</th>
-                            <th>Title</th>
-                            <th>Created Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ($blogs as $blog)
-                    <tr>
-                        <td data-label="ID">{{ $blog->id }}</td>
-                        <td data-label="Image">
-                            {{-- FIX: Using storage path --}}
-                            @if($blog->thumbnail_photo)
-                                <img src="{{ asset('storage/' . $blog->thumbnail_photo) }}" alt="Thumbnail" class="thumb-img" />
-                            @else
-                                <span class="text-gray-400">No Image</span>
-                            @endif
-                        </td>
-                        <td data-label="Title" style="font-weight: 600;">{{ $blog->title }}</td>
-                        <td data-label="Created">
-                            <small class="text-gray-500">{{ $blog->created_at ? $blog->created_at->format('M d, Y') : '-' }}</small>
-                        </td>
-                        <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                                <a href="{{ route('admin.editBlogs', $blog->id) }}" class="button small blue edit-btn">
-                                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                                </a>
-                                {{-- Add Delete button here if route exists --}}
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                        Blog List
+                    </p>
+                    <a href="#" onclick="window.location.reload()" class="card-header-icon">
+                        <span class="icon"><i class="mdi mdi-reload"></i></span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogTableBody">
+                            <!-- Initial Rows generated by server-side for SEO/No-JS fallback, 
+                                 but we will re-render via JS for filtering consistency if needed.
+                                 Actually, for simple filtering, hiding rows is easier. 
+                                 But to match the requested "Temporary Table" style, we'll render via JS. -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </div>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#blogTable').DataTable({
-                "paging": true,
-                "ordering": true,
-                "info": true,
-                "searching": true,
-                "pageLength": 10,
-                "order": [[ 0, "desc" ]], // Order by ID descending (newest first)
-                "columnDefs": [
-                    { "orderable": false, "targets": [1, 4] } // Disable sorting on Image and Actions
-                ]
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // 1. Data Preparation
+            const allBlogs = @json($blogs);
+            // Base Asset Path for images
+            const assetBase = "{{ asset('storage/') }}"; 
+
+            // 2. Render Function
+            function renderTable(data) {
+                const tbody = document.getElementById('blogTableBody');
+                tbody.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">No records found</td></tr>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    // Image Logic
+                    let imgHtml = '<span class="text-gray-400">No Image</span>';
+                    if (item.thumbnail_photo) {
+                        imgHtml = `<img src="${assetBase}/${item.thumbnail_photo}" class="thumb-img">`;
+                    }
+
+                    // Date Logic
+                    let dateStr = '-';
+                    if (item.created_at) {
+                        let d = new Date(item.created_at);
+                        dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    }
+
+                    // Edit URL
+                    let editUrl = "{{ route('admin.editBlogs', ':id') }}".replace(':id', item.id);
+
+                    let row = `
+                        <tr>
+                            <td data-label="ID">${item.id}</td>
+                            <td data-label="Image">${imgHtml}</td>
+                            <td data-label="Title" style="font-weight: 600;">${item.title}</td>
+                            <td data-label="Created"><small class="text-gray-500">${dateStr}</small></td>
+                            <td class="actions-cell">
+                                <div class="buttons right nowrap">
+                                    <a href="${editUrl}" class="button small blue edit-btn">
+                                        <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            }
+
+            // Initial Render
+            renderTable(allBlogs);
+
+            // 3. Filter Logic
+            function applyFilter() {
+                const titleQuery = document.getElementById('filterTitle').value.toLowerCase().trim();
+
+                const filtered = allBlogs.filter(item => {
+                    return item.title.toLowerCase().includes(titleQuery);
+                });
+
+                renderTable(filtered);
+            }
+
+            // Bind Events
+            document.getElementById('filterTitle').addEventListener('keyup', applyFilter);
+            
+            // Reset Logic
+            document.getElementById('btnReset').addEventListener('click', function() {
+                document.getElementById('filterTitle').value = '';
+                renderTable(allBlogs);
             });
         });
     </script>

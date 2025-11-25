@@ -2,7 +2,26 @@
 
 @section('title', $title)
 
-
+<style>
+    /* Filter Section Styling */
+    .filter-section {
+        background: #f9fafb;
+        padding: 20px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        margin: 0 20px 20px 20px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-end;
+    }
+    .filter-group { flex: 1; }
+    .filter-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 5px; color: #374151; }
+    .filter-input { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; }
+    .filter-actions { display: flex; gap: 10px; }
+    
+    /* Image Thumb */
+    .thumb-img { width: 60px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
+</style>
 
 @section('content')
     <div id="app">
@@ -20,136 +39,132 @@
 
         <section class="is-hero-bar">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-                <h1 class="title">
-                {{$title}}
-                </h1>
+                <h1 class="title">{{$title}}</h1>
                 <a href="{{ route('admin.addShortStories') }}" class="button green">Add Short Story</a>
+            </div>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="section main-section" style="padding-bottom: 0;">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label>Search Title</label>
+                    <input type="text" id="filterTitle" class="filter-input" placeholder="Type Story Title...">
+                </div>
+                <div class="filter-actions">
+                    <button type="button" id="btnReset" class="button red">Reset</button>
+                </div>
             </div>
         </section>
 
         <section class="section main-section">
             <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                    List
-                </p>
-                {{-- <select class="select">
-                    <option value="all">Filter Category</option>
-                    <option value="Freshest">Freshest</option>
-                    <option value="Novels">Novels</option>
-                </select> --}}
-                <a href="#" class="card-header-icon">
-                    <span class="icon"><i class="mdi mdi-reload"></i></span>
-                </a>
-            </header>
-            <div class="card-content">
-                <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                    @foreach ($shortStories as $item)
+                <header class="card-header">
+                    <p class="card-header-title">
+                        <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                        Short Story List
+                    </p>
+                    <a href="#" onclick="window.location.reload()" class="card-header-icon">
+                        <span class="icon"><i class="mdi mdi-reload"></i></span>
+                    </a>
+                </header>
+                <div class="card-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shortStoryTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // 1. Data Preparation
+            const allStories = @json($shortStories);
+            const assetBase = "{{ asset('storage/') }}"; 
+
+            // 2. Render Function
+            function renderTable(data) {
+                const tbody = document.getElementById('shortStoryTableBody');
+                tbody.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">No records found</td></tr>';
+                    return;
+                }
+
+                data.forEach(item => {
+                    // Image Logic
+                    let imgHtml = '<span class="text-gray-400">No Image</span>';
+                    if (item.thumbnail_photo) {
+                        imgHtml = `<img src="${assetBase}/${item.thumbnail_photo}" class="thumb-img">`;
+                    }
+
+                    // Date Logic
+                    let dateStr = '-';
+                    if (item.created_at) {
+                        let d = new Date(item.created_at);
+                        dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                    }
+
+                    // Edit URL
+                    let editUrl = "{{ route('admin.editShortStories', ':id') }}".replace(':id', item.id);
+
+                    let row = `
                         <tr>
-                            <td data-label="Name">{{ $item->id }}</td>
-                            <td data-label="Name">
-                                <div class="image-wrapper is-48x48">
-                                    <img width="70" src="{{ asset(config('app.assets_path') . $item->thumbnail_photo) }}" alt="{{ $item->title }}">
-                                </div>
-                            </td>
-                            <td data-label="Company">{{ $item->title }}</td>
-                            <td data-label="Company"> @php
-                                echo $item->short_description;
-                            @endphp</td>
+                            <td data-label="ID">${item.id}</td>
+                            <td data-label="Image">${imgHtml}</td>
+                            <td data-label="Title" style="font-weight: 600;">${item.title}</td>
+                            <td data-label="Created"><small class="text-gray-500">${dateStr}</small></td>
                             <td class="actions-cell">
                                 <div class="buttons right nowrap">
-                                    {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                                        <span class="icon"><i class="mdi mdi-eye"></i></span>
-                                    </button> --}}
-                                    <a href="{{ route('admin.editShortStories', $item->id) }}" class="button small blue edit-btn"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></a>
-                                    <button class="button small red --jb-modal" data-target="sample-modal" type="button">
-                                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                                    </button>
+                                    <a href="${editUrl}" class="button small blue edit-btn">
+                                        <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
-                </table>
-                <div class="table-pagination">
-                <div class="flex items-center justify-between">
-                    <div class="buttons">
-                    <button type="button" class="button active">1</button>
-                    <button type="button" class="button">2</button>
-                    <button type="button" class="button">3</button>
-                    </div>
-                    <small>Page 1 of 3</small>
-                </div>
-                </div>
-            </div>
-            </div>
-        </section>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            }
 
-        {{-- <section class="section main-section">
-            <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
-            <div class="card">
-                <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                    <h3>
-                        Clients
-                    </h3>
-                    <h1>
-                        512
-                    </h1>
-                    </div>
-                    <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                    <h3>
-                        Sales
-                    </h3>
-                    <h1>
-                        $7,770
-                    </h1>
-                    </div>
-                    <span class="icon widget-icon text-blue-500"><i class="mdi mdi-cart-outline mdi-48px"></i></span>
-                </div>
-                </div>
-            </div>
+            // Initial Render
+            renderTable(allStories);
 
-            <div class="card">
-                <div class="card-content">
-                <div class="flex items-center justify-between">
-                    <div class="widget-label">
-                    <h3>
-                        Performance
-                    </h3>
-                    <h1>
-                        256%
-                    </h1>
-                    </div>
-                    <span class="icon widget-icon text-red-500"><i class="mdi mdi-finance mdi-48px"></i></span>
-                </div>
-                </div>
-            </div>
-            </div>
+            // 3. Filter Logic
+            function applyFilter() {
+                const titleQuery = document.getElementById('filterTitle').value.toLowerCase().trim();
 
+                const filtered = allStories.filter(item => {
+                    return item.title.toLowerCase().includes(titleQuery);
+                });
+
+                renderTable(filtered);
+            }
+
+            // Bind Events
+            document.getElementById('filterTitle').addEventListener('keyup', applyFilter);
             
-        </section> --}}
-
-        
-        
-    </div>
+            // Reset Logic
+            document.getElementById('btnReset').addEventListener('click', function() {
+                document.getElementById('filterTitle').value = '';
+                renderTable(allStories);
+            });
+        });
+    </script>
 @endsection

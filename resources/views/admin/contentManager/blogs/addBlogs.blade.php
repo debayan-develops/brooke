@@ -22,30 +22,51 @@
     }
     .hidden { display: none; }
 
-    /* Modern CKEditor Styling */
+    /* =========================================
+       MODERN CKEDITOR 5 STYLING 
+       ========================================= */
+    /* Main Container */
     .ck-editor__editable_inline {
-        min-height: 400px; /* Taller editor for a modern feel */
+        min-height: 400px;
+        padding: 2rem !important; /* Spacious padding like a document */
+        border: 1px solid #D1D5DB !important;
         border-bottom-left-radius: 0.5rem !important;
         border-bottom-right-radius: 0.5rem !important;
-        border: 1px solid #D1D5DB !important;
-        padding: 1.5rem !important; /* More padding for readability */
-        font-family: 'Inter', system-ui, -apple-system, sans-serif; /* Modern font stack */
-        font-size: 1rem;
-        line-height: 1.6;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.8;
         color: #374151;
     }
+
+    /* Toolbar Styling */
     .ck-toolbar {
+        border: 1px solid #D1D5DB !important;
+        border-bottom: none !important;
         border-top-left-radius: 0.5rem !important;
         border-top-right-radius: 0.5rem !important;
-        border: 1px solid #D1D5DB !important;
-        border-bottom: 1px solid #E5E7EB !important;
-        background-color: #F9FAFB !important; /* Light gray background */
+        background-color: #F9FAFB !important; /* Light gray header */
         padding: 0.5rem !important;
     }
-    /* Remove focus outline */
+
+    /* Focus State - Blue Ring */
     .ck.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
-        border: 1px solid #3B82F6 !important; /* Blue focus border */
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        border-color: #3B82F6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+        outline: none !important;
+    }
+
+    /* Content Headings */
+    .ck-content h2 { font-size: 1.75em; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; color: #111827; }
+    .ck-content h3 { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; color: #1F2937; }
+    .ck-content blockquote {
+        border-left: 4px solid #3B82F6;
+        padding-left: 1em;
+        margin-left: 0;
+        font-style: italic;
+        color: #4B5563;
+        background: #F3F4F6;
+        padding: 1rem;
+        border-radius: 0 0.5rem 0.5rem 0;
     }
 </style>
 
@@ -171,11 +192,11 @@
                             </div>
                         </div>
 
-                        <!-- Modern Editor -->
+                        <!-- ADVANCED CKEDITOR 5 -->
                         <div class="field">
                             <label class="label">Blog Details</label>
                             <div class="control">
-                                <textarea class="textarea editor" id="blog_details" placeholder="Start writing your amazing blog post here..." name="blog_details">{{old('blog_details')}}</textarea>
+                                <textarea class="textarea editor" id="blog_details" placeholder="Start writing your blog post..." name="blog_details">{{old('blog_details')}}</textarea>
                             </div>
                             @error('blog_details')
                                 <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -223,7 +244,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     
-    <!-- CKEditor 5 CDN -->
+    <!-- CKEditor 5 Main Script -->
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
     <script>
@@ -234,47 +255,37 @@
             new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
             new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
 
-            // 2. Initialize Advanced Modern Editor
+            // 2. Initialize Advanced & Modern CKEditor
             ClassicEditor
                 .create(document.querySelector('.editor'), {
                     toolbar: {
                         items: [
                             'heading',
                             '|',
-                            'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript',
+                            'bold', 'italic', 'strikethrough', 'underline', 'code',
                             '|',
                             'bulletedList', 'numberedList', 'todoList',
                             '|',
                             'outdent', 'indent',
                             '|',
-                            'link', 'blockQuote', 'insertTable', 'mediaEmbed', 'horizontalLine',
+                            'link', 'blockQuote', 'insertTable', 'mediaEmbed',
                             '|',
-                            'removeFormat', 'undo', 'redo'
+                            'undo', 'redo'
                         ],
                         shouldNotGroupWhenFull: true
                     },
                     language: 'en',
+                    placeholder: 'Start writing your amazing content here...',
                     table: {
-                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties' ]
-                    },
-                    mediaEmbed: {
-                        previewsInData: true
-                    },
-                    link: {
-                        decorators: {
-                            openInNewTab: {
-                                mode: 'manual',
-                                label: 'Open in a new tab',
-                                attributes: {
-                                    target: '_blank',
-                                    rel: 'noopener noreferrer'
-                                }
-                            }
-                        }
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells'
+                        ]
                     }
                 })
                 .then(editor => {
-                    console.log('Editor was initialized', editor);
+                    console.log('Advanced Editor initialized', editor);
                 })
                 .catch(error => {
                     console.error('Editor initialization error:', error);
@@ -294,7 +305,7 @@
                     errorText.textContent = '';
 
                     if (file) {
-                        // Validate size (2MB = 2 * 1024 * 1024 bytes)
+                        // Validate size (2MB)
                         if (file.size > 2 * 1024 * 1024) {
                             errorText.textContent = "Error: File size is too large. Please upload an image under 2MB.";
                             errorText.classList.remove('hidden');
