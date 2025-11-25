@@ -16,16 +16,6 @@
     --muted: #6b7280;
     --danger: #ef4444;
   }
-  body {
-    /* margin: 0;
-    font-family: system-ui, sans-serif;
-    background: var(--bg);
-    color: #111827;
-    padding: 32px 16px;
-    display: grid;
-    gap: 32px;
-    place-items: start center; */
-  }
   .uploader {
     width: 100%;
     background: white;
@@ -111,13 +101,13 @@
             <h1 class="title">
             {{$title}}
             </h1>
-            <a href="{{ url()->previous() }}" data-target="add-facility-modal" class="button blue --jb-modal">Go Back</a>
+            {{-- FIX: Changed to point to the Edit Route directly instead of previous() --}}
+            <a href="{{ route('admin.editBlogs', $blogId) }}" class="button blue">Finish & Go Back</a>
         </div>
     </section>
 
     <section class="section main-section">
         @if(session('success'))
-            <!-- ...success notification unchanged... -->
              <div class="notification green">
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
                     <div>
@@ -136,23 +126,6 @@
                 </p>
             </header>
             <div class="card-content">
-                <!-- Featured Image AJAX Form -->
-                {{-- <form id="featuredImageForm" enctype="multipart/form-data">
-                    <div class="uploader mb-6">
-                        <h2>Featured Image</h2>
-                        <div class="dropzone" onclick="document.getElementById('featuredImageInput').click();">
-                            <small>Drag & drop or click</small>
-                            <input type="file" accept="image/*" id="featuredImageInput" name="image" hidden>
-                        </div>
-                        <div class="grid-1" id="featuredImagePreview">
-                            <!-- Preview will be inserted here -->
-                        </div>
-                        <div class="error" id="featuredImageError"></div>
-                        <input type="hidden" name="home_id" value="{{ $homeId }}">
-                        <button type="submit" class="btn mt-2">Upload Featured Image</button>
-                    </div>
-                </form> --}}
-
                 <!-- Gallery Images AJAX Form -->
                 <form id="galleryImagesForm" method="POST" action="{{ route('admin.blogImageUpload.store',['id' => $blogId]) }}" enctype="multipart/form-data">
                     @csrf
@@ -198,39 +171,21 @@
                             <tr>
                                 <th>SL no.</th>
                                 <th>Image</th>
-                                {{-- <th>Is Featured</th> --}}
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                            //    print_r($images->toArray());die;
-                            @endphp
                             @foreach($images->toArray() as $key => $row)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td> 
                                     <div class="thumb" style="width: 120px; height: 80px;">
-                                        <img src="{{ asset(config('app.assets_path') . $row['image_path']) }}" class="preview">
+                                        {{-- FIX: Changed asset path to storage --}}
+                                        <img src="{{ asset('storage/' . $row['image_path']) }}" class="preview">
                                     </div>
                                 </td>
-                                {{-- <td> 
-                                    <div class="field">
-                                        <div class="field-body">
-                                            <div class="field">
-                                            <label class="switch">
-                                                <input type="checkbox" name="featured" value="1"
-                                                {{ $row['is_featured'] ? 'checked' : '' }}>
-                                                <span class="check"></span>
-                                                <span class="control-label">Featured</span>
-                                            </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td> --}}
                                 <td class="actions-cell">
                                     <div class="buttons right nowrap">
-                                        
                                         <button class="delete-btn button small red" data-id="{{$row['id']}}" onclick="deleteGalleryImage('{{$row['id']}}', this)" type="button">
                                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                                         </button>
@@ -240,16 +195,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="table-pagination">
-                        <div class="flex items-center justify-between">
-                            {{-- <div class="buttons">
-                            <button type="button" class="button active">1</button>
-                            <button type="button" class="button">2</button>
-                            <button type="button" class="button">3</button>
-                            </div>
-                            <small>Page 1 of 3</small> --}}
-                        </div>
-                    </div>
                 </div>
                 @else
                 <div class="card empty">
@@ -265,19 +210,11 @@
     </section>
 </div>
 
-{{-- <div id="ajaxLoader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999;">
-    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
-</div> --}}
 <div id="ajaxLoader"></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // JavaScript code for handling image uploads and previews
-    // Gallery Images Preview
     document.getElementById('galleryImagesInput').addEventListener('change', function(e) {
         let previewDiv = document.getElementById('galleryImagesPreview');
         previewDiv.innerHTML = '';
@@ -319,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-    
 });
 </script>
 @endsection

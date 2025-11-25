@@ -25,6 +25,7 @@ class BlogController extends Controller
     }
     public function addBlogs()
     {
+        // Fix: Use optional chaining (?->) or null coalescing to prevent crash if 'blog' category type is missing
         $allTags = CategoryType::with('tags')->where('slug', 'blog')->first();
         $allCategories = CategoryType::with('categories')->where('slug', 'blog')->first();
         $blogTypes = BlogType::all();
@@ -32,11 +33,11 @@ class BlogController extends Controller
 
         return view('admin.contentManager.blogs.addBlogs')->with([
             'title' => 'Add Blogs',
-            'categories' => $allCategories->categories??[],
-            'tags' => $allTags->tags??[],
+            // Safe navigation: if $allCategories is null, return empty array []
+            'categories' => ($allCategories) ? $allCategories->categories : [],
+            'tags' => ($allTags) ? $allTags->tags : [],
             'blogTypes' => $blogTypes,
             'suggestedBlogs' => $suggestedBlogs,
-            // You can pass additional data here if needed
         ]);
     }
 
@@ -98,11 +99,10 @@ class BlogController extends Controller
         return view('admin.contentManager.blogs.editBlogs')->with([
             'title' => 'Edit Blogs',
             'blog' => $blog,
-            'categories' => $allCategories->categories??[],
-            'tags' => $allTags->tags??[],
+            'categories' => ($allCategories) ? $allCategories->categories : [],
+            'tags' => ($allTags) ? $allTags->tags : [],
             'blogTypes' => $blogTypes,
             'suggestedBlogs' => $suggestedBlogs,
-            // You can pass additional data here if needed
         ]);
     }
 

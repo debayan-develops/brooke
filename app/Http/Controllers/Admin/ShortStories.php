@@ -21,13 +21,12 @@ class ShortStories extends Controller
         return view('admin.contentManager.shortStories.index')->with([
             'title' => 'Short Stories',
             'shortStories' => $shortStories,
-            // You can pass additional data here if needed
         ]);
     }
 
     public function addShortStories()
     {
-
+        // Fetch category types related to 'short-story'
         $allCharacters = CategoryType::with('characters')->where('slug', 'short-story')->first();
         $allTags = CategoryType::with('tags')->where('slug', 'short-story')->first();
         $allCategories = CategoryType::with('categories')->where('slug', 'short-story')->first();
@@ -35,22 +34,22 @@ class ShortStories extends Controller
 
         return view('admin.contentManager.shortStories.addShortStories')->with([
             'title' => 'Add Short Stories',
-            'characters' => $allCharacters->characters??[],
-            'tags' => $allTags->tags??[],
-            'categories' => $allCategories->categories??[],
+            // Fix: Check if variable is not null before accessing property
+            'characters' => ($allCharacters) ? $allCharacters->characters : [],
+            'tags' => ($allTags) ? $allTags->tags : [],
+            'categories' => ($allCategories) ? $allCategories->categories : [],
             'suggestedStories' => $suggestedStories,
-            // You can pass additional data here if needed
         ]);
     }
 
     public function storeShortStories(StoreShortStories $request, $id = null)
     {
-        
         $validated = $request->validated();
         $shortStory = (!empty($id)) ? ShortStoriesModel::find($id) : new ShortStoriesModel();
+        
         $shortStory->title = $validated['title'];
         $shortStory->short_description = $validated['short_description'];
-        // dd(Auth::guard('admin')->id());
+
         // Handle file upload
         if ($request->hasFile('thumbnail_photo')) {
             if (!empty($id) && $shortStory->thumbnail_photo) {
@@ -62,13 +61,16 @@ class ShortStories extends Controller
             $filePath = $file->storeAs('short_stories/thumbnails', $filename, 'public');
             $shortStory->thumbnail_photo = $filePath;
         }
+
         $shortStory->short_story_details = $validated['short_story_details'];
         $shortStory->status = $validated['status'];
+        
         if (empty($id)) {
             $shortStory->created_by = Auth::guard('admin')->id();
         } else {
             $shortStory->updated_by = Auth::guard('admin')->id();
         }
+        
         $shortStory->save();
 
         // Sync relationships
@@ -84,8 +86,8 @@ class ShortStories extends Controller
         if(isset($validated['suggested_stories'])) {
             $shortStory->suggestedStories()->sync($validated['suggested_stories']);
         }
+
         if (!empty($id)) {
-            // dd($shortStory);
             return redirect()->route('admin.shortStoryImageUpload', ['id' => $id])->with('success', 'Short Story updated successfully!');
         }
         return redirect()->route('admin.shortStoryImageUpload', ['id' => $shortStory->id])->with('success', 'Short Story added successfully!');
@@ -104,14 +106,14 @@ class ShortStories extends Controller
 
     public function shortStoryImageUploadStore(shortStorySlider $request, $id = null)
     {
-        
-        // $shortStory = ShortStoriesModel::findOrFail($id);
         $shortStory = ShortStoriesModel::findOrFail($id);
-            // Handle file uploads
+        
+        // Handle file uploads
         if ($request->hasFile('slider_images')) {
             foreach ($request->file('slider_images') as $file) {
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('short_stories/slider', $filename, 'public');
+                
                 // Save each image path to the short_story_slider table
                 $sliderImage = new shortStorySliderModel();
                 $sliderImage->short_story_id = $shortStory->id;
@@ -146,11 +148,11 @@ class ShortStories extends Controller
         return view('admin.contentManager.shortStories.editShortStories')->with([
             'title' => 'Edit Short Stories',
             'shortStory' => $shortStory,
-            'characters' => $allCharacters->characters??[],
-            'tags' => $allTags->tags??[],
-            'categories' => $allCategories->categories??[],
+            // Fix: Check if variable is not null before accessing property
+            'characters' => ($allCharacters) ? $allCharacters->characters : [],
+            'tags' => ($allTags) ? $allTags->tags : [],
+            'categories' => ($allCategories) ? $allCategories->categories : [],
             'suggestedStories' => $suggestedStories,
-            // You can pass additional data here if needed
         ]);
     }
 }

@@ -1,27 +1,17 @@
 <?php
 
-// app/Models/Tag.php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CategoryType;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tag extends Model
 {
-    use HasFactory;
-
+    protected $table = 'tags';
     protected $fillable = ['name'];
 
     public function types(): BelongsToMany
     {
-        return $this->belongsToMany(CategoryType::class, 'tags_type_map', 'tag_id', 'category_type_id')->withTimestamps();
+        return $this->belongsToMany(CategoryType::class, 'tags_type_map', 'tag_id', 'category_type_id');
     }
-
-    public function shortStoryTags(): BelongsToMany
-    {
-        return $this->belongsToMany(ShortStories::class, 'short_story_tags', 'tag_id', 'short_story_id')->withTimestamps();
-    }
-
 }

@@ -9,31 +9,29 @@ use App\Admin\Content\Application\Actions\UpdateCategoryAction;
 use App\Admin\Content\Application\DTOs\CategoryData;
 use App\Admin\Content\Domain\Models\ContentCategory;
 use App\Admin\Content\Domain\Repositories\ContentCategoryRepositoryInterface;
-// use App\Admin\Content\Domain\Repositories\CategoryTypeRepositoryInterface;
 use App\Admin\Content\Presentation\Http\Requests\StoreCategoryRequest;
-// use App\Admin\Content\Presentation\Http\Requests\UpdateCategoryRequest;
 use App\Admin\Content\Domain\Models\CategoryType;
 
 class ContentCategoryController extends Controller
 {
     public function __construct(
-        private readonly ContentCategoryRepositoryInterface $repository,
-        // private readonly CategoryTypeRepositoryInterface $typeRepository
+        private readonly ContentCategoryRepositoryInterface $repository
     ) {}
 
     public function index()
     {
-        $categories = $this->repository->paginate(10);
-        // dd($categories->items());
+        // FIX: Fetch ALL categories with 'types' relationship eagerly loaded.
+        // This allows the client-side JavaScript to search/filter the entire dataset instantly
+        // and prevents the "Types showing as None" issue.
+        $categories = ContentCategory::with('types')->orderBy('id', 'desc')->get();
+        
         $categoryTypes = CategoryType::all();
         
         return view('admin.contentManager.contentCategory')->with([
             'title' => 'Content Category',
             'categories' => $categories,
             'categoryTypes' => $categoryTypes,
-            // You can pass additional data here if needed
         ]);
-        // return view('admin.content_categories.index', compact('categories'));
     }
 
     public function create()
@@ -49,8 +47,9 @@ class ContentCategoryController extends Controller
                          ->with('success', 'Category created successfully.');
     }
 
-    public function edit(ContentCategory $contentCategory) // Route-Model Binding is fine here
+    public function edit(ContentCategory $contentCategory)
     {
+        // Ensure types are loaded for the edit modal
         return response()->json([$contentCategory->load('types')]);
     }
 
