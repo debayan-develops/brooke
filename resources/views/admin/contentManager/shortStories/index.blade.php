@@ -96,6 +96,9 @@
             // 1. Data Preparation
             const allStories = @json($shortStories);
             const assetBase = "{{ asset('storage/') }}"; 
+            
+            // FIX: Define base route with a dummy ID '000'
+            const editRouteBase = "{{ route('admin.editShortStories', '000') }}";
 
             // 2. Render Function
             function renderTable(data) {
@@ -121,8 +124,8 @@
                         dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     }
 
-                    // Edit URL
-                    let editUrl = "{{ route('admin.editShortStories', ':id') }}".replace(':id', item.id);
+                    // FIX: Replace dummy ID with actual item ID
+                    let finalEditUrl = editRouteBase.replace('000', item.id);
 
                     let row = `
                         <tr>
@@ -132,7 +135,7 @@
                             <td data-label="Created"><small class="text-gray-500">${dateStr}</small></td>
                             <td class="actions-cell">
                                 <div class="buttons right nowrap">
-                                    <a href="${editUrl}" class="button small blue edit-btn">
+                                    <a href="${finalEditUrl}" class="button small blue">
                                         <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                                     </a>
                                 </div>

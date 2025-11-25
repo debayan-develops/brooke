@@ -53,6 +53,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/blogs/add', [BlogController::class, 'addBlogs'])->name('addBlogs');
         Route::post('/blogs/add', [BlogController::class, 'storeBlog'])->name('addBlogs.add');
         Route::get('/blogs/edit/{id}', [BlogController::class, 'editBlogs'])->name('editBlogs');
+        Route::post('/blogs/edit/{id}', [BlogController::class, 'storeBlog'])->name('editBlogs.update');
         Route::get('/blogs/image-upload/{id}', [BlogController::class, 'blogImageUpload'])->name('blogImageUpload');
         Route::post('/blogs/image-upload/{id}', [BlogController::class, 'blogImageUploadStore'])->name('blogImageUpload.store');
         Route::delete('/blogs/image-upload/delete/{id}', [BlogController::class, 'deleteSliderImage']);

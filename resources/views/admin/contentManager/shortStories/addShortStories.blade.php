@@ -2,7 +2,6 @@
 
 @section('title', $title)
 
-
 <style>
     @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
     /* Custom styles for Choices.js */
@@ -17,37 +16,37 @@
     }
 
     .form-group {
-    margin-bottom: 1rem;
+        margin-bottom: 1rem;
     }
 
     .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #374151; /* Tailwind's gray-700 */
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151; /* Tailwind's gray-700 */
     }
 
     .form-hint {
-    font-size: 0.875rem;
-    color: #6B7280; /* Tailwind's gray-500 */
+        font-size: 0.875rem;
+        color: #6B7280; /* Tailwind's gray-500 */
     }
 
     .form-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #D1D5DB; /* Tailwind's border-gray-300 */
-    border-radius: 0.375rem; /* Tailwind's rounded */
-    box-sizing: border-box;
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #D1D5DB; /* Tailwind's border-gray-300 */
+        border-radius: 0.375rem; /* Tailwind's rounded */
+        box-sizing: border-box;
     }
 
     .preview-box {
-    margin-top: 0.5rem;
+        margin-top: 0.5rem;
     }
 
     .error-text {
-    color: #EF4444; /* Tailwind's red-500 */
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
+        color: #EF4444; /* Tailwind's red-500 */
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
     }
 
 </style>
@@ -190,12 +189,11 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="suggestedStories" multiple name="suggestedStories[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-
+                                            @foreach($suggestedStories as $story)
+                                                <option value="{{ $story->id }}">{{ $story->title }}</option>
+                                            @endforeach
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('suggested_stories')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -213,15 +211,6 @@
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- <div class="field">
-                        <label class="label">More Information</label>
-                        <div class="control">
-                        <textarea class="textarea" placeholder="Enter Text" name="more_information">{{old('more_information')}}</textarea>
-                        </div>
-                        @error('more_information')
-                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
                     
                     <div class="field">
                         <label class="label">Status</label>
@@ -244,19 +233,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="field">
-                        <label for="featured_image"
-                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                            <p class="text-gray-500">Click to upload or drag & drop</p>
-                            <p class="text-xs text-gray-400">PNG, JPG up to 2MB</p>
-                            <input id="featured_image" name="featured_image" type="file" class="hidden" accept="image/*" />
-                        </label>
-
-                        <div id="preview" class="mt-4 hidden">
-                            <img class="rounded-lg shadow w-full" />
-                        </div>
-
-                    </div> --}}
                     
                     <div class="field grouped">
                         <div class="control">
@@ -279,25 +255,70 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script>
          document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Choices.js
             new Choices('#tags', { removeItemButton: true, searchEnabled: true });
             new Choices('#categories', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedStories', { removeItemButton: true, searchEnabled: true });
             new Choices('#characters', { removeItemButton: true, searchEnabled: true });
+
+            // Common CKEditor configuration for better text formatting
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
+                        'bulletedList', 'numberedList', 'todoList', '|',
+                        'outdent', 'indent', '|',
+                        'blockQuote', 'insertTable', 'undo', 'redo'
+                    ]
+                },
+                language: 'en'
+            };
+
+            // Initialize Editor 1 (Short Description)
+            ClassicEditor
+            .create(document.querySelector('.editor'), editorConfig)
+            .catch(error => { console.error(error); });
+
+            // Initialize Editor 2 (Details)
+            ClassicEditor
+            .create(document.querySelector('.editor2'), editorConfig)
+            .catch(error => { console.error(error); });
+            
+            // Thumbnail Preview Logic
+            const thumbnailInput = document.getElementById('thumbnailPhoto');
+            if(thumbnailInput) {
+                thumbnailInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    const previewBox = document.getElementById('thumbnailPreview');
+                    const errorText = document.getElementById('thumbnailError');
+                    
+                    // Clear previous
+                    previewBox.innerHTML = '';
+                    errorText.classList.add('hidden');
+
+                    if (file) {
+                        // Validate size (2MB)
+                        if (file.size > 2 * 1024 * 1024) {
+                            errorText.textContent = "File is too large (Max 2MB)";
+                            errorText.classList.remove('hidden');
+                            this.value = ''; // Reset input
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.maxWidth = '200px';
+                            img.style.borderRadius = '8px';
+                            img.style.marginTop = '10px';
+                            previewBox.appendChild(img);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
         });
     </script>
-
-    <script>
-        ClassicEditor
-            .create(document.querySelector('.editor'))
-            .catch(error => {
-                console.error(error);
-            });
-        ClassicEditor
-            .create(document.querySelector('.editor2'))
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
-
-
 @endsection
