@@ -95,7 +95,7 @@
             
             // 1. Data Preparation
             const allStories = @json($shortStories);
-            const assetBase = "{{ asset('storage/') }}"; 
+            const assetBase = "{{ asset(config('app.assets_path')) }}"; 
             
             // FIX: Define base route with a dummy ID '000'
             const editRouteBase = "{{ route('admin.editShortStories', '000') }}";
