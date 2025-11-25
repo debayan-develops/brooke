@@ -4,7 +4,13 @@
 
 <style>
     @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
-    /* Custom styles for Choices.js */
+    /* Filter Section Styling */
+    .filter-section { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-end; }
+    .filter-group { flex: 1; }
+    .filter-group label { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 5px; color: #374151; }
+    .filter-input { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; }
+    .filter-actions { display: flex; gap: 10px; }
+    .modal.is-active { display: flex !important; }
 </style>
 
 @section('content')
@@ -14,331 +20,308 @@
 
         <section class="is-title-bar">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-                <ul>
-                    <li>Admin</li>
-                    <li>{{$title}}</li>
-                </ul>
+                <ul><li>Admin</li><li>{{$title}}</li></ul>
             </div>
         </section>
 
-        <!-- Hero Bar -->
         <section class="is-hero-bar">
             <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-                <h1 class="title">
-                {{$title}}
-                </h1>
-                <button type="button" data-target="add-character-modal" class="button blue --jb-modal">Add Characters</button>
+                <h1 class="title">{{$title}}</h1>
+                <button type="button" id="btnAddCharacter" class="button blue">Add Character</button>
             </div>
         </section>
 
-        <div id="add-character-modal" class="modal">
-        <div class="modal-background --jb-modal-close"></div>
-        <div class="modal-card">
-            <form method="POST" action="{{ route('admin.character.add') }}">
-                @csrf
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Add New Characters</p>
-                </header>
-                <section class="modal-card-body">
-                    <div class="field">
-                        <label class="label">Character  Name</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control icons-left">
-                                    <input class="input" type="text" placeholder="Name" name="name">
-                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Description</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control icons-left">
-                                    <textarea class="input editor" placeholder="Description" name="description"></textarea>
-                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="grid gap-6 grid-cols-1">
-                            <div class="field">
-                                <label class="label">Character  Type</label>
-                                <div class="control icons-left icons-right">
-                                    <div class="select">
-                                        <select id="characterType" multiple name="characterType[]">
-                                            @foreach($categoryTypes as $type)
-                                                <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('home_nearby_facilities_id')
-                                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button green --jb-modal-close">Confirm</button>
-                    <button type="button" class="button --jb-modal-close">Cancel</button>
-                </footer>
-            </form>
-        </div>
-    </div>
-    <button id="modalShowBtn" class="--jb-modal" data-target=""></button>
-
-    {{-- Edit Feature Modal --}}
-    <div id="edit-character-modal" class="modal">
-        <div class="modal-background --jb-modal-close"></div>
-        <div class="modal-card">
-            <form id="edit-character" method="POST" action="">
-                @csrf
-                <input type="hidden" name="id" value="">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Edit Character</p>
-                </header>
-                <section class="modal-card-body">
-                    <div class="field">
-                        <label class="label">Name</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control icons-left">
-                                    <input class="input" type="text" placeholder="Name" name="name">
-                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Description</label>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control icons-left">
-                                    <textarea class="input editor2" placeholder="Description" name="description"></textarea>
-                                    <span class="icon left"><i class="mdi mdi-pin"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="grid gap-6 grid-cols-1">
-                            <div class="field">
-                                <label class="label">Character Type</label>
-                                <div class="control icons-left icons-right">
-                                    <div class="select">
-                                        <select id="editCharacterType" multiple name="characterType[]">
-                                        </select>
-                                        @error('tagsType')
-                                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button green --jb-modal-close">Confirm</button>
-                    <button type="button" class="button --jb-modal-close">Cancel</button>
-                </footer>
-            </form>
-        </div>
-    </div>
-
-    <div id="delete-character-modal" class="modal">
-        <div class="modal-background --jb-modal-close"></div>
-        <div class="modal-card">
-            <form id="deleteCharacter" method="POST" action="">
-                @csrf
-                @method('DELETE')
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Delete {{$title}}</p>
-                </header>
-                <section class="modal-card-body">
-                    <p>Are you sure you want to delete <span class="characterName"></span>?</p>
-                </section>
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button green --jb-modal-close">Confirm</button>
-                    <button type="button" class="button --jb-modal-close">Cancel</button>
-                </footer>
-            </form>
-        </div>
-    </div>
-
+        <!-- Filter -->
+        <section class="section main-section" style="padding-bottom: 0;">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label>Character Name</label>
+                    <input type="text" id="filterName" class="filter-input" placeholder="Search Name...">
+                </div>
+                <div class="filter-group">
+                    <label>Character Type</label>
+                    <input type="text" id="filterType" class="filter-input" placeholder="Search Type...">
+                </div>
+                <div class="filter-actions">
+                    <button type="button" id="btnFilter" class="button blue">Filter</button>
+                    <button type="button" id="btnReset" class="button red">Reset</button>
+                </div>
+            </div>
+        </section>
 
         <section class="section main-section">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="notification red">
-                        <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
-                            
-                            <div>
-                                <span class="icon"><i class="mdi mdi-buffer"></i></span>
-                                <span>{{ $error }}</span>
-                            </div>
-                            
-                            <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
-                        </div>
-                    </div>
-                @endforeach
-            @endif
             @if(session('success'))
                 <div class="notification green">
                     <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0">
-                        <div>
-                            <span class="icon"><i class="mdi mdi-buffer"></i></span>
-                            <span>{{ session('success') }}</span>
-                        </div>
+                        <div><span class="icon"><i class="mdi mdi-buffer"></i></span> <span>{{ session('success') }}</span></div>
                         <button type="button" class="button small textual --jb-notification-dismiss">Dismiss</button>
                     </div>
                 </div>
             @endif
+
             <div class="card has-table">
-            <header class="card-header">
-                <p class="card-header-title">
-                <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                List
-                </p>
-                <a href="#" class="card-header-icon">
-                <span class="icon"><i class="mdi mdi-reload"></i></span>
-                </a>
-            </header>
-            <div class="card-content">
-                <table>
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Characters Name</th>
-                    <th>Description</th>
-                    <th>Characters Type</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                    @foreach ($characters as $key => $item)
-                        <tr>
-                            <td data-label="Name">{{$key+1}}</td>
-                            <td data-label="Name">{{$item->name}}</td>
-                            <td data-label="Company">{!! Str::limit($item->description, 50) !!}</td>
-                            <td data-label="Company">{{$item->types->pluck('name')->join(', ')}}</td>
-                            <td class="actions-cell">
-                            <div class="buttons right nowrap">
-                                {{-- <button class="button small blue --jb-modal"  data-target="sample-modal-2" type="button">
-                                    <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
-                                </button> --}}
-                                <button type="button" data-target="edit-character-modal" data-id="{{$item->id}}" class="button small blue edit-btn"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
-                                <button class="button small red delete-btn" data-target="sample-modal"  data-id="{{$item->id}}" data-name="{{$item->name}}" type="button">
-                                    <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                                </button>
-                            </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-                </table>
-                <div class="table-pagination">
-                <div class="flex items-center justify-between">
-                    <div class="buttons">
-                    <button type="button" class="button active">1</button>
-                    <button type="button" class="button">2</button>
-                    <button type="button" class="button">3</button>
-                    </div>
-                    <small>Page 1 of 3</small>
+                <header class="card-header"><p class="card-header-title"><span class="icon"><i class="mdi mdi-account-multiple"></i></span> List</p></header>
+                <div class="card-content">
+                    <table>
+                        <thead><tr><th>#</th><th>Name</th><th>Character Type</th><th>Actions</th></tr></thead>
+                        <tbody id="characterTableBody"></tbody>
+                    </table>
                 </div>
-                </div>
-            </div>
             </div>
         </section>
     </div>
 
-    <!-- Script -->
+    <!-- Add Modal -->
+    <div id="add-character-modal" class="modal">
+        <div class="modal-background close-modal" data-target="add-character-modal"></div>
+        <div class="modal-card">
+            <form method="POST" action="{{ route('admin.characters.store') }}">
+                @csrf
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Add New Character</p>
+                    <button type="button" class="delete close-modal" data-target="add-character-modal"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control icons-left">
+                            <input class="input" type="text" name="name" required>
+                            <span class="icon left"><i class="mdi mdi-account"></i></span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Description</label>
+                        <div class="control">
+                            <textarea class="textarea" name="description" placeholder="Character Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Type</label>
+                        <div class="select w-full">
+                            <select id="characterType" multiple name="categoryType[]">
+                                @foreach($categoryTypes as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button green">Save</button>
+                    <button type="button" class="button close-modal" data-target="add-character-modal">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-character-modal" class="modal">
+        <div class="modal-background close-modal" data-target="edit-character-modal"></div>
+        <div class="modal-card">
+            <form id="edit-character-form" method="POST" action="">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="id">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Edit Character</p>
+                    <button type="button" class="delete close-modal" data-target="edit-character-modal"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control icons-left">
+                            <input class="input" type="text" name="name" required>
+                            <span class="icon left"><i class="mdi mdi-account"></i></span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Description</label>
+                        <div class="control">
+                            <textarea class="textarea" name="description" placeholder="Character Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Type</label>
+                        <div class="select w-full">
+                            <select id="editCharacterType" multiple name="categoryType[]">
+                                @foreach($categoryTypes as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button green">Update</button>
+                    <button type="button" class="button close-modal" data-target="edit-character-modal">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="delete-character-modal" class="modal">
+        <div class="modal-background close-modal" data-target="delete-character-modal"></div>
+        <div class="modal-card">
+            <form id="delete-character-form" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Delete Character</p>
+                    <button type="button" class="delete close-modal" data-target="delete-character-modal"></button>
+                </header>
+                <section class="modal-card-body">
+                    <p>Are you sure you want to delete <strong class="characterName"></strong>?</p>
+                </section>
+                <footer class="modal-card-foot">
+                    <button type="submit" class="button red">Delete</button>
+                    <button type="button" class="button close-modal" data-target="delete-character-modal">Cancel</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div id="ajaxLoader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.7); z-index:9999;">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color: #3b82f6; font-weight: bold;">Loading...</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            new Choices('#characterType', { removeItemButton: true, searchEnabled: true });
+            
+            const allCharacters = @json($characters); 
+            const allTypes = @json($categoryTypes);
 
-            const choices = new Choices('#editCharacterType', {
-                removeItemButton: true,
-                searchEnabled: true,
-            });
+            // Render Table
+            function renderTable(data) {
+                const tbody = document.getElementById('characterTableBody');
+                tbody.innerHTML = ''; 
 
-            let editor1 = ClassicEditor
-            .create(document.querySelector('.editor'))
-            .catch(error => {
-                console.error(error);
-            });
-            let editor2 = ClassicEditor
-            .create(document.querySelector('.editor2'))
-            .catch(error => {
-                console.error(error);
-            });
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">No records found</td></tr>';
+                    return;
+                }
 
-            $('.edit-btn').on('click', function () {
-                console.log(editor2);
-                $('#modalShowBtn').attr('data-target', 'edit-character-modal');
-                $('#ajaxLoader').fadeIn();
-                const tagId = $(this).data('id');
-                let routeTemplateEdit = "{{ route('admin.character.edit', ':id') }}";
-                let routeTemplateUpdate = "{{ route('admin.character.add', ':id') }}";
-                $('#edit-character-modal input[name="id"]').val('');
-                $('#edit-character-modal input[name="name"]').val('');
-                $('#edit-character-modal textarea[name="description"]').val('');
-                choices.clearStore();
-                choices.clearChoices();
-                $.get(routeTemplateEdit.replace(':id', tagId), function (data) {
-                    $('#edit-character-modal input[name="id"]').val(data[0].id);
-                    $('#edit-character-modal input[name="name"]').val(data[0].name);
-                    // $('#edit-character-modal textarea[name="description"]').val(data[0].description);
-                    editor2.then( editor => {
-                        editor.setData(data[0].description);
-                    } );
-                    // alert(data[0].description);
-                    $('#edit-character').attr('action', routeTemplateUpdate.replace(':id', tagId));
-                    fetchType(data[0].types);
-                    $('#ajaxLoader').fadeOut();
-                    setTimeout(() => {
-                        $('#modalShowBtn').click();
-                    }, 500);
-                }).fail(function () {
-                    $('#ajaxLoader').fadeOut();
-                    alert('Error fetching Category data.');
+                data.forEach((item, index) => {
+                    let typeNames = 'None';
+                    if (item.types && item.types.length > 0) {
+                        typeNames = item.types.map(t => t.name).join(', ');
+                    }
+
+                    let row = `
+                        <tr>
+                            <td data-label="sl">${index + 1}</td>
+                            <td data-label="Name">${item.name}</td>
+                            <td data-label="Type"><span class="tag is-light">${typeNames}</span></td>
+                            <td class="actions-cell">
+                                <div class="buttons right nowrap">
+                                    <button type="button" class="button small blue edit-btn" data-id="${item.id}"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
+                                    <button type="button" class="button small red delete-btn" data-id="${item.id}" data-name="${item.name}"><span class="icon"><i class="mdi mdi-trash-can"></i></span></button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    tbody.innerHTML += row;
                 });
-            });
-            let allTypes = @json($categoryTypes);
-            function fetchType(types) {
-                const selectedIds = types.map(type => type.id);
-                // Clear existing options and set new ones
-                choices.clearChoices();
-                choices.setChoices(
-                    allTypes.map(type => ({
-                        value: type.id,
-                        label: type.name,
-                        selected: selectedIds.includes(type.id),
-                        disabled: false,
-                    })),
-                    'value',
-                    'label',
-                    false
-                );
             }
 
-            $('.delete-btn').on('click', function () {
-                $('#modalShowBtn').attr('data-target', 'delete-character-modal');
-                const tagId = $(this).data('id');
-                $('#delete-character-modal input[name="id"]').val(tagId);
-                let routeTemplateDelete = "{{ route('admin.character.destroy', ':id') }}";
-                $('#deleteCharacter').attr('action', routeTemplateDelete.replace(':id', tagId));
-                const characterName = $(this).data('name');
-                    $('.characterName').text(characterName ? characterName : 'this character');
-                $('#modalShowBtn').click();
+            renderTable(allCharacters);
 
+            // Filter Logic
+            function applyFilter() {
+                const nameQuery = document.getElementById('filterName').value.toLowerCase().trim();
+                const typeQuery = document.getElementById('filterType').value.toLowerCase().trim();
+
+                const filtered = allCharacters.filter(item => {
+                    const nameMatch = item.name.toLowerCase().includes(nameQuery);
+                    
+                    let itemTypeString = (item.types && item.types.length > 0) ? item.types.map(t => t.name).join(' ').toLowerCase() : '';
+                    const typeMatch = itemTypeString.includes(typeQuery);
+
+                    return nameMatch && typeMatch;
+                });
+                renderTable(filtered);
+            }
+
+            document.getElementById('btnFilter').addEventListener('click', applyFilter);
+            document.getElementById('filterName').addEventListener('keyup', applyFilter);
+            document.getElementById('filterType').addEventListener('keyup', applyFilter);
+
+            document.getElementById('btnReset').addEventListener('click', function() {
+                document.getElementById('filterName').value = '';
+                document.getElementById('filterType').value = '';
+                renderTable(allCharacters);
             });
-            
-        });
 
+            const addChoices = new Choices('#characterType', { removeItemButton: true });
+            const editChoices = new Choices('#editCharacterType', { removeItemButton: true });
+
+            function toggleModal(modalId, show) {
+                const modal = document.getElementById(modalId);
+                if (show) modal.classList.add('is-active');
+                else modal.classList.remove('is-active');
+            }
+
+            document.getElementById('btnAddCharacter').addEventListener('click', function() {
+                toggleModal('add-character-modal', true);
+            });
+
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('close-modal') || e.target.classList.contains('modal-background')) {
+                    toggleModal(e.target.getAttribute('data-target'), false);
+                }
+
+                const editBtn = e.target.closest('.edit-btn');
+                if (editBtn) {
+                    const id = editBtn.getAttribute('data-id');
+                    toggleModal('edit-character-modal', true);
+                    $('#ajaxLoader').fadeIn();
+
+                    // FIX: Use correct route names
+                    let editUrl = "{{ route('admin.characters.edit', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+                    let updateUrl = "{{ route('admin.characters.update', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+
+                    document.querySelector('#edit-character-form input[name="id"]').value = '';
+                    document.querySelector('#edit-character-form input[name="name"]').value = '';
+                    document.querySelector('#edit-character-form textarea[name="description"]').value = '';
+                    editChoices.clearStore();
+
+                    $.get(editUrl, function (data) {
+                        const char = (Array.isArray(data)) ? data[0] : data;
+                        
+                        document.querySelector('#edit-character-form input[name="id"]').value = char.id;
+                        document.querySelector('#edit-character-form input[name="name"]').value = char.name;
+                        document.querySelector('#edit-character-form textarea[name="description"]').value = char.description || '';
+                        document.getElementById('edit-character-form').action = updateUrl;
+
+                        const selectedIds = char.types ? char.types.map(t => t.id) : [];
+                        const choicesData = allTypes.map(type => ({
+                            value: type.id, label: type.name, selected: selectedIds.includes(type.id)
+                        }));
+                        editChoices.setChoices(choicesData, 'value', 'label', true);
+                        $('#ajaxLoader').fadeOut();
+                    }).fail(function() {
+                        $('#ajaxLoader').fadeOut();
+                        alert('Error fetching data');
+                        toggleModal('edit-character-modal', false);
+                    });
+                }
+
+                const deleteBtn = e.target.closest('.delete-btn');
+                if (deleteBtn) {
+                    const id = deleteBtn.getAttribute('data-id');
+                    const name = deleteBtn.getAttribute('data-name');
+                    
+                    // FIX: Use correct route name
+                    let deleteUrl = "{{ route('admin.characters.destroy', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+                    
+                    document.getElementById('delete-character-form').action = deleteUrl;
+                    document.querySelector('.characterName').innerText = name;
+                    toggleModal('delete-character-modal', true);
+                }
+            });
+        });
     </script>
 @endsection
