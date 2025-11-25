@@ -97,7 +97,7 @@
             const allBlogs = @json($blogs);
             
             // Base Asset Path (Ensure it ends with /)
-            const assetBase = "{{ asset('storage') }}/"; 
+            const assetBase = "{{ asset(config('app.assets_path')) }}/"; 
             
             // Base Route for Edit (Use a unique string placeholder)
             // We use 'BLOCK_ID' as a safe placeholder string
