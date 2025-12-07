@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContentManagementController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ShortStories;
 use App\Admin\Content\Presentation\Http\Controllers\ContentCategoryController;
+use App\Http\Controllers\Admin\NovelController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -74,8 +75,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/homes', [App\Http\Controllers\Admin\HomesController::class, 'index'])->name('homes');
         Route::get('/pages', [App\Http\Controllers\Admin\PageController::class, 'index'])->name('pages');
         Route::get('/contents', [ContentManagementController::class, 'index'])->name('contents');
-        Route::get('/novels', [ContentManagementController::class, 'novels'])->name('novels');
-        Route::get('/novels/add', [ContentManagementController::class, 'addNovels'])->name('addNovels');
-        Route::get('/novels/add-chapter', [ContentManagementController::class, 'addChapter'])->name('addChapter');
+
+        // Novels
+        Route::get('/novels', [NovelController::class, 'index'])->name('novels');
+        Route::get('/get-novels', [NovelController::class, 'getNovels'])->name('getNovels');
+        Route::get('/novels/add', [NovelController::class, 'addBNovels'])->name('addNovels');
+        Route::post('/novels/add', [NovelController::class, 'storeNovel'])->name('addNovels.add');
+        Route::get('/novels/edit/{id}', [NovelController::class, 'editNovels'])->name('editNovels');
+        Route::post('/novels/edit/{id}', [NovelController::class, 'storeNovel'])->name('editNovels.update');
+        Route::get('/novels/add-chapter/{novelId?}', [NovelController::class, 'addChapter'])->name('novels.addChapter');
     });
 });

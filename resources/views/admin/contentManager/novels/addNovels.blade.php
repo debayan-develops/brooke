@@ -85,7 +85,18 @@
                 </p>
             </header>
             <div class="card-content">
-                <form method="POST" action="{{ route('admin.addChapter') }}">
+                
+                {{-- Display Validation Errors --}}
+                @if ($errors->any())
+                    <div class="notification is-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('admin.addNovels.add') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="home_id" value="">
                     <div class="field" style="margin-top: 20px">
@@ -94,21 +105,21 @@
                             <div class="field grouped multiline">
                                 <div class="control">
                                     <label class="radio">
-                                    <input type="radio" name="is_active" value="1" checked>
+                                    <input type="radio" name="permission" value="1" checked>
                                     <span class="check"></span>
                                     <span class="control-label">Public</span>
                                     </label>
                                 </div>
                                 <div class="control">
                                     <label class="radio">
-                                    <input type="radio" name="is_active" value="0">
+                                    <input type="radio" name="permission" value="0">
                                     <span class="check"></span>
                                     <span class="control-label">Registered User</span>
                                     </label>
                                 </div>
                                 <div class="control">
                                     <label class="radio">
-                                    <input type="radio" name="is_active" value="0">
+                                    <input type="radio" name="permission" value="2">
                                     <span class="check"></span>
                                     <span class="control-label">Paid User</span>
                                     </label>
@@ -161,7 +172,7 @@
                         <label for="thumbnailPhoto" class="label">
                             Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="thumbnailPhoto" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
+                        <input id="thumbnailPhoto" type="file" name="thumbnail" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
                         <div id="thumbnailPreview" class="preview-box"></div>
                         <p id="thumbnailError" class="error-text hidden"></p>
                     </div>
@@ -171,7 +182,7 @@
                         <label for="bannerPhoto" class="label">
                             Upload Banner Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="bannerPhoto" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
+                        <input id="bannerPhoto" type="file" name="banner_image" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
                         <div id="bannerPreview" class="preview-box"></div>
                         <p id="bannerError" class="error-text hidden"></p>
                     </div>
@@ -182,18 +193,13 @@
                                 <label class="label"> Tags</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="tagType" multiple name="tagType[]">
-                                            {{-- @foreach($facilities as $facility)
-                                                <option value="{{ $facility->id }}">{{ $facility->name }}</option>
-                                            @endforeach --}}
-                                            <option value="1">Tag 1</option>
-                                            <option value="2">Tag 2</option>
-                                            <option value="3">Tag 3</option>
-                                            <option value="4">Tag 4</option>
-                                            <option value="5">Tag 5</option>
-                                            <option value="6">Tag 6</option>
+                                        <select id="tagType" multiple name="tags[]">
+                                            @foreach($tags as $tag)
+                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                            @endforeach
+                                            
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('tags')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -250,21 +256,16 @@
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
-                                <label class="label">Suggested Novels</label>
+                                <label class="label">Related Novels</label>
                                 <div class="control icons-left icons-right">
                                     <div class="select">
-                                        <select id="suggestedNovels" multiple name="suggestedNovels[]">
+                                        <select id="relatedNovels" multiple name="relatedNovels[]">
                                             {{-- @foreach($facilities as $facility)
                                                 <option value="{{ $facility->id }}">{{ $facility->name }}</option>
                                             @endforeach --}}
-                                            <option value="1">Suggested Novels 1</option>
-                                            <option value="2">Suggested Novels 2</option>
-                                            <option value="3">Suggested Novels 3</option>
-                                            <option value="4">Suggested Novels 4</option>
-                                            <option value="5">Suggested Novels 5</option>
-                                            <option value="6">Suggested Novels 6</option>
+                                            
                                         </select>
-                                        @error('home_nearby_facilities_id')
+                                        @error('relatedNovels')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -276,21 +277,21 @@
                     <div class="field">
                         <label class="label">Short Description</label>
                         <div class="control">
-                        <textarea class="textarea introducing" placeholder="Enter Text" name="introducing" row="4">{{old('introducing')}}</textarea>
+                        <textarea class="textarea description" placeholder="Enter Text" name="description" row="4">{{old('description')}}</textarea>
                         </div>
-                        @error('introducing')
+                        @error('description')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                     </div>
-                    {{-- <div class="field">
-                        <label class="label">More Information</label>
+                    <div class="field">
+                        <label class="label">About Story</label>
                         <div class="control">
-                        <textarea class="textarea" placeholder="Enter Text" name="more_information">{{old('more_information')}}</textarea>
+                        <textarea class="textarea about_story" placeholder="Enter Text" name="about_story">{{old('about_story')}}</textarea>
                         </div>
-                        @error('more_information')
+                        @error('about_story')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
-                    </div> --}}
+                    </div>
                     
                     <div class="field">
                         <label class="label">Status</label>
@@ -298,14 +299,14 @@
                             <div class="field grouped multiline">
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="is_active" value="1" checked>
+                                <input type="radio" name="status" value="1" checked>
                                 <span class="check"></span>
                                 <span class="control-label">Active</span>
                                 </label>
                             </div>
                             <div class="control">
                                 <label class="radio">
-                                <input type="radio" name="is_active" value="0">
+                                <input type="radio" name="status" value="0">
                                 <span class="check"></span>
                                 <span class="control-label">Inactive</span>
                                 </label>
@@ -350,9 +351,14 @@
         
         document.addEventListener('DOMContentLoaded', function () {
             new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
-            new Choices('#suggestedNovels', { removeItemButton: true, searchEnabled: true });
+            new Choices('#relatedNovels', { removeItemButton: true, searchEnabled: true });
             ClassicEditor
-                .create( document.querySelector( '.textarea.introducing' ) )
+                .create( document.querySelector( '.textarea.description' ) )
+                .catch( error => {
+                    console.error( error );
+                } );
+            ClassicEditor
+                .create( document.querySelector( '.textarea.about_story' ) )
                 .catch( error => {
                     console.error( error );
                 } );

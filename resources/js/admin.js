@@ -2,7 +2,14 @@
 
 import $ from 'jquery';
 window.$ = window.jQuery = $; // make it globally available
-import Choices from 'choices.js';
+// import Choices from 'choices.js';
+import DataTable from 'datatables.net-dt';
+window.DataTable = DataTable; // make it globally available
+import 'datatables.net-dt/css/dataTables.dataTables.css';
+
+
+
+
 /* Aside & Navbar: dropdowns */
 Array.from(document.getElementsByClassName('dropdown')).forEach(function (elA) {
   elA.addEventListener('click', function (e) {

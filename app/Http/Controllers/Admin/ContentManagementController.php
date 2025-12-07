@@ -16,21 +16,6 @@ class ContentManagementController extends Controller
         return view('admin.contentManager.contents')->with(['title' => 'Contents']);
     }
 
-    public function novels()
-    {
-        return view('admin.contentManager.novels.index')->with(['title' => 'Novels']);
-    }
-
-    public function addNovels()
-    {
-        return view('admin.contentManager.novels.addNovels')->with(['title' => 'Add Novels']);
-    }
-
-    public function addChapter()
-    {
-        return view('admin.contentManager.novels.addChapter')->with(['title' => 'Add Chapter']);
-    }
-
     // ================= TAGS LOGIC =================
 
     public function tags()
