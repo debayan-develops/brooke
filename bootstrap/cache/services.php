@@ -35,6 +35,7 @@
     31 => 'Yajra\\DataTables\\DataTablesServiceProvider',
     32 => 'App\\Providers\\AppServiceProvider',
     33 => 'App\\Admin\\Content\\Providers\\ContentServiceProvider',
+    34 => 'Yajra\\DataTables\\DataTablesServiceProvider',
   ),
   'eager' => 
   array (
@@ -57,6 +58,7 @@
     16 => 'Yajra\\DataTables\\DataTablesServiceProvider',
     17 => 'App\\Providers\\AppServiceProvider',
     18 => 'App\\Admin\\Content\\Providers\\ContentServiceProvider',
+    19 => 'Yajra\\DataTables\\DataTablesServiceProvider',
   ),
   'deferred' => 
   array (
