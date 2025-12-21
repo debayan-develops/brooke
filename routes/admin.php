@@ -64,6 +64,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/short-stories/add', [ShortStories::class, 'addShortStories'])->name('addShortStories');
         Route::post('/short-stories/add', [ShortStories::class, 'storeShortStories'])->name('addShortStories.add');
         Route::get('/short-stories/edit/{id}', [ShortStories::class, 'editShortStories'])->name('editShortStories');
+        Route::post('/short-stories/edit/{id}', [ShortStories::class, 'storeShortStories'])->name('editShortStories.update');
         Route::get('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
         Route::post('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUploadStore'])->name('shortStoryImageUpload.store');
         Route::delete('/short-stories/image-upload/delete/{id}', [ShortStories::class, 'deleteSliderImage']);
