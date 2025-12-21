@@ -77,12 +77,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/contents', [ContentManagementController::class, 'index'])->name('contents');
 
         // Novels
-        Route::get('/novels', [NovelController::class, 'index'])->name('novels');
-        Route::get('/get-novels', [NovelController::class, 'getNovels'])->name('getNovels');
-        Route::get('/novels/add', [NovelController::class, 'addBNovels'])->name('addNovels');
-        Route::post('/novels/add', [NovelController::class, 'storeNovel'])->name('addNovels.add');
-        Route::get('/novels/edit/{id}', [NovelController::class, 'editNovels'])->name('editNovels');
-        Route::post('/novels/edit/{id}', [NovelController::class, 'storeNovel'])->name('editNovels.update');
-        Route::get('/novels/add-chapter/{novelId?}', [NovelController::class, 'addChapter'])->name('novels.addChapter');
+        Route::prefix('novels')->group(function () {
+            Route::get('/', [NovelController::class, 'index'])->name('novels');
+            Route::get('/get-novels', [NovelController::class, 'getNovels'])->name('getNovels');
+            Route::get('/add', [NovelController::class, 'addBNovels'])->name('addNovels');
+            Route::post('/add', [NovelController::class, 'storeNovel'])->name('addNovels.add');
+            Route::get('/edit/{id}', [NovelController::class, 'editNovels'])->name('editNovels');
+            Route::post('/edit/{id}', [NovelController::class, 'storeNovel'])->name('editNovels.update');
+            Route::get('/add-chapter/{novelId?}', [NovelController::class, 'addChapter'])->name('novels.addChapter');
+            Route::post('/store-chapter/{novelId?}/{chapterId?}', [NovelController::class, 'storeChapter'])->name('novels.storeChapter');
+            Route::get('/edit-chapter/{novelId?}/{chapterId?}', [NovelController::class, 'editChapter'])->name('novels.editChapter');
+            Route::get('/chapter-slider/{novelId?}/{chapterId?}', [NovelController::class, 'chapterSlider'])->name('novels.chapterSlider');
+        });
     });
 });

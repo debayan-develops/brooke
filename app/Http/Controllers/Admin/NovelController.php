@@ -10,6 +10,9 @@ use App\Models\CategoryType;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
+use App\Http\Requests\StoreNovelChapterRequest;
+use App\Models\NovelChapterModel as NovelChapter;
+use App\Models\NovelChapterSliderImageModel as NovelChapterSliderImage;
 
 class NovelController extends Controller
 {
@@ -32,19 +35,21 @@ class NovelController extends Controller
             // Safe navigation: if $allCategories is null, return empty array []
             'categories' => ($allCategories) ? $allCategories->categories : [],
             'tags' => ($allTags) ? $allTags->tags : [],
+            'relatedNovels' => Novel::all(),
         ]);
     }
     public function editNovels($id)
     {
-        $novel = Novel::with(['novelTags', 'novelCategories', 'suggestedNovels'])->findOrFail($id);
+        $novel = Novel::with(['novelTags', 'suggestedNovels'])->findOrFail($id);
         $allTags = CategoryType::with('tags')->where('slug', 'novel')->first();
-        $allCategories = CategoryType::with('categories')->where('slug', 'novel')->first();
-        return view('admin.contentManager.novels.addNovels')->with([
+        // $allCategories = CategoryType::with('categories')->where('slug', 'novel')->first();
+        return view('admin.contentManager.novels.editNovels')->with([
             'title' => 'Edit Novel',
             'novel' => $novel,
             // Safe navigation: if $allCategories is null, return empty array []
-            'categories' => ($allCategories) ? $allCategories->categories : [],
+            // 'categories' => ($allCategories) ? $allCategories->categories : [],
             'tags' => ($allTags) ? $allTags->tags : [],
+            'relatedNovels' => Novel::where('id', '!=', $id)->get(),
         ]);
     }
     public function getNovels(Request $request)
@@ -128,11 +133,65 @@ class NovelController extends Controller
     }
     public function addChapter($novelId = null)
     {
+        $chapters = NovelChapter::where('novel_id', $novelId)->get();
 
         return view('admin.contentManager.novels.addChapter')->with([
             'title' => 'Add Chapter',
             'novelId' => $novelId,
+            'chapters' => $chapters,
             'images' => []
+        ]);
+    }
+
+    public function editChapter($chapterId)
+    {
+        $chapter = NovelChapter::findOrFail($chapterId);
+
+        return view('admin.contentManager.novels.editChapter')->with([
+            'title' => 'Edit Chapter',
+            'chapter' => $chapter,
+        ]);
+    }
+
+    public function storeChapter(StoreNovelChapterRequest $request, $novelId, $chapterId = null)
+    {
+        $validated = $request->validated();
+
+        $chapter = (!empty($chapterId)) ? NovelChapter::find($chapterId) : new NovelChapter();
+        $chapter->novel_id = $novelId;
+        $chapter->title = $validated['title'];
+        $chapter->description = $validated['description'];
+        $chapter->chapter_number = $validated['chapter_number'];
+        $chapter->is_active = $validated['is_active'];
+        $chapter->save();
+
+        // Handle slider image uploads
+        // if ($request->hasFile('slider_images')) {
+        //     foreach ($request->file('slider_images') as $image) {
+        //         $filename = time() . '_' . $image->getClientOriginalName();
+        //         $filePath = $image->storeAs('novel_chapter_slider_images', $filename, 'public');
+        //         NovelChapterSliderImage::create([
+        //             'novel_chapter_id' => $chapter->id,
+        //             'image_path' => $filePath
+        //         ]);
+        //     }
+        // }
+        if (!empty($chapterId)) {
+            return redirect()->route('admin.novels.addChapter', ['novelId' => $novelId])->with('success', 'Chapter updated successfully!');
+        }
+        return redirect()->route('admin.novels.addChapter', ['novelId' => $novelId])->with('success', 'Chapter added successfully!');
+    }
+
+    public function chapterSlider($novelId, $chapterId)
+    {
+        $chapter = NovelChapter::findOrFail($chapterId);
+        $images = NovelChapterSliderImage::where('novel_chapter_id', $chapterId)->get();
+
+        return view('admin.contentManager.novels.chapterSlider')->with([
+            'title' => 'Chapter Slider Images',
+            'novelId' => $novelId,
+            'chapter' => $chapter,
+            'images' => $images
         ]);
     }
 }
