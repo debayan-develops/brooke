@@ -44,7 +44,6 @@
             </div>
         </section>
 
-        <!-- Filter Section -->
         <section class="section main-section" style="padding-bottom: 0;">
             <div class="filter-section">
                 <div class="filter-group">
@@ -80,15 +79,13 @@
                             </tr>
                         </thead>
                         <tbody id="shortStoryTableBody">
-                            <!-- Populated by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -97,8 +94,20 @@
             const allStories = @json($shortStories);
             const assetBase = "{{ asset('storage/') }}"; 
             
-            // FIX: Define base route with a dummy ID '000'
-            const editRouteBase = "{{ route('admin.editShortStories', '000') }}";
+            // --- FIX START: ROBUST URL GENERATION ---
+            // We generate the raw route, but then we strip the domain to make it relative.
+            // This prevents "Connection Refused" if the domain/port is wrong in config.
+            const rawRoute = "{{ route('admin.editShortStories', '000') }}";
+            let editRouteBase = rawRoute;
+            
+            try {
+                // Try to extract just the path (e.g., /admin/stories/edit/000)
+                // This forces the browser to use the CURRENT working port (8000)
+                editRouteBase = new URL(rawRoute).pathname;
+            } catch (e) {
+                console.log('URL parsing failed, using raw route');
+            }
+            // --- FIX END ---
 
             // 2. Render Function
             function renderTable(data) {
@@ -124,7 +133,7 @@
                         dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                     }
 
-                    // FIX: Replace dummy ID with actual item ID
+                    // Swap the placeholder '000' with the real ID
                     let finalEditUrl = editRouteBase.replace('000', item.id);
 
                     let row = `

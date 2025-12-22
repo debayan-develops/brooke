@@ -1,7 +1,66 @@
 @extends('layouts.admin')
 
 @section('title', $title)
+<style>
+    @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
+    
+    /* --- FIX 1: FORCE BULLETS & NUMBERS TO SHOW IN EDITOR --- */
+    .ck-content ol, .ck-content ul {
+        margin-left: 20px !important;
+        padding-left: 20px !important;
+    }
+    .ck-content ol {
+        list-style-type: decimal !important; /* Forces 1. 2. 3. */
+    }
+    .ck-content ul {
+        list-style-type: disc !important; /* Forces bullets */
+    }
+    .ck-content li {
+        margin-bottom: 5px;
+    }
+    /* -------------------------------------------------------- */
+</style>
 
+@section('content')
+<style>
+    /* Override default Choices.js styles */
+    .textarea.introducing {
+        height: 15rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .form-hint {
+        font-size: 0.875rem;
+        color: #6B7280;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #D1D5DB;
+        border-radius: 0.375rem;
+        box-sizing: border-box;
+    }
+
+    .preview-box {
+        margin-top: 0.5rem;
+    }
+
+    .error-text {
+        color: #EF4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
 <style>
     @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
     /* Custom styles for Choices.js */

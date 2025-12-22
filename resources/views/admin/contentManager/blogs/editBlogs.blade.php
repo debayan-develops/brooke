@@ -211,19 +211,31 @@
                         </div>
                         
                         <!-- Buttons -->
-                        <div class="field grouped">
-                            <div class="control">
-                                <button type="submit" class="button green">Update</button>
-                            </div>
-                            <div class="control">
-                                <a href="{{ route('admin.blogs') }}" class="button red">Cancel</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-    </div>
+                        
+    <div class="form-group mt-4" style="display: flex; flex-wrap: wrap; gap: 15px; padding: 20px 0; align-items: center;">
+    
+    <button type="submit" 
+            class="btn" 
+            style="background-color: #0056b3 !important; color: white !important; border: 1px solid #0056b3; border-radius: 5px; padding: 10px 20px;">
+        Update & Next Step <i class="fa fa-arrow-right"></i>
+    </button>
+
+    <button type="submit" 
+            name="action" 
+            value="save_and_exit" 
+            class="btn" 
+            style="background-color: #17a2b8 !important; color: white !important; border: 1px solid #17a2b8; border-radius: 5px; padding: 10px 20px;">
+        <i class="fa fa-check"></i> Update & Finish
+    </button>
+
+    <a href="{{ route('admin.blogs') }}" 
+       class="btn" 
+       style="background-color: #dc3545 !important; color: white !important; border: 1px solid #dc3545; border-radius: 5px; padding: 10px 20px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+        Cancel
+    </a>
+
+</div>
+</form>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>

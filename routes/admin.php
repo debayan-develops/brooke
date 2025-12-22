@@ -59,12 +59,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/blogs/image-upload/delete/{id}', [BlogController::class, 'deleteSliderImage']);
 
         // Short Stories
+        
         Route::get('/short-stories', [ShortStories::class, 'index'])->name('shortStories');
         Route::get('/short-stories/add', [ShortStories::class, 'addShortStories'])->name('addShortStories');
         Route::post('/short-stories/add', [ShortStories::class, 'storeShortStories'])->name('addShortStories.add');
         Route::get('/short-stories/edit/{id}', [ShortStories::class, 'editShortStories'])->name('editShortStories');
         Route::get('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
         Route::post('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUploadStore'])->name('shortStoryImageUpload.store');
+        
+        // --- FIX IS HERE: Removed "admin." from the name ---
+        Route::post('/short-stories/update/{id}', [ShortStories::class, 'update'])->name('editShortStories.update');
+        
         Route::delete('/short-stories/image-upload/delete/{id}', [ShortStories::class, 'deleteSliderImage']);
 
         // Users
