@@ -43,12 +43,11 @@ class BlogController extends Controller
 
     public function storeBlog(StoreBlogs $request, $id = null)
     {
-        
         $validated = $request->validated();
         $blog = (!empty($id)) ? BlogModel::find($id) : new BlogModel();
+        
         $blog->title = $validated['title'];
-        // $blog->short_description = $validated['short_description'];
-        // dd(Auth::guard('admin')->id());
+        
         // Handle file upload
         if ($request->hasFile('thumbnail_photo')) {
             if (!empty($id) && $blog->thumbnail_photo) {
@@ -60,14 +59,18 @@ class BlogController extends Controller
             $filePath = $file->storeAs('blogs/thumbnails', $filename, 'public');
             $blog->thumbnail_photo = $filePath;
         }
+
         $blog->blog_details = $validated['blog_details'];
         $blog->status = $validated['status'];
+        
         if (empty($id)) {
             $blog->created_by = Auth::guard('admin')->id();
         } else {
             $blog->updated_by = Auth::guard('admin')->id();
         }
+        
         $blog->save();
+
         // Sync relationships
         if (isset($validated['blogTypes'])) {
             $blog->blogTypes()->sync($validated['blogTypes']);
@@ -81,10 +84,21 @@ class BlogController extends Controller
         if(isset($validated['suggestedArticles'])) {
             $blog->suggestedBlogs()->sync($validated['suggestedArticles']);
         }
+
+        // =========================================================
+        //  NEW CODE: Check for "Save & Finish" Button
+        // =========================================================
+        if ($request->input('action') == 'save_and_exit') {
+            // Redirect to the main list (Index page)
+            // Note: Ensure 'admin.blogs' is the correct name of your index route in web.php
+            return redirect()->route('admin.blogs')->with('success', 'Blog saved successfully!');
+        }
+        // =========================================================
+
         if (!empty($id)) {
-            // dd($shortStory);
             return redirect()->route('admin.blogImageUpload', ['id' => $id])->with('success', 'Blog updated successfully!');
         }
+        
         return redirect()->route('admin.blogImageUpload', ['id' => $blog->id])->with('success', 'Blog added successfully!');
     }
 
