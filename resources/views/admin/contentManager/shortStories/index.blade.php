@@ -92,7 +92,7 @@
             
             // 1. Data Preparation
             const allStories = @json($shortStories);
-            const assetBase = "{{ asset('storage/') }}"; 
+            const assetBase = "{{ asset(config('app.assets_path')) }}"; 
             
             // --- FIX START: ROBUST URL GENERATION ---
             // We generate the raw route, but then we strip the domain to make it relative.

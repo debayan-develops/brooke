@@ -5,15 +5,18 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-20h2NfWW.css",
+    "file": "assets/app-DajLe-7K.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/admin.js": {
-    "file": "assets/admin-CJ079cvl.js",
+    "file": "assets/admin-CCHbY6xw.js",
     "name": "admin",
     "src": "resources/js/admin.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/admin-mnvyF5AA.css"
+    ]
   },
   "resources/js/app.js": {
     "file": "assets/app-DNxiirP_.js",

@@ -97,7 +97,7 @@
                         </ul>
                     </div>
                 @endif
-                <form method="POST" action="{{ route('admin.addNovels.add') }}" enctype="multipart/form-data">
+                <form method="POST" action="" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="home_id" value="">
                     <div class="field" style="margin-top: 20px">

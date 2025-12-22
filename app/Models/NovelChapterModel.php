@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class novelChapterModel extends Model
+{
+    protected $table = 'novel_chapters';
+
+    protected $fillable = [
+        'novel_id',
+        'title',
+        'description',
+        'chapter_number',
+        'is_active'
+    ];
+}
