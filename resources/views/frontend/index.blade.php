@@ -13,7 +13,7 @@
 
     <div  class="img-wrap-1" data-aos="fade-up-right" id="bio">
       <a href="{{ route('frontend.page.published-work') }}">
-        <img src="{{ '/images/published-work.jpeg') }}" alt="4" class="">
+        <img src="{{ '/images/published-work.jpeg' }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">Published Work</h3>
       </a>
     </div>
