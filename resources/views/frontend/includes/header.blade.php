@@ -11,7 +11,7 @@
         <!-- Boxicons CDN Link -->
         <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
         <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ '/images/favicon.ico' }}" type="image/x-icon">
 
         <title>{{ $pageTitle ?? 'Brooke Hennen' }}</title>
         @stack('styles')

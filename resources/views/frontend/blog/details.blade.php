@@ -27,10 +27,10 @@
         <div class="swiper mySwiper rounded-lg shadow-md">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Slide 1" class="w-full h-[520px] object-cover rounded-lg" />
+                <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Slide 1" class="w-full h-[520px] object-cover rounded-lg" />
                 </div>
                 <div class="swiper-slide">
-                <img src="{{ asset('images/Alternate-Blog-Banner.jpg') }}" alt="Slide 2" class="w-full h-[520px] object-cover rounded-lg" />
+                <img src="{{ '/images/Alternate-Blog-Banner.jpg' }}" alt="Slide 2" class="w-full h-[520px] object-cover rounded-lg" />
                 </div>
             </div>
             <div class="swiper-button-next"></div>

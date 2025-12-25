@@ -23,7 +23,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
         <!-- Left Section -->
         <div class=" text-white ">
-          <img src="{{ asset('images/demo-pic-2.jpg') }}" class="w-full h-[650px] object-cover rounded-lg" alt="" srcset="">
+          <img src="{{ '/images/demo-pic-2.jpg' }}" class="w-full h-[650px] object-cover rounded-lg" alt="" srcset="">
         </div>
         <!-- Right Section -->
         <div class="flex justify-center items-center bg-white  rounded-lg shadow-md">

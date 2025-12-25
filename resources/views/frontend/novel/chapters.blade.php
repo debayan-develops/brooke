@@ -4,7 +4,7 @@
 @include('frontend.includes.header')
 @include('frontend.includes.navbar')
     <!-- 🖼️ Banner -->
-    <div class="bg-cover max-w-6xl mx-auto bg-center h-[400px] flex items-center justify-center text-white lg:mt-20" style="background-image: url({{ asset('images/Falling-Into-Love-With-Comics-Again.jpg') }})">
+    <div class="bg-cover max-w-6xl mx-auto bg-center h-[400px] flex items-center justify-center text-white lg:mt-20" style="background-image: url({{ '/images/Falling-Into-Love-With-Comics-Again.jpg' }})">
         <!-- <div class="bg-black bg-opacity-50 w-full h-full"></div> -->
     </div>
     <div class="max-w-4xl mx-auto text-center">

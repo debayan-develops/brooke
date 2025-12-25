@@ -95,7 +95,7 @@
         <article class="bg-white p-4 rounded-lg shadow flex flex-col md:flex-row items-center md:items-start text-center md:text-left animate-fadeInUp transition-all hover:shadow-lg">
           <!-- Image -->
           <div class="w-48 h-60 overflow-hidden rounded-md mt-2 mb-4 md:mb-0 md:mr-6 mx-auto md:mx-0">
-            <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Everglades fantasy landscape" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
+            <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Everglades fantasy landscape" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
           </div>
           <!-- Content -->
           <div class="flex-1">
@@ -124,7 +124,7 @@
         <!-- Story Card 2 -->
         <article class="bg-white p-4 rounded-lg shadow flex flex-col md:flex-row items-center md:items-start text-center md:text-left animate-fadeInUp transition-all hover:shadow-lg">
           <div class="w-48 h-60 overflow-hidden rounded-md mt-2 mb-4 md:mb-0 md:mr-6 mx-auto md:mx-0">
-            <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Fantasy forest illustration" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
+            <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Fantasy forest illustration" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
           </div>
           <div class="flex-1">
             <a href="{{ route('frontend.novel.index') }}" class="text-2xl font-semibold mb-1 text-black hover:text-blue-600 block">Whispers of the Forest</a>
@@ -147,7 +147,7 @@
         <!-- Story Card 3 -->
         <article class="bg-white p-4 rounded-lg shadow flex flex-col md:flex-row items-center md:items-start text-center md:text-left animate-fadeInUp transition-all hover:shadow-lg">
           <div class="w-48 h-60 overflow-hidden rounded-md mt-2 mb-4 md:mb-0 md:mr-6 mx-auto md:mx-0">
-            <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Fantasy forest illustration" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
+            <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Fantasy forest illustration" class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
           </div>
           <div class="flex-1">
             <a href="{{ route('frontend.short-story.index') }}" class="text-2xl font-semibold mb-1 text-black hover:text-blue-600 block">Whispers of the Forest</a>

@@ -22,7 +22,7 @@
                         <div class="col-span-12 md:col-span-6 xl:col-span-5 h-[365px] px-5">
                             <div class="">
                                 <div class="img-box">
-                                <img src="{{ asset('images/bg-1.jpg') }}" alt="Person using laptop" class="image">
+                                <img src="{{ '/images/bg-1.jpg' }}" alt="Person using laptop" class="image">
                                 <div class="text-box-2">
                                     <!-- <div >
                                         <p class="date">2 weeks ago</p>
@@ -36,7 +36,7 @@
                         <div class="col-span-12 md:col-span-6 xl:col-span-5 h-[365px] px-5">
                             <div class="">
                                 <div class="img-box">
-                                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Person using laptop" class="image">
+                                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Person using laptop" class="image">
                                     <div class="text-box-2">
                                         <!-- <div >
                                             <p class="date">1 weeks ago</p>
@@ -50,7 +50,7 @@
                         <div class="col-span-12 md:col-span-6 xl:col-span-5 pt-5 h-[365px] px-5">
                             <div class="">
                                 <div class="img-box">
-                                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Person using laptop" class="image">
+                                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Person using laptop" class="image">
                                     <div class="text-box-2">
                                         <!-- <div >
                                             <p class="date">3 weeks ago</p>
@@ -64,7 +64,7 @@
                         <div class="col-span-12 md:col-span-6 xl:col-span-5 pt-5 h-[365px] px-5 ">
                             <div class="">
                                 <div class="img-box">
-                                    <img src="{{ asset('images/Mozart-Letter-Thumbnail-Image.jpg') }}" alt="Person using laptop" class="image">
+                                    <img src="{{ '/images/Mozart-Letter-Thumbnail-Image.jpg' }}" alt="Person using laptop" class="image">
                                     <div class="text-box-2">
                                         <!-- <div >
                                             <p class="date">1 weeks ago</p>

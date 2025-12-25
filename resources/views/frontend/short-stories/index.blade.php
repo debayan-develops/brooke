@@ -223,7 +223,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -258,7 +258,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -293,7 +293,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -328,7 +328,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -391,7 +391,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -426,7 +426,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -461,7 +461,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -496,7 +496,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -557,7 +557,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -592,7 +592,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -627,7 +627,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -662,7 +662,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -723,7 +723,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -758,7 +758,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -793,7 +793,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 
@@ -828,7 +828,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-6 sm:space-y-0 border-t border-gray-300 pt-6">
                                 <!-- Image Container with fixed size -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Fragment Before Dawn"
+                                <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Fragment Before Dawn"
                                     class="object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                 </div>
 

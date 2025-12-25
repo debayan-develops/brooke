@@ -53,7 +53,7 @@
         </form>
       </div>
     </div>
-    <img src="{{ asset('images/close.png') }}" class="close-btn-2" alt="" srcset="" id="close-popup">
+    <img src="{{ '/images/close.png' }}" class="close-btn-2" alt="" srcset="" id="close-popup">
   </div>
 </header>
 

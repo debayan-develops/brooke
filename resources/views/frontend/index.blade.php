@@ -13,35 +13,35 @@
 
     <div  class="img-wrap-1" data-aos="fade-up-right" id="bio">
       <a href="{{ route('frontend.page.published-work') }}">
-        <img src="{{ asset('images/published-work.jpeg') }}" alt="4" class="">
+        <img src="{{ '/images/published-work.jpeg') }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">Published Work</h3>
       </a>
     </div>
 
     <div class="img-wrap-2" data-aos="fade-down-right">
       <a href="{{ route('frontend.page.fiction') }}">
-        <img src="{{ asset('images/Fall.jpg') }}" alt="4" class="">
+        <img src="{{ '/images/Fall.jpg' }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">Fictional Works</h3>
       </a>
     </div>
 
     <div class="img-wrap-3" data-aos="zoom-in-down">
       <a href="#bio">
-        <img src="{{ asset('images/photo.JPG') }}" alt="4" class="">
+        <img src="{{ '/images/photo.JPG' }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">About Brooke</h3>
       </a>
     </div>
 
     <div class="img-wrap-4" data-aos="fade-down-left">
       <a href="{{ route('frontend.page.non-fiction') }}">
-        <img src="{{ asset('images/IMG_0978.JPG') }}" alt="4" class="">
+        <img src="{{ '/images/IMG_0978.JPG' }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">Non-Fictional Works</h3>
       </a>
     </div>
 
     <div class="img-wrap-5" data-aos="fade-up-left">
       <a href="{{ route('frontend.page.biography') }}">
-        <img src="{{ asset('images/IMG_1245.JPG') }}" alt="4" class="">
+        <img src="{{ '/images/IMG_1245.JPG' }}" alt="4" class="">
         <h3 class="py-3 text-center text-base xl:text-xl font-semibold">More About Brooke </h3>
       </a>
     </div>
@@ -57,7 +57,7 @@
           <h3 class="text-[#333]">Brooke Hennen</h3>
         </div>
         <div class="px-5 xl:px-8 rounded-br-lg">
-          <img src="{{ asset('images/cape-2.jpg') }}" class="border-right-buttom" alt="" srcset="">
+          <img src="{{ '/images/cape-2.jpg' }}" class="border-right-buttom" alt="" srcset="">
         </div>
       </div>
       <div class="col-span-10 md:col-span-6 px-5 md:px-0">
@@ -97,7 +97,7 @@
             <div class="swiper-slide book-item">
               <a href="#" id="" class="">
                 <div class="book-link text-center bg-gray-500 mx-20 md:mx-0">
-                  <img src="{{ asset('images/demo-book.png') }}" alt="" class="book-img" srcset="">
+                  <img src="{{ '/images/demo-book.png' }}" alt="" class="book-img" srcset="">
                 </div>
                 <h4 class="pt-2 pb-3 text-lg capitalize hover:text-[#027b9a] font-semibold text-center text-gray-800">
                   A Rainy Day in King Solomon's Court
@@ -107,7 +107,7 @@
             <div class="swiper-slide book-item">
               <a href="#" id="" class="">
                 <div class="book-link text-center bg-gray-500 mx-20 md:mx-0">
-                  <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="" class="book-img" srcset="">
+                  <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="" class="book-img" srcset="">
                 </div>
                 <h4 class="pt-2 pb-3 text-lg capitalize hover:text-[#027b9a] font-semibold text-center text-gray-800">
                   Indiana Everglades Pt.1
@@ -117,7 +117,7 @@
             <div class="swiper-slide book-item">
               <a href="#" id="" class="">
                 <div class="book-link text-center bg-gray-500 mx-20 md:mx-0">
-                  <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="" class="book-img" srcset="">
+                  <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="" class="book-img" srcset="">
                 </div>
                 <h4 class="pt-2 pb-3 text-lg capitalize hover:text-[#027b9a] font-semibold text-center text-gray-800">
                   Indiana Everglades Pt.2
@@ -127,7 +127,7 @@
             <div class="swiper-slide book-item">
               <a href="#" id="" class="">
                 <div class="book-link text-center bg-gray-500 mx-20 md:mx-0">
-                  <img src="{{ asset('images/Mozart-Letter-Thumbnail-Image.jpg') }}" alt="" class="book-img" srcset="">
+                  <img src="{{ '/images/Mozart-Letter-Thumbnail-Image.jpg' }}" alt="" class="book-img" srcset="">
                 </div>
                 <h4 class="pt-2 pb-3 text-lg capitalize hover:text-[#027b9a] font-semibold text-center text-gray-800">
                   A Mozart Letter Story: I Met A Girl
@@ -155,7 +155,7 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-6 pt-5 h-[365px] px-5">
             <div class="">
               <div class="img-box">
-                <img src="{{ asset('images/bg-1.jpg') }}" alt="Person using laptop" class="image">
+                <img src="{{ '/images/bg-1.jpg' }}" alt="Person using laptop" class="image">
                 <div class="text-box">
                   <div class="title">A Rainy Day in King Solomon's Court</div>
                   <a href="#" class="read-more">READ MORE</a>
@@ -166,7 +166,7 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-6 pt-5 h-[365px] px-5">
             <div class="">
               <div class="img-box">
-                <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Person using laptop" class="image">
+                <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Person using laptop" class="image">
                 <div class="text-box">
                   <div class="title">The Journey from Hardcopy to Semi-Digital Pt. 1</div>
                   <a href="#" class="read-more">READ MORE</a>
@@ -177,7 +177,7 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-6 pt-5 h-[365px] px-5">
             <div class="">
               <div class="img-box">
-                <img src="{{ asset('images/Apocalypse-and-Archangel-First-Appearance.jpg') }}" alt="Person using laptop" class="image">
+                <img src="{{ '/images/Apocalypse-and-Archangel-First-Appearance.jpg' }}" alt="Person using laptop" class="image">
                 <div class="text-box">
                   <div class="title">Maintaining the Collection Pt. 1</div>
                   <a href="#" class="read-more">READ MORE</a>
@@ -188,7 +188,7 @@
           <div class="col-span-12 md:col-span-6 xl:col-span-6 pt-5 h-[365px] px-5">
             <div class="">
               <div class="img-box">
-                <img src="{{ asset('images/Falling-Into-Love-With-Comics-Again.jpg') }}" alt="Person using laptop" class="image">
+                <img src="{{ '/images/Falling-Into-Love-With-Comics-Again.jpg' }}" alt="Person using laptop" class="image">
                 <div class="text-box">
                   <div class="title">Falling in Love with (American) Comics Again Pt.1</div>
                   <a href="#" class="read-more">READ MORE</a>

@@ -173,7 +173,7 @@
                                 
                                 <!-- Image Container (fixed size across all screens) -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                     class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                 </div>
 
@@ -204,7 +204,7 @@
                                 
                                 <!-- Image Container (fixed size across all screens) -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                     class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                 </div>
 
@@ -238,7 +238,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -268,7 +268,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -297,7 +297,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -326,7 +326,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -395,7 +395,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -425,7 +425,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -454,7 +454,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -483,7 +483,7 @@
                                     
                                     <!-- Image Container (fixed size across all screens) -->
                                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                         class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                     </div>
 
@@ -517,7 +517,7 @@
                                 
                                 <!-- Image Container (fixed size across all screens) -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                     class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                 </div>
 
@@ -548,7 +548,7 @@
                                 
                                 <!-- Image Container (fixed size across all screens) -->
                                 <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Process Notes" loading="lazy"
+                                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Process Notes" loading="lazy"
                                     class="object-cover transform transition duration-500 hover:scale-105 hover:brightness-90 hover:rotate-1 w-full h-full">
                                 </div>
 

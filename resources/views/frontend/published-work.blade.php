@@ -33,7 +33,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/bg-1.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/bg-1.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 <!-- <div >
                                 <p class="date">2 weeks ago</p>
@@ -47,7 +47,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 <!-- <div >
                                 <p class="date">1 weeks ago</p>
@@ -61,7 +61,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/Apocalypse-and-Archangel-First-Appearance.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/Apocalypse-and-Archangel-First-Appearance.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 
                                 <div class="title">Maintaining the Collection Pt. 1</div>
@@ -73,7 +73,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/Falling-Into-Love-With-Comics-Again.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/Falling-Into-Love-With-Comics-Again.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 
                                 <div class="title">Falling in Love with (American) Comics Again Pt.1</div>
@@ -85,7 +85,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 <!-- <div >
                                     <p class="date">1 weeks ago</p>
@@ -99,7 +99,7 @@
                 <div class="col-span-12 md:col-span-6  xl:col-span-4 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 <!-- <div >
                                     <p class="date">3 weeks ago</p>
@@ -113,7 +113,7 @@
                 <div class="col-span-12 xl:col-span-4  md:col-span-6 md:col-start-4 xl:col-start-5 h-[365px] px-4">
                     <div class="">
                         <div class="img-box">
-                            <img src="{{ asset('images/Mozart-Letter-Thumbnail-Image.jpg') }}" alt="Person using laptop" class="image">
+                            <img src="{{ '/images/Mozart-Letter-Thumbnail-Image.jpg' }}" alt="Person using laptop" class="image">
                             <div class="text-box">
                                 <!-- <div >
                                     <p class="date">1 weeks ago</p>

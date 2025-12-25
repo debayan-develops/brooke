@@ -52,7 +52,7 @@
                 <div class="swiper-wrapper">
                 <!-- Slide 1 -->
                 <div class="swiper-slide relative h-full">
-                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Chapter Banner"
+                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Chapter Banner"
                     class="w-full h-full object-cover brightness-90" />
                     <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"></div>
                     <h1 class="absolute bottom-4 sm:bottom-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center px-4 leading-snug">
@@ -62,7 +62,7 @@
 
                 <!-- Slide 2 -->
                 <div class="swiper-slide relative h-full">
-                    <img src="{{ asset('images/published-work.jpeg') }}" alt="Alternate Banner"
+                    <img src="{{ '/images/published-work.jpeg' }}" alt="Alternate Banner"
                     class="w-full h-full object-cover brightness-90" />
                     <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"></div>
                     <h1 class="absolute bottom-4 sm:bottom-5 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center px-4 leading-snug">

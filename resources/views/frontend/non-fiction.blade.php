@@ -27,7 +27,7 @@
               <div class=" book-item">
                 <a href="the-journey.php" id="" class="">
                   <div class="book-link text-center bg-gray-500">
-                    <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="" class="book-img hover:scale-1.5" srcset="">
+                    <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="" class="book-img hover:scale-1.5" srcset="">
                     
                   </div>
                 </a>
@@ -62,7 +62,7 @@
               <div class=" book-item">
                 <a href="falling-in-love.php" id="" class="">
                   <div class="book-link text-center bg-gray-500">
-                    <img src="{{ asset('images/Falling-Into-Love-With-Comics-Again.jpg') }}" alt="" class="book-img hover:scale-1.5" srcset="">
+                    <img src="{{ '/images/Falling-Into-Love-With-Comics-Again.jpg' }}" alt="" class="book-img hover:scale-1.5" srcset="">
                     
                   </div>
                 </a>
@@ -97,7 +97,7 @@
               <div class=" book-item">
                 <a href="maintaing-the-collection-pt-1.php" id="" class="">
                   <div class="book-link text-center bg-gray-500">
-                    <img src="{{ asset('images/Apocalypse-and-Archangel-First-Appearance.jpg') }}" alt="" class="book-img hover:scale-1.5" srcset="">
+                    <img src="{{ '/images/Apocalypse-and-Archangel-First-Appearance.jpg' }}" alt="" class="book-img hover:scale-1.5" srcset="">
                     
                   </div>
                 </a>

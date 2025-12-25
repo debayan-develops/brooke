@@ -25,21 +25,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-8 text-center px-8 sm:px-0 py-6">
 
                 <div class="bg-gray-400 work work-bg1 relative" onclick="playVideo('www.youtube.com/embed/Ve-a-dBehs8?autoplay=1&controls=0&loop=1')">
-                    <!-- <img src="{{ asset('images/play.png') }}" alt="" srcset="" >  -->
+                    <!-- <img src="{{ '/images/play.png' }}" alt="" srcset="" >  -->
                     <div class="work-info">
                         <h4>Sin City Review</h4>
                         <!-- <p>Ut sagittis velit nisi, vestibulum scelerisque libero maximus nec. Aenean fermentum nisi et urna ultricies, vitae pulvinar eros congue.</p> -->
                     </div>
                 </div>
                 <div class="bg-gray-400 work work-bg2 relative" onclick="playVideo('www.youtube.com/embed/w8VoHSGB7xE?autoplay=1&controls=0&loop=1')">
-                    <!-- <img src="{{ asset('images/play.png') }}" alt="" srcset="" >  -->
+                    <!-- <img src="{{ '/images/play.png' }}" alt="" srcset="" >  -->
                     <div class="work-info">
                         <h4>Syncing Scrivener Desktop to Mobile </h4>
                         <!-- <p>Ut sagittis velit nisi, vestibulum scelerisque libero maximus nec. Aenean fermentum nisi et urna ultricies, vitae pulvinar eros congue.</p> -->
                     </div>
                 </div>
                 <div class="bg-gray-400 work work-bg3 relative" onclick="playVideo('www.youtube.com/embed/duyg_5K0MJI?autoplay=1&controls=0&loop=1')">
-                    <!-- <img src="{{ asset('images/play.png') }}" alt="" srcset="" >  -->
+                    <!-- <img src="{{ '/images/play.png' }}" alt="" srcset="" >  -->
                     <div class="work-info">
                         <h4> Breaking Down "Good Readers and Good Writers" by Vladimir Nabokov </h4>
                         <!-- <p>Ut sagittis velit nisi, vestibulum scelerisque libero maximus nec. Aenean fermentum nisi et urna ultricies, vitae pulvinar eros congue.</p> -->
@@ -58,7 +58,7 @@
         <div class="modal-content">
             <iframe width="100%" id="myVideo" src="" title="YouTube video player" frameborder="0"  referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
-        <img src="{{ asset('images/close.png') }}" class="close-btn" alt="" srcset="" onclick="stopVideo()">
+        <img src="{{ '/images/close.png' }}" class="close-btn" alt="" srcset="" onclick="stopVideo()">
 
     </div>
 

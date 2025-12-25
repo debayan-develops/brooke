@@ -35,11 +35,11 @@
                     <div class="swiper-wrapper">
                         <!-- Slide 1 -->
                         <div class="swiper-slide relative">
-                            <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="Story Banner" class="w-full h-96 object-cover" />
+                            <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Story Banner" class="w-full h-96 object-cover" />
                         </div>
                         <!-- Slide 2 -->
                         <div class="swiper-slide relative">
-                            <img src="{{ asset('images/published-work.jpeg') }}" alt="Alternate Banner" class="w-full h-96 object-cover" />
+                            <img src="{{ '/images/published-work.jpeg' }}" alt="Alternate Banner" class="w-full h-96 object-cover" />
                             
                         </div>
                         <!-- Add more slides as needed -->

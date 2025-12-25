@@ -60,42 +60,42 @@
                         
                         <a href="https://www.facebook.com/brookehennen" target="_blank" class="inline-block"> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/facebook.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/facebook.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://x.com/congatsulations" target="_blank" class="inline-block"> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/twitter.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/twitter.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://www.linkedin.com/in/brooke-hennen-81972598/" target="_blank" class="inline-block"> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/linkedin.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/linkedin.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://breakingdownthepage.substack.com/" target="_blank" class="inline-block"> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/substack.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/substack.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://www.youtube.com/channel/UCeQnKRnBf0deyg6vMRpnJZQ" target="_blank" class="inline-block"> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/youtube.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/youtube.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://rumble.com/c/c-1368502" target="_blank" class="inline-block "> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/rumble.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/rumble.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://breakingdownthepage.locals.com" target="_blank" class="inline-block "> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/locals.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/locals.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         <a href="https://discord.gg/3v7nEja5fK" target="_blank" class="inline-block "> 
                             <div class="bg-[#14a9ce] p-3 rounded-full">
-                            <img src="{{ asset('images/discord.png') }}" class="w-4" alt="" srcset="">
+                            <img src="{{ '/images/discord.png' }}" class="w-4" alt="" srcset="">
                             </div>
                         </a>
                         </div>

@@ -8,7 +8,7 @@
   @include('frontend.includes.navbar')
   <!-- ------------------------------ MAIN CONTENT ------------------------------ --><!-- Hero Section -->
   <!-- Hero Section
-  <section class="relative h-[60vh] bg-cover bg-center flex items-center justify-center text-center text-white animate-fadeInUp" style="background-image: url({{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }});">
+  <section class="relative h-[60vh] bg-cover bg-center flex items-center justify-center text-center text-white animate-fadeInUp" style="background-image: url({{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }});">
     <div class="bg-black bg-opacity-50 p-6 mt-24 rounded-lg animate-fadeInUp">
       <h1 class="text-5xl font-bold mb-4 tracking-wide animate-fadeInUp">FRESHEST</h1>
       <p class="text-lg max-w-xl mx-auto animate-fadeInUp">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae sapien nec sapien.</p>
@@ -33,28 +33,28 @@
   <section class="container mx-auto grid grid-cols-5 gap-4 h-[472px] p-4">
     <!-- Large Left Image (40% width, full height) -->
     <div class="col-span-2 row-span-2">
-      <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Main Image" class="w-full h-[472px] object-cover rounded-lg" />
+      <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Main Image" class="w-full h-[472px] object-cover rounded-lg" />
     </div>
 
     <!-- Right Grid: 2 rows × 3 columns (each image: 1/2 height of section) -->
     <div class="col-span-3 grid grid-cols-3 grid-rows-2 gap-4 h-[472px]">
       <div class="">
-        <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Image 2" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Image 2" class="w-full h-full object-cover rounded-lg" />
       </div>
       <div class="">
-        <img src="{{ asset('images/IMG_0978.JPG') }}" alt="Image 3" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/IMG_0978.JPG' }}" alt="Image 3" class="w-full h-full object-cover rounded-lg" />
       </div>
       <div class="">
-        <img src="{{ asset('images/How I Organize My Writing Notebooks.jpeg') }}" alt="Image 4" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/How I Organize My Writing Notebooks.jpeg' }}" alt="Image 4" class="w-full h-full object-cover rounded-lg" />
       </div>
       <div class="">
-        <img src="{{ asset('images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg') }}" alt="Image 5" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/The-Journey-from-Hardcopy-to-Semi-Digital-Icon.jpg' }}" alt="Image 5" class="w-full h-full object-cover rounded-lg" />
       </div>
       <div class="">
-        <img src="{{ asset('images/How I Organize My Writing Notebooks.jpeg') }}" alt="Image 6" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/How I Organize My Writing Notebooks.jpeg' }}" alt="Image 6" class="w-full h-full object-cover rounded-lg" />
       </div>
       <div class="">
-        <img src="{{ asset('images/IMG_0978.JPG') }}" alt="Image 7" class="w-full h-full object-cover rounded-lg" />
+        <img src="{{ '/images/IMG_0978.JPG' }}" alt="Image 7" class="w-full h-full object-cover rounded-lg" />
       </div>
     </div>
   </section>

@@ -138,7 +138,7 @@
                     
                     <!-- Image -->
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
+                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
                         class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 
@@ -235,7 +235,7 @@
                     
                     <!-- Image -->
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
+                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
                         class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 
@@ -328,7 +328,7 @@
                     
                     <!-- Image -->
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
+                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
                         class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 
@@ -422,7 +422,7 @@
                     
                     <!-- Image -->
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ asset('images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg') }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
+                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
                         class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 

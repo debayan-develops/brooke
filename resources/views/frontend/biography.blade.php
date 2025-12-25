@@ -57,7 +57,7 @@
             <div class="my-10 px-5 xl:px-0">
                 <div class="">
                     <div class="inline">
-                        <p class="text-2xl text-gray-400" style="display: ruby;">Our Expertise <img src="{{ asset('images/right-arrow.png') }}" class="w-[80px]" alt="" srcset=""></p>
+                        <p class="text-2xl text-gray-400" style="display: ruby;">Our Expertise <img src="{{ '/images/right-arrow.png' }}" class="w-[80px]" alt="" srcset=""></p>
                     </div>  
                 </div>
                 <div class="max-w-[900px] mx-auto">
@@ -68,7 +68,7 @@
                             <a href="teaching-background.php" class="">
                                 <div class="flex items-center mt-0">
                                     <div class="relative" style="rotate: -10deg;">
-                                        <img src="{{ asset('images/How I Organize My Writing 21st J.jpeg') }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                        <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
                                     </div>
                                     <h2 class="mt-4 ml-8 text-lg font-semibold">Teaching Background</h2>
                                 </div>
@@ -80,7 +80,7 @@
                                     <div class="flex items-center my-">
                                         <h2 class="mt-4 mr-8 text-lg font-semibold">Non-Profit Activity</h2>
                                         <div class="relative" style="rotate: 10deg;">
-                                            <img src="{{ asset('images/published-work.jpeg') }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                            <img src="{{ '/images/published-work.jpeg' }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                             <a href="organize-my-writing.php" class="">
                                 <div class="flex items-center mt-16">
                                     <div class="relative" style="rotate: -10deg;">
-                                        <img src="{{ asset('images/How I Organize My Writing Notebooks.jpeg') }}" alt="UX/Wireframing" class="w-60 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                        <img src="{{ '/images/How I Organize My Writing Notebooks.jpeg' }}" alt="UX/Wireframing" class="w-60 h-52 object-cover object-center rounded-lg shadow-lg ">
                                     </div>
                                     <h2 class="mt-4 ml-8 text-lg font-semibold">How do I organize my writing?</h2>
                                 </div>
@@ -102,7 +102,7 @@
                                     <div class="flex items-center my-16">
                                         <h2 class="mt-4 mr-8 text-lg font-semibold">Favorite Bible stories</h2>
                                         <div class="relative" style="rotate: 10deg;">
-                                            <img src="{{ asset('images/How I Organize My Writing PD Folder.jpeg') }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                            <img src="{{ '/images/How I Organize My Writing PD Folder.jpeg' }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                         <!-- <div class="col-span-5" data-aos="zoom-in-right">
                             <div class="flex items-center mt-">
                                 <div class="relative" style="rotate: -10deg;">
-                                  <img src="{{ asset('images/book-reading-1.jpg') }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                  <img src="{{ '/images/book-reading-1.jpg' }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
                                 </div>
                                 <h2 class="mt-4 ml-8  text-base lg:text-xl  font-semibold">Your Title Here</h2>
                             </div>
@@ -121,7 +121,7 @@
                                 <div class="flex items-center my-">
                                   <h2 class="mt-4 mr-8  text-base lg:text-xl  font-semibold">Your Title Here</h2>
                                   <div class="relative" style="rotate: 10deg;">
-                                    <img src="{{ asset('images/book-reading-3.jpg') }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
+                                    <img src="{{ '/images/book-reading-3.jpg' }}" alt="UX/Wireframing" class="w-52 h-52 object-cover object-center rounded-lg shadow-lg ">
                                   </div>
                                 </div>
                             </div>
