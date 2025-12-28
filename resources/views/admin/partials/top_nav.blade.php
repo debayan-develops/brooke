@@ -15,7 +15,7 @@
   <div class="navbar-menu" id="navbar-menu">
     <div class="navbar-end">
       <div class="navbar-item has-divider">
-        <a class="button blue" href="{{ config('app.url') }}" target="_blank">
+        <a class="button blue" href="{{ route('frontend.home') }}" target="_blank">
           Visit Site
         </a>
       </div>
