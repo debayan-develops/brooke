@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\NovelController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    // Auth Routes
+    // --- AUTH ROUTES ---
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -20,36 +20,32 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin.auth')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Content Management Group
+        // --- CONTENT MANAGEMENT ---
         Route::prefix('content-manager')->group(function () {
             
-            // --- CATEGORIES ---
+            // Categories
             Route::get('/categories', [ContentCategoryController::class, 'index'])->name('contentCategory');
             Route::post('/categories/create', [ContentCategoryController::class, 'store'])->name('contentCategory.create');
             Route::get('/categories/{contentCategory}/edit', [ContentCategoryController::class, 'edit'])->name('contentCategory.edit');
             Route::post('/categories/{contentCategory}/update', [ContentCategoryController::class, 'update'])->name('contentCategory.update');
             Route::delete('/categories/{contentCategory}', [ContentCategoryController::class, 'destroy'])->name('contentCategory.destroy');
 
-            // --- TAGS ---
+            // Tags
             Route::get('/tags', [ContentManagementController::class, 'tags'])->name('tags'); 
             Route::post('/tags', [ContentManagementController::class, 'storeTag'])->name('tags.store'); 
-            
-            // Explicitly named routes for Edit/Update/Delete
             Route::get('/tags/{id}/edit', [ContentManagementController::class, 'editTag'])->name('tags.edit'); 
             Route::put('/tags/{id}', [ContentManagementController::class, 'updateTag'])->name('tags.update'); 
             Route::delete('/tags/{id}', [ContentManagementController::class, 'deleteTag'])->name('tags.destroy');
 
-            // --- CHARACTERS ---
+            // Characters
             Route::get('/characters', [ContentManagementController::class, 'character'])->name('character'); 
             Route::post('/characters', [ContentManagementController::class, 'storeCharacter'])->name('characters.store'); 
-            
-            // Explicitly named routes for Edit/Update/Delete
             Route::get('/characters/{id}/edit', [ContentManagementController::class, 'editCharacter'])->name('characters.edit'); 
             Route::put('/characters/{id}', [ContentManagementController::class, 'updateCharacter'])->name('characters.update'); 
             Route::delete('/characters/{id}', [ContentManagementController::class, 'deleteCharacter'])->name('characters.destroy');
         });
 
-        // Blogs
+        // --- BLOGS ---
         Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
         Route::get('/blogs/add', [BlogController::class, 'addBlogs'])->name('addBlogs');
         Route::post('/blogs/add', [BlogController::class, 'storeBlog'])->name('addBlogs.add');
@@ -59,41 +55,66 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/blogs/image-upload/{id}', [BlogController::class, 'blogImageUploadStore'])->name('blogImageUpload.store');
         Route::delete('/blogs/image-upload/delete/{id}', [BlogController::class, 'deleteSliderImage']);
 
-        // Short Stories
-        
+        // --- SHORT STORIES ---
         Route::get('/short-stories', [ShortStories::class, 'index'])->name('shortStories');
         Route::get('/short-stories/add', [ShortStories::class, 'addShortStories'])->name('addShortStories');
         Route::post('/short-stories/add', [ShortStories::class, 'storeShortStories'])->name('addShortStories.add');
         Route::get('/short-stories/edit/{id}', [ShortStories::class, 'editShortStories'])->name('editShortStories');
         Route::post('/short-stories/edit/{id}', [ShortStories::class, 'storeShortStories'])->name('editShortStories.update');
+        Route::post('/short-stories/update/{id}', [ShortStories::class, 'update'])->name('editShortStories.update');
         Route::get('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
         Route::post('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUploadStore'])->name('shortStoryImageUpload.store');
-        
-        // --- FIX IS HERE: Removed "admin." from the name ---
-        Route::post('/short-stories/update/{id}', [ShortStories::class, 'update'])->name('editShortStories.update');
-        
         Route::delete('/short-stories/image-upload/delete/{id}', [ShortStories::class, 'deleteSliderImage']);
 
-        // Users
+        // --- USERS & PAGES ---
         Route::get('/users', [UserController::class, 'index'])->name('users');
-        
-        // Other pages
         Route::get('/homes', [App\Http\Controllers\Admin\HomesController::class, 'index'])->name('homes');
         Route::get('/pages', [App\Http\Controllers\Admin\PageController::class, 'index'])->name('pages');
         Route::get('/contents', [ContentManagementController::class, 'index'])->name('contents');
 
-        // Novels
+        // --- NOVELS (Consolidated & Fixed) ---
         Route::prefix('novels')->group(function () {
+            
+            // 1. Novel List & Create
             Route::get('/', [NovelController::class, 'index'])->name('novels');
             Route::get('/get-novels', [NovelController::class, 'getNovels'])->name('getNovels');
             Route::get('/add', [NovelController::class, 'addBNovels'])->name('addNovels');
             Route::post('/add', [NovelController::class, 'storeNovel'])->name('addNovels.add');
-            Route::get('/edit/{id}', [NovelController::class, 'editNovels'])->name('editNovels');
-            Route::post('/edit/{id}', [NovelController::class, 'storeNovel'])->name('editNovels.update');
-            Route::get('/add-chapter/{novelId?}', [NovelController::class, 'addChapter'])->name('novels.addChapter');
-            Route::post('/store-chapter/{novelId?}/{chapterId?}', [NovelController::class, 'storeChapter'])->name('novels.storeChapter');
-            Route::get('/edit-chapter/{novelId?}/{chapterId?}', [NovelController::class, 'editChapter'])->name('novels.editChapter');
-            Route::get('/chapter-slider/{novelId?}/{chapterId?}', [NovelController::class, 'chapterSlider'])->name('novels.chapterSlider');
+            
+            // 2. Novel Edit & Delete (Using ContentManagementController as per new logic)
+            Route::get('/edit/{id}', [ContentManagementController::class, 'editNovels'])->name('editNovels'); 
+            Route::post('/update/{id}', [ContentManagementController::class, 'updateNovel'])->name('novels.update');
+            Route::delete('/delete/{id}', [ContentManagementController::class, 'deleteNovel'])->name('novels.delete');
+
+            // 3. Chapter Management
+            // Add Chapter (Route: admin.addChapter)
+            Route::get('/add-chapter/{novel_id}', [ContentManagementController::class, 'addChapter'])->name('addChapter');
+            
+            // Store Chapter (Route: admin.novels.storeChapter)
+            Route::post('/store-chapter/{novel_id}', [ContentManagementController::class, 'storeChapter'])->name('novels.storeChapter');
+
+            // Edit Chapter (Route: admin.novels.editChapter)
+            Route::get('/edit-chapter/{novel_id}/{chapter_id}', [ContentManagementController::class, 'editChapter'])->name('novels.editChapter');
+            
+            // Update Chapter (Route: admin.novels.updateChapter)
+            Route::put('/update-chapter/{chapter_id}', [ContentManagementController::class, 'updateChapter'])->name('novels.updateChapter');
+            
+            // Delete Chapter (Route: admin.novels.deleteChapter)
+            Route::delete('/delete-chapter/{id}', [ContentManagementController::class, 'deleteChapter'])->name('novels.deleteChapter');
+
+            // 4. Chapter Slider Management
+            // View Slider Page
+            Route::get('/chapter/slider/{chapter_id}', [ContentManagementController::class, 'addChapterSlider'])->name('novels.addChapterSlider');
+            
+            // Upload Images
+            Route::post('/chapter/slider/{chapter_id}', [ContentManagementController::class, 'storeChapterSlider'])->name('novels.storeChapterSlider');
+            // Update Slider Image Title
+            Route::post('/novels/chapter/slider/update/{image_id}', [ContentManagementController::class, 'updateChapterSliderImage'])->name('novels.updateChapterSliderImage');
+            // Update Image Title (New)
+            Route::post('/chapter/slider/update/{image_id}', [ContentManagementController::class, 'updateChapterSliderImage'])->name('novels.updateChapterSliderImage');
+
+            // Delete Image
+            Route::delete('/chapter/slider/delete/{image_id}', [ContentManagementController::class, 'deleteChapterSliderImage'])->name('novels.deleteChapterSliderImage');
         });
     });
 });
