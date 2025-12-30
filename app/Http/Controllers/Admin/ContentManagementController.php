@@ -260,7 +260,7 @@ class ContentManagementController extends Controller
             'content' => 'nullable|string', // Assuming you have body content
         ]);
 
-        $chapter = new \App\Models\novelChapterModel();
+        $chapter = new \App\Models\NovelChapterModel();
         $chapter->novel_id = $novel_id;
         $chapter->title = $request->input('title');
         $chapter->chapter_number = $request->input('chapter_number');
@@ -293,14 +293,14 @@ class ContentManagementController extends Controller
 
     public function deleteChapter($id)
     {
-        $chapter = \App\Models\novelChapterModel::findOrFail($id);
+        $chapter = \App\Models\NovelChapterModel::findOrFail($id);
         $chapter->delete();
         return back()->with('success', 'Chapter deleted successfully!');
     }
 
     public function addChapterSlider($chapter_id)
     {
-        $chapter = \App\Models\novelChapterModel::findOrFail($chapter_id);
+        $chapter = \App\Models\NovelChapterModel::findOrFail($chapter_id);
         // Fetch existing slider images
         $sliderImages = \App\Models\novelChapterSliderImagesModel::where('novel_chapter_id', $chapter_id)->get();
 
@@ -343,7 +343,7 @@ class ContentManagementController extends Controller
     public function editChapter($novel_id, $chapter_id)
     {
         $novel = Novel::with('chapters')->findOrFail($novel_id);
-        $chapterToEdit = \App\Models\novelChapterModel::findOrFail($chapter_id);
+        $chapterToEdit = \App\Models\NovelChapterModel::findOrFail($chapter_id);
 
         return view('admin.contentManager.novels.addChapter', [
             'title' => 'Edit Chapter: ' . $chapterToEdit->title,
@@ -362,7 +362,7 @@ class ContentManagementController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $chapter = \App\Models\novelChapterModel::findOrFail($chapter_id);
+        $chapter = \App\Models\NovelChapterModel::findOrFail($chapter_id);
         
         $chapter->update([
             'title' => $request->input('title'),
