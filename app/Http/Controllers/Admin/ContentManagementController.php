@@ -302,7 +302,7 @@ class ContentManagementController extends Controller
     {
         $chapter = \App\Models\NovelChapterModel::findOrFail($chapter_id);
         // Fetch existing slider images
-        $sliderImages = \App\Models\novelChapterSliderImagesModel::where('novel_chapter_id', $chapter_id)->get();
+        $sliderImages = \App\Models\NovelChapterSliderImagesModel::where('novel_chapter_id', $chapter_id)->get();
 
         return view('admin.contentManager.novels.addSlider', compact('chapter', 'sliderImages'));
     }
@@ -317,7 +317,7 @@ class ContentManagementController extends Controller
             foreach ($request->file('images') as $file) {
                 $path = $file->store('novels/chapters/sliders', 'public');
 
-                \App\Models\novelChapterSliderImagesModel::create([
+                \App\Models\NovelChapterSliderImagesModel::create([
                     'novel_chapter_id' => $chapter_id,
                     'image_path' => $path,
                     'is_active' => 1
@@ -330,7 +330,7 @@ class ContentManagementController extends Controller
 
     public function deleteChapterSliderImage($image_id)
     {
-        $image = \App\Models\novelChapterSliderImagesModel::findOrFail($image_id);
+        $image = \App\Models\NovelChapterSliderImagesModel::findOrFail($image_id);
         
         // Delete file from storage
         if ($image->image_path) {
@@ -380,7 +380,7 @@ class ContentManagementController extends Controller
             'title' => 'nullable|string|max:255',
         ]);
 
-        $image = \App\Models\novelChapterSliderImagesModel::findOrFail($image_id);
+        $image = \App\Models\NovelChapterSliderImagesModel::findOrFail($image_id);
         $image->title = $request->input('title');
         $image->save();
 
