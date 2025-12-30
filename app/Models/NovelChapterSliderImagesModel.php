@@ -11,6 +11,7 @@ class novelChapterSliderImagesModel extends Model
     protected $fillable = [
         'novel_chapter_id',
         'image_path',
+        'title',
         'is_active'
     ];
 }

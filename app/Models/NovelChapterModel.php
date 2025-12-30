@@ -15,4 +15,10 @@ class novelChapterModel extends Model
         'chapter_number',
         'is_active'
     ];
+
+    // Optional: Reverse link back to Novel
+    public function novel()
+    {
+        return $this->belongsTo(NovelModel::class, 'novel_id');
+    }
 }
