@@ -72,7 +72,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pages', [App\Http\Controllers\Admin\PageController::class, 'index'])->name('pages');
         Route::get('/contents', [ContentManagementController::class, 'index'])->name('contents');
 
-        // --- NOVELS (Consolidated & Fixed) ---
+       // --- NOVELS (Updated to use NovelController) ---
         Route::prefix('novels')->group(function () {
             
             // 1. Novel List & Create
@@ -81,40 +81,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/add', [NovelController::class, 'addBNovels'])->name('addNovels');
             Route::post('/add', [NovelController::class, 'storeNovel'])->name('addNovels.add');
             
-            // 2. Novel Edit & Delete (Using ContentManagementController as per new logic)
-            Route::get('/edit/{id}', [ContentManagementController::class, 'editNovels'])->name('editNovels'); 
-            Route::post('/update/{id}', [ContentManagementController::class, 'updateNovel'])->name('novels.update');
-            Route::delete('/delete/{id}', [ContentManagementController::class, 'deleteNovel'])->name('novels.delete');
+            // 2. Novel Edit & Delete (Changed to NovelController)
+            Route::get('/edit/{id}', [NovelController::class, 'editNovels'])->name('editNovels'); 
+            Route::post('/update/{id}', [NovelController::class, 'updateNovel'])->name('novels.update');
+            Route::delete('/delete/{id}', [NovelController::class, 'deleteNovel'])->name('novels.delete');
 
-            // 3. Chapter Management
-            // Add Chapter (Route: admin.addChapter)
-            Route::get('/add-chapter/{novel_id}', [ContentManagementController::class, 'addChapter'])->name('addChapter');
-            
-            // Store Chapter (Route: admin.novels.storeChapter)
-            Route::post('/store-chapter/{novel_id}', [ContentManagementController::class, 'storeChapter'])->name('novels.storeChapter');
+            // 3. Chapter Management (Changed to NovelController)
+            Route::get('/add-chapter/{novel_id}', [NovelController::class, 'addChapter'])->name('addChapter');
+            Route::post('/store-chapter/{novel_id}', [NovelController::class, 'storeChapter'])->name('novels.storeChapter');
+            Route::get('/edit-chapter/{novel_id}/{chapter_id}', [NovelController::class, 'editChapter'])->name('novels.editChapter');
+            Route::put('/update-chapter/{chapter_id}', [NovelController::class, 'updateChapter'])->name('novels.updateChapter');
+            Route::delete('/delete-chapter/{id}', [NovelController::class, 'deleteChapter'])->name('novels.deleteChapter');
 
-            // Edit Chapter (Route: admin.novels.editChapter)
-            Route::get('/edit-chapter/{novel_id}/{chapter_id}', [ContentManagementController::class, 'editChapter'])->name('novels.editChapter');
-            
-            // Update Chapter (Route: admin.novels.updateChapter)
-            Route::put('/update-chapter/{chapter_id}', [ContentManagementController::class, 'updateChapter'])->name('novels.updateChapter');
-            
-            // Delete Chapter (Route: admin.novels.deleteChapter)
-            Route::delete('/delete-chapter/{id}', [ContentManagementController::class, 'deleteChapter'])->name('novels.deleteChapter');
-
-            // 4. Chapter Slider Management
-            // View Slider Page
-            Route::get('/chapter/slider/{chapter_id}', [ContentManagementController::class, 'addChapterSlider'])->name('novels.addChapterSlider');
-            
-            // Upload Images
-            Route::post('/chapter/slider/{chapter_id}', [ContentManagementController::class, 'storeChapterSlider'])->name('novels.storeChapterSlider');
-            // Update Slider Image Title
-            Route::post('/novels/chapter/slider/update/{image_id}', [ContentManagementController::class, 'updateChapterSliderImage'])->name('novels.updateChapterSliderImage');
-            // Update Image Title (New)
-            Route::post('/chapter/slider/update/{image_id}', [ContentManagementController::class, 'updateChapterSliderImage'])->name('novels.updateChapterSliderImage');
-
-            // Delete Image
-            Route::delete('/chapter/slider/delete/{image_id}', [ContentManagementController::class, 'deleteChapterSliderImage'])->name('novels.deleteChapterSliderImage');
+            // 4. Chapter Slider Management (Changed to NovelController)
+            Route::get('/chapter/slider/{chapter_id}', [NovelController::class, 'addChapterSlider'])->name('novels.addChapterSlider');
+            Route::post('/chapter/slider/{chapter_id}', [NovelController::class, 'storeChapterSlider'])->name('novels.storeChapterSlider');
+            Route::post('/chapter/slider/update/{image_id}', [NovelController::class, 'updateChapterSliderImage'])->name('novels.updateChapterSliderImage');
+            Route::delete('/chapter/slider/delete/{image_id}', [NovelController::class, 'deleteChapterSliderImage'])->name('novels.deleteChapterSliderImage');
         });
     });
 });

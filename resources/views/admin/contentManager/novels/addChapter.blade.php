@@ -198,7 +198,7 @@
                             <tr>
                                 <th>Chapter No.</th>
                                 <th>Chapter Title</th>
-                                <th>Actions</th>
+                                <th style="text-align: right;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

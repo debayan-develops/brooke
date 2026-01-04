@@ -18,6 +18,7 @@ class NovelModel extends Model
         'title',
         'description',
         'about_story',
+        'permission',
         'author',
         'thumbnail',
         'banner_image',
