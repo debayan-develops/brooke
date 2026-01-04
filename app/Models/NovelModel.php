@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\novelChapterModel; // Import the Chapter Model
+use App\Models\NovelChapterModel; // Import the Chapter Model
 use App\Models\Tag;
 
 class NovelModel extends Model
@@ -43,7 +43,7 @@ class NovelModel extends Model
     // 1. Link to Chapters (Fixes the "count() on null" error)
     public function chapters()
     {
-        return $this->hasMany(novelChapterModel::class, 'novel_id');
+        return $this->hasMany(NovelChapterModel::class, 'novel_id');
     }
 
     // 2. Alias for 'tags' (Matches our Controller code)

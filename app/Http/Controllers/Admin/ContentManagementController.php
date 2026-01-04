@@ -154,5 +154,5 @@ class ContentManagementController extends Controller
         return redirect()->route('admin.character')->with('success', 'Character deleted successfully');
     }
 
-    
+   
 }

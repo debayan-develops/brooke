@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class novelChapterSliderImagesModel extends Model
+class NovelChapterSliderImagesModel extends Model
 {
     protected $table = 'novel_chapter_slider_images';
 
