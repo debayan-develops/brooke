@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\NovelModel as Novel; // Ensure this matches your model name
-use App\Models\novelChapterModel;
-use App\Models\novelChapterSliderImagesModel;
+use App\Models\NovelChapterModel;
+use App\Models\NovelChapterSliderImagesModel;
 use Illuminate\Support\Facades\Storage;
 
 class NovelController extends Controller
@@ -189,7 +189,7 @@ class NovelController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $chapter = new novelChapterModel();
+        $chapter = new NovelChapterModel();
         $chapter->novel_id = $novel_id;
         $chapter->title = $request->input('title');
         $chapter->chapter_number = $request->input('chapter_number');
@@ -203,7 +203,7 @@ class NovelController extends Controller
     public function editChapter($novel_id, $chapter_id)
     {
         $novel = Novel::with('chapters')->findOrFail($novel_id);
-        $chapterToEdit = novelChapterModel::findOrFail($chapter_id);
+        $chapterToEdit = NovelChapterModel::findOrFail($chapter_id);
 
         return view('admin.contentManager.novels.addChapter', [
             'title' => 'Edit Chapter: ' . $chapterToEdit->title,
@@ -222,7 +222,7 @@ class NovelController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $chapter = novelChapterModel::findOrFail($chapter_id);
+        $chapter = NovelChapterModel::findOrFail($chapter_id);
         
         $chapter->update([
             'title' => $request->input('title'),
@@ -237,7 +237,7 @@ class NovelController extends Controller
 
     public function deleteChapter($id)
     {
-        $chapter = novelChapterModel::findOrFail($id);
+        $chapter = NovelChapterModel::findOrFail($id);
         $chapter->delete();
         return back()->with('success', 'Chapter deleted successfully!');
     }
@@ -246,8 +246,8 @@ class NovelController extends Controller
 
     public function addChapterSlider($chapter_id)
     {
-        $chapter = novelChapterModel::findOrFail($chapter_id);
-        $sliderImages = novelChapterSliderImagesModel::where('novel_chapter_id', $chapter_id)->get();
+        $chapter = NovelChapterModel::findOrFail($chapter_id);
+        $sliderImages = NovelChapterSliderImagesModel::where('novel_chapter_id', $chapter_id)->get();
 
         return view('admin.contentManager.novels.addSlider', compact('chapter', 'sliderImages'));
     }
@@ -262,7 +262,7 @@ class NovelController extends Controller
             foreach ($request->file('images') as $file) {
                 $path = $file->store('novels/chapters/sliders', 'public');
 
-                novelChapterSliderImagesModel::create([
+                NovelChapterSliderImagesModel::create([
                     'novel_chapter_id' => $chapter_id,
                     'image_path' => $path,
                     'is_active' => 1
@@ -279,7 +279,7 @@ class NovelController extends Controller
             'title' => 'nullable|string|max:255',
         ]);
 
-        $image = novelChapterSliderImagesModel::findOrFail($image_id);
+        $image = NovelChapterSliderImagesModel::findOrFail($image_id);
         $image->title = $request->input('title');
         $image->save();
 
@@ -288,7 +288,7 @@ class NovelController extends Controller
 
     public function deleteChapterSliderImage($image_id)
     {
-        $image = novelChapterSliderImagesModel::findOrFail($image_id);
+        $image = NovelChapterSliderImagesModel::findOrFail($image_id);
         
         if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
             Storage::disk('public')->delete($image->image_path);
