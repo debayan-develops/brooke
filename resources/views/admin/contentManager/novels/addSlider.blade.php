@@ -98,7 +98,7 @@
                         @foreach($sliderImages as $img)
                             <div class="thumb-item">
                                 <div class="thumb-img-container">
-                                    <img src="{{ asset('storage/' . $img->image_path) }}" alt="Slider Image">
+                                    <img src="{{ asset(config('app.assets_path') . $img->image_path) }}" alt="Slider Image">
                                     
                                     <form action="{{ route('admin.novels.deleteChapterSliderImage', $img->id) }}" method="POST" onsubmit="return confirm('Delete this image?');">
                                         @csrf

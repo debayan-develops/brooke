@@ -128,7 +128,7 @@
                             <label class="label">Current Banner</label>
                             @if($novel->banner_image)
                                 <div class="thumb" style="width: 300px; height: 120px; margin-bottom: 10px;">
-                                    <img src="{{ asset('storage/' . $novel->banner_image) }}" 
+                                    <img src="{{ asset(config('app.assets_path') . $novel->banner_image) }}" 
                                          alt="Banner Image"
                                          style="object-fit: cover; width: 100%; height: 100%;"
                                          onerror="this.style.display='none'">

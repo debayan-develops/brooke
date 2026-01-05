@@ -145,7 +145,7 @@
                                 <td>{{ $novel->id }}</td>
                                 <td>
                                     @if($novel->thumbnail)
-                                        <img src="{{ asset('storage/' . $novel->thumbnail) }}" class="thumb-img" alt="Cover">
+                                        <img src="{{ asset(config('app.assets_path') . $novel->thumbnail) }}" class="thumb-img" alt="Cover">
                                     @else
                                         <span class="text-gray-400">No Image</span>
                                     @endif
