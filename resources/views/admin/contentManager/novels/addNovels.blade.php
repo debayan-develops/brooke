@@ -2,59 +2,65 @@
 
 @section('title', $title)
 
+<style>
+    .ck-content ol, .ck-content ul {
+        margin-left: 20px !important;
+        padding-left: 20px !important;
+    }
+    .ck-content ol { list-style-type: decimal !important; }
+    .ck-content ul { list-style-type: disc !important; }
+    .ck-content li { margin-bottom: 5px; }
+    
+    /* RESTORED LARGE HEIGHT HERE */
+    .ck-editor__editable_inline { 
+        min-height: 400px !important; 
+    }
+</style>
 
 <style>
     @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
-    /* Custom styles for Choices.js */
+    
+    /* Custom Radio Button Styles (For Active/Inactive) */
+    .custom-radio {
+        display: inline-flex !important;
+        align-items: center !important;
+        cursor: pointer !important;
+        position: relative !important;
+        margin-right: 20px;
+    }
+    .custom-radio input[type="radio"] {
+        position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0;
+    }
+    .radio-circle {
+        height: 20px !important; width: 20px !important;
+        background-color: #fff !important;
+        border: 2px solid #ccc !important;
+        border-radius: 50% !important;
+        display: inline-block !important;
+        position: relative !important;
+        transition: all 0.2s ease-in-out;
+    }
+    .custom-radio input:checked ~ .radio-circle {
+        background-color: #2563eb !important; border-color: #2563eb !important;
+    }
+    .radio-circle::after {
+        content: ""; position: absolute; display: none;
+        top: 5px; left: 5px; width: 6px; height: 6px;
+        border-radius: 50%; background: white;
+    }
+    .custom-radio input:checked ~ .radio-circle::after { display: block !important; }
+    .radio-text {
+        margin-left: 8px !important; font-weight: 500 !important; color: #333 !important;
+    }
+
+    /* Form Styles */
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151; }
+    .form-hint { font-size: 0.875rem; color: #6B7280; }
+    .form-input { width: 100%; padding: 0.5rem; border: 1px solid #D1D5DB; border-radius: 0.375rem; box-sizing: border-box; }
 </style>
 
 @section('content')
-<style>
-    @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
-    /* Override default Choices.js styles */
-    .textarea.introducing {
-        height: 15rem;
-    }
-
-    .form-group {
-    margin-bottom: 1rem;
-    }
-
-    .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #374151; /* Tailwind's gray-700 */
-    }
-
-    .form-hint {
-    font-size: 0.875rem;
-    color: #6B7280; /* Tailwind's gray-500 */
-    }
-
-    .form-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #D1D5DB; /* Tailwind's border-gray-300 */
-    border-radius: 0.375rem; /* Tailwind's rounded */
-    box-sizing: border-box;
-    }
-
-    .preview-box {
-    margin-top: 0.5rem;
-    }
-
-    .error-text {
-    color: #EF4444; /* Tailwind's red-500 */
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    }
-
-    .ck-editor__editable_inline {
-    min-height: 400px;
-    }
-
-</style>
     <div id="app">
         @include('admin.partials.top_nav')
         @include('admin.partials.nav')
@@ -73,7 +79,7 @@
                 <h1 class="title">
                 {{$title}}
                 </h1>
-                <a href="{{ url()->previous() }}" data-target="add-facility-modal" class="button blue --jb-modal">Go Back</a>
+                <a href="{{ url()->previous() }}" class="button blue">Go Back</a>
             </div>
         </section>
 
@@ -87,7 +93,6 @@
             </header>
             <div class="card-content">
                 
-                {{-- Display Validation Errors --}}
                 @if ($errors->any())
                     <div class="notification is-danger">
                         <ul>
@@ -97,9 +102,11 @@
                         </ul>
                     </div>
                 @endif
+
                 <form method="POST" action="{{ route('admin.addNovels.add') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="home_id" value="">
+                    
                     <div class="field" style="margin-top: 20px">
                         <label class="label">Content View Permission</label>
                         <div class="field-body">
@@ -128,6 +135,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="field">
                         <label class="label">Title</label>
                         <div class="field-body">
@@ -138,10 +146,10 @@
                                 @error('title')
                                     <p class="text-red-500 text-sm">{{ $message }}</p>
                                 @enderror
-
                             </div>
                         </div>
                     </div>
+
                     <div class="field">
                         <label class="label">Author Name</label>
                         <div class="field-body">
@@ -152,40 +160,22 @@
                                 @error('author')
                                     <p class="text-red-500 text-sm">{{ $message }}</p>
                                 @enderror
-
                             </div>
                         </div>
                     </div>
                     
-                    {{-- <div class="field">
-                        <label class="label">Short description</label>
-                        <div class="control">
-                            <textarea class="textarea" placeholder="Enter Text" name="introducing">{{old('introducing')}}</textarea>
-                        </div>
-                        @error('introducing')
-                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                        @enderror
-                        
-                    </div> --}}
-
-                    <!-- Thumbnail Photo -->
                     <div class="form-group">
                         <label for="thumbnailPhoto" class="label">
                             Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="thumbnailPhoto" type="file" name="thumbnail" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
-                        <div id="thumbnailPreview" class="preview-box"></div>
-                        <p id="thumbnailError" class="error-text hidden"></p>
+                        <input id="thumbnailPhoto" type="file" name="thumbnail" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
                     </div>
 
-                    <!-- Banner Photo -->
                     <div class="form-group">
                         <label for="bannerPhoto" class="label">
                             Upload Banner Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                         </label>
-                        <input id="bannerPhoto" type="file" name="banner_image" accept=".jpg,.jpeg,.png,.webp" class="form-input"  />
-                        <div id="bannerPreview" class="preview-box"></div>
-                        <p id="bannerError" class="error-text hidden"></p>
+                        <input id="bannerPhoto" type="file" name="banner_image" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
                     </div>
 
                     <div class="field">
@@ -195,10 +185,11 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="tagType" multiple name="tags[]">
-                                            @foreach($tags as $tag)
-                                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                                            @endforeach
-                                            
+                                            @if(isset($tags) && count($tags) > 0)
+                                                @foreach($tags as $tag)
+                                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         @error('tags')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -208,52 +199,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="field">
-                        <div class="grid gap-6 grid-cols-1">
-                            <div class="field">
-                                <label class="label">Category Type</label>
-                                <div class="control icons-left icons-right">
-                                    <div class="select">
-                                        <select id="categoryType" multiple name="categoryType[]">
-                                            
-                                            <option value="1">Category 1</option>
-                                            <option value="2">Category 2</option>
-                                            <option value="3">Category 3</option>
-                                            <option value="4">Category 4</option>
-                                            <option value="5">Category 5</option>
-                                            <option value="6">Category 6</option>
-                                        </select>
-                                        @error('home_nearby_facilities_id')
-                                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="field">
-                        <div class="grid gap-6 grid-cols-1">
-                            <div class="field">
-                                <label class="label">Article Type</label>
-                                <div class="control icons-left icons-right">
-                                    <div class="select">
-                                        <select id="characters" multiple name="characters[]">
-                                            
-                                            <option value="1">Novel</option>
-                                            <option value="2">Journal</option>
-                                            <option value="3">Type 3</option>
-                                            <option value="4">Type 4</option>
-                                            <option value="5">Type 5</option>
-                                            <option value="6">Type 6</option>
-                                        </select>
-                                        @error('home_nearby_facilities_id')
-                                            <p class="text-red-500 text-sm">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>--}}
+
                     <div class="field">
                         <div class="grid gap-6 grid-cols-1">
                             <div class="field">
@@ -261,10 +207,11 @@
                                 <div class="control icons-left icons-right">
                                     <div class="select">
                                         <select id="relatedNovels" multiple name="relatedNovels[]">
-                                            @foreach($relatedNovels as $novel)
-                                                <option value="{{ $novel->id }}">{{ $novel->title }}</option>
-                                            @endforeach
-                                            
+                                            @if(isset($relatedNovels) && count($relatedNovels) > 0)
+                                                @foreach($relatedNovels as $novel)
+                                                    <option value="{{ $novel->id }}">{{ $novel->title }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         @error('relatedNovels')
                                             <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -278,12 +225,13 @@
                     <div class="field">
                         <label class="label">Short Description</label>
                         <div class="control">
-                        <textarea class="textarea description" placeholder="Enter Text" name="description" row="4">{{old('description')}}</textarea>
+                        <textarea class="textarea description" placeholder="Enter Text" name="description" rows="4">{{old('description')}}</textarea>
                         </div>
                         @error('description')
                             <p class="text-red-500 text-sm">{{ $message }}</p>
                         @enderror
                     </div>
+
                     <div class="field">
                         <label class="label">About Story</label>
                         <div class="control">
@@ -294,42 +242,23 @@
                         @enderror
                     </div>
                     
-                    <div class="field">
+                    <div class="field" style="margin-top: 20px;">
                         <label class="label">Status</label>
-                        <div class="field-body">
-                            <div class="field grouped multiline">
-                            <div class="control">
-                                <label class="radio">
+                        <div class="control" style="display: flex; gap: 20px; align-items: center;">
+                            <label class="custom-radio">
                                 <input type="radio" name="status" value="1" checked>
-                                <span class="check"></span>
-                                <span class="control-label">Active</span>
-                                </label>
-                            </div>
-                            <div class="control">
-                                <label class="radio">
+                                <span class="radio-circle"></span>
+                                <span class="radio-text">Active</span>
+                            </label>
+                            <label class="custom-radio">
                                 <input type="radio" name="status" value="0">
-                                <span class="check"></span>
-                                <span class="control-label">Inactive</span>
-                                </label>
-                            </div>
-                            </div>
+                                <span class="radio-circle"></span>
+                                <span class="radio-text">Inactive</span>
+                            </label>
                         </div>
                     </div>
-                    {{-- <div class="field">
-                        <label for="featured_image"
-                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                            <p class="text-gray-500">Click to upload or drag & drop</p>
-                            <p class="text-xs text-gray-400">PNG, JPG up to 2MB</p>
-                            <input id="featured_image" name="featured_image" type="file" class="hidden" accept="image/*" />
-                        </label>
-
-                        <div id="preview" class="mt-4 hidden">
-                            <img class="rounded-lg shadow w-full" />
-                        </div>
-
-                    </div> --}}
                     
-                    <div class="field grouped">
+                    <div class="field grouped" style="margin-top: 30px;">
                         <div class="control">
                         <button type="submit" class="button green">
                             Next
@@ -346,25 +275,28 @@
             </div>
         </section>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
     <script>
-        
         document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Choices.js
             new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
             new Choices('#relatedNovels', { removeItemButton: true, searchEnabled: true });
+
+            // Initialize CKEditor for Short Description
             ClassicEditor
-                .create( document.querySelector( '.textarea.description' ) )
-                .catch( error => {
-                    console.error( error );
-                } );
+                .create( document.querySelector( '.textarea.description' ), {
+                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
+                })
+                .catch( error => { console.error( error ); } );
+
+            // Initialize CKEditor for About Story
             ClassicEditor
-                .create( document.querySelector( '.textarea.about_story' ) )
-                .catch( error => {
-                    console.error( error );
-                } );
+                .create( document.querySelector( '.textarea.about_story' ), {
+                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
+                })
+                .catch( error => { console.error( error ); } );
         });
-
     </script>
-
 @endsection
