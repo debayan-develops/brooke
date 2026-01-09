@@ -43,7 +43,9 @@ class NovelModel extends Model
     // 1. Link to Chapters (Fixes the "count() on null" error)
     public function chapters()
     {
-        return $this->hasMany(NovelChapterModel::class, 'novel_id');
+       
+        return $this->hasMany(NovelChapterModel::class, 'novel_id', 'id')
+                    ->orderBy('chapter_number', 'asc');
     }
 
     // 2. Alias for 'tags' (Matches our Controller code)
