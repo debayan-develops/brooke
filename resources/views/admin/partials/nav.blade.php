@@ -35,44 +35,47 @@
         </a>
       </li>
 
-      <li class="--set-active-content-manager-html {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.tags') || request()->routeIs('admin.character') || request()->routeIs('admin.novels') || request()->routeIs('admin.blogs') || request()->routeIs('admin.shortStories') || request()->routeIs('admin.shortStoryImageUpload')) ? 'active' : '' }}">
+      {{-- 
+          UPDATED LOGIC:
+          We use request()->is('admin/novels*') to check if the URL starts with /admin/novels.
+          This ensures the menu stays open for Edit, Add, and Chapter pages.
+      --}}
+      <li class="--set-active-content-manager-html {{ (request()->routeIs('admin.contentCategory*') || request()->routeIs('admin.tags*') || request()->routeIs('admin.character*') || request()->is('admin/novels*') || request()->is('admin/blogs*') || request()->is('admin/shortStories*') || request()->is('admin/short-stories*')) ? 'active' : '' }}">
         <a class="dropdown">
           <span class="icon"><i class="mdi mdi-view-list"></i></span>
           <span class="menu-item-label">Content Manager</span>
-          <span class="icon"><i class="mdi {{ (request()->routeIs('admin.contentCategory') || request()->routeIs('admin.tags') || request()->routeIs('admin.character') || request()->routeIs('admin.novels') || request()->routeIs('admin.blogs') || request()->routeIs('admin.shortStories') || request()->routeIs('admin.shortStoryImageUpload') || request()->routeIs('admin.shortStoryImageUpload')) ? 'mdi-minus' : 'mdi-plus' }}"></i></span>
+          <span class="icon"><i class="mdi {{ (request()->routeIs('admin.contentCategory*') || request()->routeIs('admin.tags*') || request()->routeIs('admin.character*') || request()->is('admin/novels*') || request()->is('admin/blogs*') || request()->is('admin/shortStories*') || request()->is('admin/short-stories*')) ? 'mdi-minus' : 'mdi-plus' }}"></i></span>
         </a>
         <ul>
-          <li class="{{ (request()->routeIs('admin.contentCategory')) ? 'active' : '' }}">
+          <li class="{{ request()->routeIs('admin.contentCategory*') ? 'active' : '' }}">
             <a href="{{ route('admin.contentCategory') }}">
               <span>Category</span>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.tags') ? 'active' : '' }}">
+          <li class="{{ request()->routeIs('admin.tags*') ? 'active' : '' }}">
             <a href="{{ route('admin.tags') }}">
               <span>Tags</span>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.character') ? 'active' : '' }}">
+          <li class="{{ request()->routeIs('admin.character*') ? 'active' : '' }}">
             <a href="{{ route('admin.character') }}">
               <span>Characters</span>
             </a>
           </li>
-          {{-- <li class="{{ request()->routeIs('admin.contents') ? 'active' : '' }}">
-            <a href="{{ route('admin.contents') }}">
-              <span>Contents</span>
-            </a>
-          </li> --}}
-          <li class="{{ request()->routeIs('admin.novels') ? 'active' : '' }}">
+          
+          <li class="{{ request()->is('admin/novels*') ? 'active' : '' }}">
             <a href="{{ route('admin.novels') }}">
               <span>Novels</span>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.blogs') ? 'active' : '' }}">
+          
+          <li class="{{ request()->is('admin/blogs*') ? 'active' : '' }}">
             <a href="{{ route('admin.blogs') }}">
               <span>Blog</span>
             </a>
           </li>
-          <li class="{{ request()->routeIs('admin.shortStories') ? 'active' : '' }}">
+          
+          <li class="{{ request()->is('admin/shortStories*') || request()->is('admin/short-stories*') ? 'active' : '' }}">
             <a href="{{ route('admin.shortStories') }}">
               <span>Short Stories</span>
             </a>
