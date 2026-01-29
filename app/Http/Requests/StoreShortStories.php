@@ -32,8 +32,12 @@ class StoreShortStories extends FormRequest
             ], // max 2MB
             'short_story_details' => 'required',
             'status' => 'required|boolean',
-            'characters' => 'array',
-            'characters.*' => 'exists:characters,id',
+            // FIX: Allow 'characters' to be an array, but REMOVE any 'integer' or 'exists' check on the items
+            'characters' => 'nullable|array', 
+            'characters.*' => 'nullable', // Allow mixed types (String Names OR Integer IDs)
+        
+              // Do the same for suggested stories just in case
+            'suggested_stories' => 'nullable|array',
             'tags' => 'array',
             'tags.*' => 'exists:tags,id',
             'categories' => 'array',

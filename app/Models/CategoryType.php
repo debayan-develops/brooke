@@ -33,4 +33,8 @@ class CategoryType extends Model
         return $this->belongsToMany(Character::class, 'character_type_map', 'category_type_id', 'character_id')->withTimestamps();
     }
 
+    public function shortStories() {
+    return $this->belongsToMany(ShortStories::class, 'short_story_categories', 'category_id', 'short_story_id');
+}
+
 }

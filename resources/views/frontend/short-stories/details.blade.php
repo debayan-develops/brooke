@@ -1,311 +1,235 @@
 @php
-    $pageTitle = 'Brooke Hennen - Short Story Details';
+    $pageTitle = $shortStory->title . ' - Brooke Hennen';
+    $authorName = 'Brooke Hennen';
 @endphp
 @include('frontend.includes.header')
 @include('frontend.includes.navbar')
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 
-  <style>
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-            }
-            .animate-fade-in {
-            animation: fade-in 0.8s ease-out forwards;
-            }
-            .delay-200 { animation-delay: 0.2s; }
-            .delay-400 { animation-delay: 0.4s; }
-            .delay-600 { animation-delay: 0.6s; }
+<style>
+    /* TYPOGRAPHY: Classic Serif Look */
+    body {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        color: #333;
+        background-color: #f9f9f9;
+    }
 
+    /* THE MAIN CONTENT BOX */
+    .classic-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 40px 60px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
 
+    /* TITLE */
+    .story-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #111;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+    }
 
-    </style>
+    /* META (Author Left / Date Right) */
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #f3f4f6;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+        
+        /* UPDATED STYLES HERE: */
+        font-family: 'Georgia', serif; /* Matches body font */
+        font-size: 0.95rem;
+        color: #666;
+        font-style: italic; /* Forces Italics */
+        /* Removed text-transform: uppercase; */
+    }
+
+    /* STORY BODY */
+    .story-body {
+        font-size: 1.15rem;
+        line-height: 1.9;
+        color: #2d3748;
+        text-align: left;
+    }
+    .story-body p { margin-bottom: 1.5rem; }
+
+    /* SIDEBAR STYLING */
+    .sidebar-heading {
+        font-family: 'Georgia', serif;
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .sidebar-link {
+        color: #2563eb;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        font-family: sans-serif;
+    }
+    .sidebar-link:hover { text-decoration: underline; color: #1e40af; }
+
+    /* TAGS */
+    .tag-pill {
+        display: inline-block;
+        background-color: #f3f4f6;
+        color: #4b5563;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        text-decoration: none;
+        font-family: sans-serif;
+    }
+    .tag-pill:hover { background-color: #e5e7eb; color: #111; }
+
+    /* SCROLLBAR HIDE */
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    @media (max-width: 768px) {
+        .classic-container { padding: 20px; }
+        .story-title { font-size: 2rem; }
+    }
+</style>
+
+<div class="py-10 lg:py-16">
     
+    <div class="classic-container">
+        
+        @if($shortStory->sliderImages && $shortStory->sliderImages->count() > 0)
+            <div class="w-full h-[400px] lg:h-[500px] mb-8 relative group bg-gray-100 rounded-sm overflow-hidden shadow-sm">
+                
+                <div id="sliderTrack" class="flex overflow-x-auto snap-x snap-mandatory h-full scrollbar-hide" style="scroll-behavior: smooth;">
+                   @foreach($shortStory->sliderImages as $image)
+                        <div class="w-full flex-shrink-0 snap-center h-full relative">
+                            @php
+                                // Path Fix: Strip "C:\Users..." and get just the filename
+                                $cleanPath = str_replace('\\', '/', $image->image_path);
+                                $filename = basename($cleanPath); 
+                                $finalUrl = asset('storage/short_stories/slider/' . $filename);
+                            @endphp
 
-
-<!-- ------------------------------ HEADER SECTION ------------------------------ -->
-    
-    @include('frontend.includes.navbar')
-    <section>
-        <div class="max-w-5xl mx-auto px-4 lg:py-10 lg:mt-20">
-            
-            <!-- Hero Slider Section -->
-            <div class="relative  group">
-                <div class="swiper mySwiper rounded-lg shadow-md mb-2">
-                    <div class="swiper-wrapper">
-                        <!-- Slide 1 -->
-                        <div class="swiper-slide relative">
-                            <img src="{{ '/images/How I Organize My Writing 21st J.jpeg' }}" alt="Story Banner" class="w-full h-96 object-cover" />
+                            <img src="{{ $finalUrl }}" 
+                                 onerror="this.onerror=null;this.src='/images/demo-book.png';"
+                                 alt="Story Slide" 
+                                 class="w-full h-full object-cover">
                         </div>
-                        <!-- Slide 2 -->
-                        <div class="swiper-slide relative">
-                            <img src="{{ '/images/published-work.jpeg' }}" alt="Alternate Banner" class="w-full h-96 object-cover" />
-                            
-                        </div>
-                        <!-- Add more slides as needed -->
-                    </div>
-
-                    <!-- Navigation Buttons -->
-                    <div class="swiper-button-next text-white"></div>
-                    <div class="swiper-button-prev text-white"></div>
-
-                    <!-- Pagination Dots -->
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-
-            <!-- Metadata -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-sm text-gray-600 mb-6 gap-2">
-                <!-- Title and Author -->
-                <div class="flex flex-col gap-1">
-                    <h1 class="text-2xl sm:text-3xl text-black font-bold">
-                    Echoes in the Fog
-                    </h1>
-                    <span class="text-gray-500">
-                    By <span class="font-medium text-gray-700">Brooke Hennen</span>
-                    </span>
+                    @endforeach
                 </div>
 
-                <!-- Published Date -->
-                <span class="italic">
-                    Published: July 06, 2023
-                </span>
-            </div>
+                <button onclick="document.getElementById('sliderTrack').scrollBy({left: -window.innerWidth, behavior: 'smooth'})"
+                        class="absolute inset-y-0 left-0 px-4 flex items-center justify-center bg-transparent border-0 cursor-pointer opacity-50 hover:opacity-100 transition duration-300 z-10 focus:outline-none">
+                    <span class="text-white text-5xl font-bold drop-shadow-lg shadow-black">‹</span>
+                </button>
 
-
-
-
-            <!-- Story Content -->
-            <div class="grid md:grid-cols-4 gap-8">
-                <!-- Main Content -->
-                <div class="md:col-span-3 space-y-6">
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-200">
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-400">
-                        Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-600">
-                        Fusce convallis, mauris imperdiet gravida bibendum, nisl turpis suscipit mauris, sed placerat ipsum urna sed risus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-200">
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-400">
-                        Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.
-                    </p>
-                    <p class="text-lg leading-relaxed text-gray-800 animate-fade-in delay-600">
-                        Fusce convallis, mauris imperdiet gravida bibendum, nisl turpis suscipit mauris, sed placerat ipsum urna sed risus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                    </p>
-                </div>
-
-
-                <!-- Sidebar -->
-                <aside class="md:col-span-1 space-y-6 sticky top-20">
-
-                    <!-- Suggested Stories -->
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-2">Suggested Stories</h3>
-                        <ul class="space-y-2 text-base text-blue-600">
-                        <li><a href="#" class="hover:underline">Lorem ipsum Cras eu sodales dui</a></li>
-                        <li><a href="#" class="hover:underline">Lorem ipsum Cras eu  dui</a></li>
-                        <li><a href="#" class="hover:underline">Lorem ipsum Cras eu sodales </a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Character Insights -->
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-2">Character Insights</h3>
-                        <ul class="space-y-2 text-base text-blue-600">
-                            <li><a href="#" class="hover:underline">Aiden Blackthorn – The Reluctant Hero</a></li>
-                            <li><a href="#" class="hover:underline">Lyra Voss – Secrets of the Healer</a></li>
-                            <li><a href="#" class="hover:underline">The Crimson Order – Villains with a Code</a></li>
-                            <li><a href="#" class="hover:underline">Family Ties: The Holloway Legacy</a></li>
-                            <li><a href="#" class="hover:underline">Character Map & Relationships</a></li>
-                        </ul>
-                    </div>
-
-
-                    <!-- 🏷️ Tags Section (Boxy Design) -->
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-700 mb-2">Popular Tags</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <a href="/tags/backstory" class="bg-gray-200 px-3 py-1 rounded text-base text-gray-700 hover:bg-gray-300 transition">Backstory</a>
-                            <a href="/tags/character-study" class="bg-gray-200 px-3 py-1 rounded text-base text-gray-700 hover:bg-gray-300 transition">Character Study</a>
-                            <a href="/tags/redemption" class="bg-gray-200 px-3 py-1 rounded text-base text-gray-700 hover:bg-gray-300 transition">Redemption</a>
-                            <a href="/tags/flashback" class="bg-gray-200 px-3 py-1 rounded text-base text-gray-700 hover:bg-gray-300 transition">Flashback</a>
-                        </div>
-                    </div>
-
-                    <!-- 📁 Horizontal Categories Card -->
-                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-5 pl-0 w-full max-w-2xl">
-                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Categories</h2>
-                        <ul class="space-y-2 text-base">
-                            <li><a href="/category/category1" class="text-blue-600 hover:underline">Category 1</a></li>
-                            <li><a href="/category/category2" class="text-blue-600 hover:underline">Category 2</a></li>
-                            <li><a href="/category/category3" class="text-blue-600 hover:underline">Category 3</a></li>
-                            <li><a href="/category/category4" class="text-blue-600 hover:underline">Category 4</a></li>
-                            <li><a href="/category/category5" class="text-blue-600 hover:underline">Category 5</a></li>
-                        </ul>
-                    </div>
-
-
-                    
-
-
-
-
-                </aside>
+                <button onclick="document.getElementById('sliderTrack').scrollBy({left: window.innerWidth, behavior: 'smooth'})"
+                        class="absolute inset-y-0 right-0 px-4 flex items-center justify-center bg-transparent border-0 cursor-pointer opacity-50 hover:opacity-100 transition duration-300 z-10 focus:outline-none">
+                    <span class="text-white text-5xl font-bold drop-shadow-lg shadow-black">›</span>
+                </button>
 
             </div>
+        @else
+            <div class="w-full h-[300px] mb-8 bg-gray-200 flex items-center justify-center text-gray-500 rounded-sm">
+                <p>No slider images available for this story.</p>
+            </div>
+        @endif
 
-            <!-- CTA -->
-            <div class="mt-10 text-center">
-                <a href="{{ route('frontend.short-story.index') }}" class="inline-block px-6 py-3 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition duration-300">
-                    ← Back to All Stories
-                </a>
+        <h1 class="story-title">{{ $shortStory->title }}</h1>
+        
+        <div class="meta-row">
+            <div class="text-left">
+                By <span class="font-bold text-gray-800">{{ $authorName }}</span>
+            </div>
+            <div class="text-right">
+                Published: {{ $shortStory->created_at->format('F d, Y') }}
             </div>
         </div>
-    </section>
 
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
-    <!-- ⬆️ Scroll-to-Top Button -->
-    <button id="scrollToTopBtn"
-    class="fixed bottom-5 right-5 z-50 p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 hover:scale-110 transition-all duration-300 opacity-0 invisible">
-        <svg class="w-5 h-5 arrow-icon transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-        </svg>
-    </button>
+            <div class="lg:col-span-8">
+                <div class="story-body">
+                    {!! $shortStory->short_story_details !!}
+                </div>
 
+                <div class="mt-12 text-center pt-8 border-t border-gray-100">
+                    <a href="{{ route('frontend.short-story.index') }}" 
+                       class="inline-block bg-blue-600 text-white px-8 py-3 rounded text-sm font-bold uppercase tracking-wide hover:bg-blue-700 transition shadow-md no-underline">
+                        ← Back to All Stories
+                    </a>
+                </div>
+            </div>
 
+            <div class="lg:col-span-4 space-y-10 border-l border-gray-100 pl-0 lg:pl-10">
+                
+                @if($shortStory->suggestedStories->count() > 0)
+                <div>
+                    <h3 class="sidebar-heading">Suggested Stories</h3>
+                    <div class="space-y-3">
+                        @foreach($shortStory->suggestedStories as $suggested)
+                            <a href="{{ route('frontend.short-story.show', $suggested->id) }}" class="sidebar-link">
+                                {{ $suggested->title }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
 
+                @if($shortStory->shortStoryCharacters->count() > 0)
+                <div>
+                    <h3 class="sidebar-heading">Character Insights</h3>
+                    <div class="space-y-4">
+                        @foreach($shortStory->shortStoryCharacters as $character)
+                            <div>
+                                <div class="text-blue-600 font-bold text-sm mb-1">{{ $character->name }}</div>
+                                @if($character->description)
+                                    <p class="text-xs text-gray-500 italic leading-snug">
+                                        "{{ Str::limit($character->description, 80) }}"
+                                    </p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
 
+                <div>
+                    <h3 class="sidebar-heading">Popular Tags</h3>
+                    <div class="flex flex-wrap">
+                        @foreach($sidebarTags as $tag)
+                            <a href="#" class="tag-pill">{{ $tag->name }}</a>
+                        @endforeach
+                    </div>
+                </div>
 
+                <div>
+                    <h3 class="sidebar-heading">Categories</h3>
+                    <div class="space-y-2">
+                        @foreach($sidebarCategories as $category)
+                            <a href="{{ route('frontend.short-story.index', ['category_id' => $category->id]) }}" class="sidebar-link">
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
 
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script>
-        const swiper = new Swiper(".mySwiper", {
-            loop: true,
-            autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-            },
-            pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
-            },
-            navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-            },
-            effect: "fade",
-            fadeEffect: {
-            crossFade: true
-            }
-        });
-        
-        function toggleStoryDetails(storyId) {
-            const storyBlock = document.querySelector(`[data-id="${storyId}"]`);
-            const details = storyBlock.querySelector('.extra-details');
-            const iconPath = storyBlock.querySelector('.icon-path');
-            const iconButton = storyBlock.querySelector('.icon-toggle');
+        </div>
 
-            const isHidden = details.classList.contains('hidden');
-            details.classList.toggle('hidden');
-
-            // Swap icon path
-            iconPath.setAttribute('d', isHidden
-            ? 'M20 12H4' // Minus
-            : 'M12 4v16m8-8H4' // Plus
-            );
-
-            // Rotate icon
-            iconButton.classList.toggle('rotate-180', isHidden);
-        }
-
-        // Search input event listeners
-            const searchInput = document.getElementById('searchInput');
-            const typingStatus = document.getElementById('typingStatus');
-            const clearBtn = document.getElementById('clearBtn');
-            const genreSelect = document.getElementById('genre');
-
-            // Live Typing + Clear Button
-            searchInput.addEventListener('input', () => {
-                typingStatus.classList.add('opacity-100');
-                clearBtn.classList.remove('hidden');
-
-                clearTimeout(window.typingTimeout);
-                window.typingTimeout = setTimeout(() => {
-                typingStatus.classList.remove('opacity-100');
-                }, 1200);
-            });
-
-            // Clear Input
-            clearBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                clearBtn.classList.add('hidden');
-                typingStatus.classList.remove('opacity-100');
-                searchInput.focus();
-            });
-
-        // Update Placeholder Based on Genre
-        genreSelect.addEventListener('change', () => {
-            const selected = genreSelect.value;
-            searchInput.placeholder =
-            selected === 'all' ? 'Search novels...' : `Search ${selected} novels...`;
-        });
-
-        // favorite’s toggle function
-         function toggleFavorite(button) {
-        const icon = button.querySelector('.favorite-icon');
-        const countSpan = button.querySelector('.favorite-count');
-        const isLiked = icon.classList.contains('liked');
-
-        // ✅ New outline and filled paths (smooth heart shape)
-        const outlinePath = `
-        <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6
-            C9 5.5 11 7 12 8.5
-            C13 7 15 5.5 17 6
-            C20 7 21 10.5 19 13.5
-            C17 16.5 12 21 12 21Z" />
-        `;
-
-        const filledPath = `
-        <path fill="currentColor"
-            d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6
-            C9 5.5 11 7 12 8.5
-            C13 7 15 5.5 17 6
-            C20 7 21 10.5 19 13.5
-            C17 16.5 12 21 12 21Z" />
-        `;
-
-        if (!isLiked) {
-        icon.innerHTML = filledPath;
-        icon.classList.add('liked', 'text-red-500');
-        } else {
-        icon.innerHTML = outlinePath;
-        icon.classList.remove('liked', 'text-red-500');
-        }
-
-        // Update count (demo logic)
-        let count = parseInt(countSpan.textContent.replace(/,/g, ''));
-        countSpan.textContent = isLiked ? count - 1 : count + 1;
-        }
-
-        
-    </script>
-
-
-
-
+    </div>
+</div>
 
 @include('frontend.includes.footer')

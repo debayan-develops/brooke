@@ -10,6 +10,9 @@ use App\Models\shortStorySlider as shortStorySliderModel;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreShortStories;
 use App\Http\Requests\shortStorySlider;
+// IMPORTANT: Make sure this Model path matches your project. 
+// If your character model is named 'ShortStoryCharacter', change it here.
+use App\Models\Character; 
 
 class ShortStories extends Controller
 {
@@ -46,9 +49,12 @@ class ShortStories extends Controller
 
     public function storeShortStories(StoreShortStories $request, $id = null)
     {
+        // 1. Get Validated Data for Main Fields
         $validated = $request->validated();
+        
         $shortStory = (!empty($id)) ? ShortStoriesModel::find($id) : new ShortStoriesModel();
         
+        // 2. Save Main Text Data
         $shortStory->title = $validated['title'];
         $shortStory->short_description = $validated['short_description'];
 
@@ -73,14 +79,96 @@ class ShortStories extends Controller
         
         $shortStory->save();
 
-        if (isset($validated['characters'])) $shortStory->shortStoryCharacters()->sync($validated['characters']);
-        if (isset($validated['tags'])) $shortStory->shortStoryTags()->sync($validated['tags']);
-        if (isset($validated['categories'])) $shortStory->shortStoryCategories()->sync($validated['categories']);
+        /* =================================================================
+           FIX: ROBUST RELATIONSHIP SYNCING
+           We use $request->input() to bypass potential validation stripping
+           and ensure data is saved.
+           =================================================================
+        */
+
+        // 1. SYNC CHARACTERS (With "Create on Fly" Logic)
+        /* =================================================================
+           FIX: SYNC CHARACTERS (AND ATTACH TO CATEGORY TYPE)
+           =================================================================
+        */
+        if ($request->has('characters')) {
+            $rawCharacters = $request->input('characters');
+            $finalCharacterIds = [];
+
+            // 1. Get the "Short Story" Category Type ID to link new characters
+            // (This ensures they show up in the list next time)
+            $shortStoryType = \App\Models\CategoryType::where('slug', 'short-story')->first();
+
+            if (is_array($rawCharacters)) {
+                foreach ($rawCharacters as $item) {
+                    if (is_numeric($item)) {
+                        // EXISTING CHARACTER (ID)
+                        $finalCharacterIds[] = $item;
+                    } else {
+                        // NEW CHARACTER (String Name)
+                        // 1. Create or Find the Character
+                        // Replace '\App\Models\Character' with your actual Model name if different
+                        $newChar = \App\Models\Character::firstOrCreate(['name' => $item]);
+                        
+                        // 2. Link it to "Short Story" Type (if not already linked)
+                        if ($shortStoryType) {
+                            // Assuming there is a relation like 'categoryTypes()' or using the pivot table directly
+                            // If your Character model has: public function categoryTypes() { return $this->belongsToMany(...); }
+                            // Then use: $newChar->categoryTypes()->syncWithoutDetaching([$shortStoryType->id]);
+                            
+                            // If you don't have the relationship set up in the Model, use the DB facade directly:
+                            \DB::table('character_type_map')->updateOrInsert([
+                                'character_id' => $newChar->id,
+                                'category_type_id' => $shortStoryType->id
+                            ], [
+                                'created_at' => now(), 
+                                'updated_at' => now()
+                            ]);
+                        }
+
+                        $finalCharacterIds[] = $newChar->id;
+                    }
+                }
+                // 3. Sync all IDs to the Short Story
+                $shortStory->shortStoryCharacters()->sync($finalCharacterIds);
+            }
+        } else {
+            // Detach if empty selection
+            if ($request->isMethod('post') || $request->isMethod('put')) {
+                $shortStory->shortStoryCharacters()->detach();
+            }
+        }
+
+        // 2. SYNC TAGS
+        if ($request->has('tags')) {
+            $shortStory->shortStoryTags()->sync($request->input('tags'));
+        } elseif ($request->isMethod('post') || $request->isMethod('put')) {
+            $shortStory->shortStoryTags()->detach();
+        }
+
+        // 3. SYNC CATEGORIES
+        if ($request->has('categories')) {
+            $shortStory->shortStoryCategories()->sync($request->input('categories'));
+        } elseif ($request->isMethod('post') || $request->isMethod('put')) {
+            $shortStory->shortStoryCategories()->detach();
+        }
         
-        if(isset($validated['suggested_stories'])) {
-            $shortStory->suggestedStories()->sync($validated['suggested_stories']);
-        } elseif(isset($validated['suggestedStories'])) {
-            $shortStory->suggestedStories()->sync($validated['suggestedStories']);
+        // 4. SYNC SUGGESTED STORIES
+        // Check for multiple possible input names to be safe
+        $suggestedIds = [];
+        if($request->has('suggested_stories')) {
+            $suggestedIds = $request->input('suggested_stories');
+        } elseif($request->has('suggestedStories')) {
+            $suggestedIds = $request->input('suggestedStories');
+        } elseif($request->has('suggested_story_ids')) {
+            $suggestedIds = $request->input('suggested_story_ids');
+        }
+
+        if(!empty($suggestedIds)) {
+            $shortStory->suggestedStories()->sync($suggestedIds);
+        } elseif ($request->isMethod('post') || $request->isMethod('put')) {
+             // Detach if empty and we are currently saving
+             $shortStory->suggestedStories()->detach();
         }
 
         // --- FIX: Correct redirect for "Save & Exit" ---
@@ -131,19 +219,36 @@ class ShortStories extends Controller
 
     public function editShortStories($id)
     {
+        // 1. Load the story with relationships
         $shortStory = ShortStoriesModel::findOrFail($id)->load(['shortStoryCategories', 'shortStoryTags', 'shortStoryCharacters', 'suggestedStories']);
+        
+        // 2. Load the dropdown data
         $allCharacters = CategoryType::with('characters')->where('slug', 'short-story')->first();
         $allTags = CategoryType::with('tags')->where('slug', 'short-story')->first();
         $allCategories = CategoryType::with('categories')->where('slug', 'short-story')->first();
         $suggestedStories = ShortStoriesModel::all();
 
+        // 3. Pass data to the view
         return view('admin.contentManager.shortStories.editShortStories')->with([
             'title' => 'Edit Short Stories',
             'shortStory' => $shortStory,
-            'characters' => ($allCharacters) ? $allCharacters->characters : [],
+            
+            // --- FIX 1: Rename 'characters' to 'allCharacters' ---
+            // The view expects $allCharacters, so we map the data to that name.
+            'allCharacters' => ($allCharacters) ? $allCharacters->characters : [],
+
             'tags' => ($allTags) ? $allTags->tags : [],
             'categories' => ($allCategories) ? $allCategories->categories : [],
-            'suggestedStories' => $suggestedStories,
+            
+            // --- FIX 2: Pass 'allStories' as well ---
+            // If your view uses $allStories loop, this ensures it works.
+            'allStories' => $suggestedStories, 
+            'suggestedStories' => $suggestedStories, // Keep this too, just in case
         ]);
+    }
+
+    public function sliderImages()
+    {
+        return $this->hasMany(\App\Models\shortStorySlider::class, 'short_story_id');
     }
 }
