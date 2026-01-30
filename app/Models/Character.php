@@ -14,4 +14,9 @@ class Character extends Model
     {
         return $this->belongsToMany(CategoryType::class, 'character_type_map', 'character_id', 'category_type_id');
     }
+    public function stories()
+    {
+        // This connects the Character to ShortStories via the pivot table
+        return $this->belongsToMany(\App\Models\ShortStories::class, 'short_story_characters', 'character_id', 'short_story_id');
+    }
 }

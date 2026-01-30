@@ -27,19 +27,18 @@
     .tag:hover {
         background-color: #f0f0f0;
     }
-    /* Force Left Alignment for Tags */
     .tags-container {
         justify-content: flex-start !important;
     }
 
-    /* RESTORED: View All Button Styles */
+    /* View All Button Styles */
     @keyframes shootArrow {
         0% { transform: translateX(-10px); opacity: 0; }
         50% { transform: translateX(5px); opacity: 1; }
         100% { transform: translateX(0); opacity: 1; }
     }
     .view-all {
-        background-color: #3b82f6; /* Tailwind's blue-600 */
+        background-color: #3b82f6; 
         color: white;
         padding: 10px 20px;
         border-radius: 6px;
@@ -49,18 +48,17 @@
         overflow: hidden;
         text-decoration: none;
         transition: background-color 0.3s ease;
+        padding-right: 40px; 
     }
     .view-all:hover {
-        background-color: #2563eb; /* Darker blue */
+        background-color: #2563eb; 
     }
     .view-all::after {
-        content: '→'; /* The arrow */
+        content: '→';
         position: absolute;
         right: 15px;
         animation: shootArrow 1s ease-out infinite;
     }
-    /* Pad right to make room for the animated arrow */
-    .view-all { padding-right: 40px; }
 
     @keyframes shootRight {
         0% { transform: translateX(-10px); opacity: 0; }
@@ -177,7 +175,7 @@
                                     <h2 class="text-xl font-semibold">{{ $section->name }}</h2>
                                 </div>
                                 
-                                {{-- TOP VIEW ALL (Blinking Single Arrow) --}}
+                                {{-- TOP VIEW ALL --}}
                                 @if(!request('category_id') && !request('search') && isset($section->id))
                                     <div class="ml-auto mr-16">
                                         <a href="{{ route('frontend.short-story.index', ['category_id' => $section->id]) }}" class="shooting-link">
@@ -188,7 +186,6 @@
                             </div>
 
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4">
-                                {{-- LIMIT Logic: Show only 4 items if not filtering/searching --}}
                                 @php
                                     $storiesToDisplay = (request('category_id') || request('search')) 
                                                         ? $section->stories 
@@ -211,22 +208,35 @@
                                         </div>
 
                                         <div class="flex-1">
-                                            <h3 class="text-xl sm:text-2xl font-semibold mb-2 relative group">
-                                                <a href="{{ route('frontend.short-story.show', $story->id) }}" class="hover:text-blue-600 hover:underline">
-                                                    {{ $story->title }} <br>
-                                                    <span class="text-sm text-gray-500 ml-2">({{ $story->created_at->format('F d, Y') }})</span>
+                                            
+                                            <div class="relative group w-max max-w-full mb-2">
+                                                <a href="{{ route('frontend.short-story.show', $story->id) }}" class="block">
+                                                    <h3 class="text-xl sm:text-2xl font-semibold font-serif text-gray-900 group-hover:text-blue-600 group-hover:underline mb-1">
+                                                        {{ $story->title }}
+                                                    </h3>
                                                 </a>
-                                            </h3>
 
-                                            <div class="flex flex-wrap gap-3 text-sm text-gray-600 mb-2">
+                                                <div class="hidden group-hover:block absolute left-0 bottom-full mb-2 z-50 w-72 p-4 bg-yellow-100 border border-yellow-300 rounded shadow-xl">
+                                                    <p class="text-sm text-gray-800 leading-relaxed font-sans font-bold italic">
+                                                        @if($story->short_description)
+                                                            {{ Str::limit($story->short_description, 150) }}
+                                                        @else
+                                                            {!! Str::limit(strip_tags($story->short_story_details), 150) !!}
+                                                        @endif
+                                                    </p>
+                                                    <div class="absolute left-6 -bottom-1 w-3 h-3 bg-yellow-100 border-r border-b border-yellow-300 transform rotate-45"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-sm text-gray-500 mb-2 font-serif font-bold">
+                                                ({{ $story->created_at->format('F d, Y') }})
+                                            </div>
+
+                                            <div class="flex flex-wrap gap-3 text-sm text-gray-600 mb-4">
                                                 @foreach($story->shortStoryCategories as $cat)
                                                     <span class="bg-gray-200 px-2 py-1 rounded">{{ $cat->name }}</span>
                                                 @endforeach
                                             </div>
-
-                                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                                                {{ Str::limit(strip_tags($story->short_description), 120) }}
-                                            </p>
 
                                             <div class="mt-4">
                                                 <a href="{{ route('frontend.short-story.show', $story->id) }}" class="group inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-300 relative overflow-hidden w-full sm:w-auto justify-center">
@@ -239,8 +249,6 @@
                                 @endforeach
                             </div>
 
-                            {{-- BOTTOM VIEW ALL BUTTON (Blue Button with Arrows) --}}
-                            {{-- Only show if NOT filtering AND there are more than 4 stories --}}
                             @if(!request('category_id') && !request('search') && isset($section->id) && $section->stories->count() > 4)
                                 <div class="flex justify-center mt-8">
                                     <a href="{{ route('frontend.short-story.index', ['category_id' => $section->id]) }}" class="view-all">
@@ -260,9 +268,7 @@
 
                 @if(request('category_id') || request('search'))
                     <div class="mt-10 flex justify-center">
-                        {{-- Note: Pagination links require the query result to be a Paginator object --}}
-                        {{-- Since we are manually creating collections in controller for search, standard links() might need adjustment in controller if strict pagination is needed. --}}
-                        {{-- However, for the 'search' view, simpler is better. --}}
+                        {{-- Pagination --}}
                     </div>
                 @endif
 

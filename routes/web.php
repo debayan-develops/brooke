@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\NovelController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\ShortStoryController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\CharacterController;
 
 // Frontend Routes
 Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
@@ -31,7 +32,7 @@ Route::prefix('/')->name('frontend.')->group(function () {
         Route::get('/', [ShortStoryController::class, 'index'])->name('index');
         Route::get('/{id}', [ShortStoryController::class, 'show'])->name('show');
     });
-    
+    Route::get('/character/{id}', [CharacterController::class, 'show']);
     // Direct page routes (without /pages prefix)
     Route::get('/biography', [PageController::class, 'biography'])->name('page.biography');
     Route::get('/contact', [PageController::class, 'contact'])->name('page.contact');
