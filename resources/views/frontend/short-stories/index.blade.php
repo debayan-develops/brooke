@@ -197,8 +197,8 @@
                                         
                                         <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0 flex-shrink-0">
                                             @if($story->thumbnail_photo)
-                                                <img src="{{ asset('storage/' . $story->thumbnail_photo) }}" 
-                                                     onerror="this.onerror=null;this.src='{{ asset('images/' . $story->thumbnail_photo) }}';"
+                                                <img src="{{ asset(config('app.assets_path') . $story->thumbnail_photo) }}" 
+                                                     onerror="this.onerror=null;this.src='{{ asset(config('app.assets_path') . $story->thumbnail_photo) }}';"
                                                      alt="{{ $story->title }}"
                                                      class="w-full h-full object-cover transform transition duration-500 hover:-translate-y-1 hover:scale-105 hover:brightness-90">
                                             @else
