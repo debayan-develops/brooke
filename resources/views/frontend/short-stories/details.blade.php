@@ -6,6 +6,33 @@
 @include('frontend.includes.navbar')
 
 <style>
+    /* HTML CONTENT STYLING (For Character Descriptions) */
+    .html-content p { margin-bottom: 0.8rem; }
+    
+    /* FIX: Force Bullets on Frontend */
+    .html-content ul { 
+        list-style-type: disc !important; 
+        margin-left: 1.5rem !important; 
+        margin-bottom: 1rem; 
+    }
+    
+    /* FIX: Force Numbers on Frontend */
+    .html-content ol { 
+        list-style-type: decimal !important; 
+        margin-left: 1.5rem !important; 
+        margin-bottom: 1rem; 
+    }
+    
+    .html-content li { margin-bottom: 0.25rem; }
+    .html-content strong { font-weight: 700; color: #111; }
+    .html-content em { font-style: italic; }
+    .html-content blockquote {
+        border-left: 4px solid #3b82f6;
+        padding-left: 1rem;
+        color: #555;
+        font-style: italic;
+        margin: 1rem 0;
+    }
     /* TYPOGRAPHY: Classic Serif Look */
     body {
         font-family: 'Georgia', 'Times New Roman', serif;
@@ -116,9 +143,9 @@
                         <div class="w-full flex-shrink-0 snap-center h-full relative">
                             @php
                                 // Path Fix: Strip "C:\Users..." and get just the filename
-                                $cleanPath = str_replace('\\', '/', $image->image_path);
-                                $filename = basename($cleanPath); 
-                                $finalUrl = asset('storage/short_stories/slider/' . $filename);
+                                //$cleanPath = str_replace('\\', '/', $image->image_path);
+                               // $filename = basename($cleanPath); 
+                                $finalUrl = asset(config('app.assets_path') .  $image->image_path);
                             @endphp
 
                             <img src="{{ $finalUrl }}" 
@@ -172,16 +199,23 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-4 space-y-10 border-l border-gray-100 pl-0 lg:pl-10">
+           <div class="lg:col-span-4 space-y-10 border-l border-gray-100 pl-0 lg:pl-10">
                 
                 @if($shortStory->suggestedStories->count() > 0)
                 <div>
                     <h3 class="sidebar-heading">Suggested Stories</h3>
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         @foreach($shortStory->suggestedStories as $suggested)
-                            <a href="{{ route('frontend.short-story.show', $suggested->id) }}" class="sidebar-link">
-                                {{ $suggested->title }}
-                            </a>
+                            <div class="w-full">
+                                <a href="{{ route('frontend.short-story.show', $suggested->id) }}" class="block">
+                                    <span class="text-blue-600 font-sans font-medium text-base hover:underline">
+                                        {{ $suggested->title }}
+                                    </span>
+                                </a>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {{ Str::limit(strip_tags($suggested->short_description ?? $suggested->short_story_details), 80) }}
+                                </p>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -190,15 +224,15 @@
                 @if($shortStory->shortStoryCharacters->count() > 0)
                 <div>
                     <h3 class="sidebar-heading">Character Insights</h3>
-                    <div class="space-y-4">
-                        @foreach($shortStory->shortStoryCharacters as $character)
+                    <div class="space-y-6"> @foreach($shortStory->shortStoryCharacters as $character)
                             <div>
-                                <div class="text-blue-600 font-bold text-sm mb-1">{{ $character->name }}</div>
-                                @if($character->description)
-                                    <p class="text-xs text-gray-500 italic leading-snug">
-                                        "{{ Str::limit($character->description, 80) }}"
-                                    </p>
-                                @endif
+                                <a href="{{ url('/character/' . $character->id) }}" class="text-blue-600 font-bold text-sm font-sans hover:underline block mb-1">
+                                 {{ $character->name }}
+                                 </a>
+
+                                <div class="text-sm text-gray-600 leading-relaxed font-sans html-content">
+                                    {!! $character->description !!}
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -209,7 +243,7 @@
                     <h3 class="sidebar-heading">Popular Tags</h3>
                     <div class="flex flex-wrap">
                         @foreach($sidebarTags as $tag)
-                            <a href="#" class="tag-pill">{{ $tag->name }}</a>
+                            <a href="#" class="tag-pill hover:bg-gray-200 transition">{{ $tag->name }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -218,9 +252,11 @@
                     <h3 class="sidebar-heading">Categories</h3>
                     <div class="space-y-2">
                         @foreach($sidebarCategories as $category)
-                            <a href="{{ route('frontend.short-story.index', ['category_id' => $category->id]) }}" class="sidebar-link">
-                                {{ $category->name }}
-                            </a>
+                            <div class="w-max">
+                                <a href="{{ route('frontend.short-story.index', ['category_id' => $category->id]) }}" class="text-blue-600 font-sans text-sm hover:underline">
+                                    {{ $category->name }}
+                                </a>
+                            </div>
                         @endforeach
                     </div>
                 </div>
