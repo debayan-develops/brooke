@@ -5,6 +5,14 @@
 @include('frontend.includes.navbar')
 
 <style>
+    /* Fix for Yellow Box HTML content */
+    .html-content p { margin-bottom: 5px; }
+    .html-content h1, .html-content h2, .html-content h3 { 
+        font-size: 1rem !important; /* Force headings to be small in the tooltip */
+        font-weight: bold; 
+        margin-bottom: 5px;
+    }
+    .html-content ul { list-style: disc; margin-left: 15px; }
     /* Animations */
     @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
     .animate-fadeInUp { animation: fadeInUp 0.6s ease-out forwards; }
@@ -217,13 +225,13 @@
                                                 </a>
 
                                                 <div class="hidden group-hover:block absolute left-0 bottom-full mb-2 z-50 w-72 p-4 bg-yellow-100 border border-yellow-300 rounded shadow-xl">
-                                                    <p class="text-sm text-gray-800 leading-relaxed font-sans font-bold italic">
+                                                    <div class="text-sm text-gray-800 leading-relaxed font-sans html-content">
                                                         @if($story->short_description)
-                                                            {{ Str::limit($story->short_description, 150) }}
+                                                            {!! Str::limit($story->short_description, 150) !!}
                                                         @else
                                                             {!! Str::limit(strip_tags($story->short_story_details), 150) !!}
                                                         @endif
-                                                    </p>
+                                                    </div>
                                                     <div class="absolute left-6 -bottom-1 w-3 h-3 bg-yellow-100 border-r border-b border-yellow-300 transform rotate-45"></div>
                                                 </div>
                                             </div>
