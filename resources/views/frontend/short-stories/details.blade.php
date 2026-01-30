@@ -224,15 +224,12 @@
                 @if($shortStory->shortStoryCharacters->count() > 0)
                 <div>
                     <h3 class="sidebar-heading">Character Insights</h3>
-                    <div class="space-y-6"> @foreach($shortStory->shortStoryCharacters as $character)
+                    <div class="space-y-3"> 
+                        @foreach($shortStory->shortStoryCharacters as $character)
                             <div>
-                                <a href="{{ url('/character/' . $character->id) }}" class="text-blue-600 font-bold text-sm font-sans hover:underline block mb-1">
-                                 {{ $character->name }}
-                                 </a>
-
-                                <div class="text-sm text-gray-600 leading-relaxed font-sans html-content">
-                                    {!! $character->description !!}
-                                </div>
+                                <a href="{{ url('/character/' . $character->id) }}" class="text-blue-600 font-bold text-sm font-sans hover:underline block">
+                                    {{ $character->name }}
+                                </a>
                             </div>
                         @endforeach
                     </div>

@@ -217,6 +217,8 @@
 
                                         <div class="flex-1">
                                             
+                                            <div class="flex-1">
+                                            
                                             <div class="relative group w-max max-w-full mb-2">
                                                 <a href="{{ route('frontend.short-story.show', $story->id) }}" class="block">
                                                     <h3 class="text-xl sm:text-2xl font-semibold font-serif text-gray-900 group-hover:text-blue-600 group-hover:underline mb-1">
@@ -240,10 +242,17 @@
                                                 ({{ $story->created_at->format('F d, Y') }})
                                             </div>
 
-                                            <div class="flex flex-wrap gap-3 text-sm text-gray-600 mb-4">
-                                                @foreach($story->shortStoryCategories as $cat)
-                                                    <span class="bg-gray-200 px-2 py-1 rounded">{{ $cat->name }}</span>
-                                                @endforeach
+                                            <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-4">
+                                                {{-- We check 'shortStoryTags' because that is the function name in your Model --}}
+                                                @if($story->shortStoryTags && $story->shortStoryTags->count() > 0)
+                                                    @foreach($story->shortStoryTags as $tag)
+                                                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded border border-gray-200">
+                                                            #{{ $tag->name }}
+                                                        </span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-gray-400 italic text-[10px]">No tags</span>
+                                                @endif
                                             </div>
 
                                             <div class="mt-4">

@@ -21,7 +21,11 @@ class ShortStoryController extends Controller
 
         // 3. Prepare the Sections Collection
         $sections = collect();
-
+        // Inside your index function
+        $shortStories = ShortStories::with(['shortStoryCategories', 'sliderImages', 'shortStoryTags']) // <--- USE THIS EXACT NAME
+                ->where('status', 'active')
+                ->orderBy('created_at', 'desc')
+                ->paginate(12);
         // 4. Logic: Is this a Filter/Search request?
         // Note: We check if 'category_id' is set and is NOT 'all'
         $isFiltering = $request->filled('search') 
