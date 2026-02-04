@@ -97,16 +97,18 @@
                             <label for="thumbnailPhoto" class="label">
                                 Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                             </label>
-                            <input id="thumbnailPhoto" name="thumbnail_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
+                            <input id="thumbnailPhoto" name="thumbnail_image" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
                             
                             <div id="thumbnailPreview" class="preview-box">
-                                @if($blog->thumbnail_photo)
-                                    <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" style="max-width: 200px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                {{-- FIX: Check 'thumbnail_image' (Database Column) instead of 'thumbnail_photo' --}}
+                                @if($blog->thumbnail_image)
+                                    <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_image) }}" 
+                                         style="max-width: 200px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                 @endif
                             </div>
                             <p id="thumbnailError" class="error-text hidden"></p>
 
-                            @error('thumbnail_photo')
+                            @error('thumbnail_image')
                                 <p class="text-red-500 text-sm">{{ $message }}</p>
                             @enderror
                         </div>
@@ -178,14 +180,11 @@
 
                         <!-- Modern CKEditor -->
                         <div class="field">
-                            <label class="label">Blog Details</label>
-                            <div class="control">
-                                <textarea class="textarea editor" id="blog_details" name="blog_details">{{ old('blog_details', $blog->blog_details) }}</textarea>
-                            </div>
-                            @error('blog_details')
-                                <p class="text-red-500 text-sm">{{ $message }}</p>
-                            @enderror
-                        </div>
+    <label class="label">Blog Details</label>
+    <div class="control">
+        <textarea class="textarea" name="blog_details" placeholder="Write your blog content here..." rows="10">{{ old('blog_details', $blog->description) }}</textarea>
+    </div>
+</div>
                         
                         <!-- Status -->
                         <div class="field">

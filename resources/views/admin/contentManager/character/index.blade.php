@@ -4,6 +4,19 @@
 
 <style>
     @import url('https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css');
+    
+    /* FIX 1: Force Bullets & Numbers inside CKEditor in Admin */
+    .ck-content ul {
+        list-style-type: disc !important;
+        padding-left: 20px !important;
+    }
+    .ck-content ol {
+        list-style-type: decimal !important;
+        padding-left: 20px !important;
+    }
+    .ck-content li {
+        display: list-item !important; /* Forces the dot to appear */
+    }
     /* Filter Section Styling */
     .filter-section { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-end; }
     .filter-group { flex: 1; }
@@ -11,6 +24,21 @@
     .filter-input { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.9rem; }
     .filter-actions { display: flex; gap: 10px; }
     .modal.is-active { display: flex !important; }
+
+    /* CKEditor Custom Height */
+    .ck-editor__editable { min-height: 200px; }
+    
+    /* FIX: Make the form fill the modal so Footer buttons always show */
+    .modal-card form {
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 40px);
+        overflow: hidden; /* Prevents double scrollbars */
+    }
+    .modal-card-body {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
 </style>
 
 @section('content')
@@ -31,7 +59,6 @@
             </div>
         </section>
 
-        <!-- Filter -->
         <section class="section main-section" style="padding-bottom: 0;">
             <div class="filter-section">
                 <div class="filter-group">
@@ -71,16 +98,16 @@
         </section>
     </div>
 
-    <!-- Add Modal -->
     <div id="add-character-modal" class="modal">
         <div class="modal-background close-modal" data-target="add-character-modal"></div>
-        <div class="modal-card">
+        <div class="modal-card" style="width: 800px; max-width: 95%;"> 
             <form method="POST" action="{{ route('admin.characters.store') }}">
                 @csrf
                 <header class="modal-card-head">
                     <p class="modal-card-title">Add New Character</p>
                     <button type="button" class="delete close-modal" data-target="add-character-modal"></button>
                 </header>
+                
                 <section class="modal-card-body">
                     <div class="field">
                         <label class="label">Name</label>
@@ -89,12 +116,14 @@
                             <span class="icon left"><i class="mdi mdi-account"></i></span>
                         </div>
                     </div>
+                    
                     <div class="field">
                         <label class="label">Description</label>
                         <div class="control">
-                            <textarea class="textarea" name="description" placeholder="Character Description"></textarea>
+                            <textarea id="addDescriptionEditor" name="description" placeholder="Character Description"></textarea>
                         </div>
                     </div>
+                    
                     <div class="field">
                         <label class="label">Type</label>
                         <div class="select w-full">
@@ -106,6 +135,7 @@
                         </div>
                     </div>
                 </section>
+                
                 <footer class="modal-card-foot">
                     <button type="submit" class="button green">Save</button>
                     <button type="button" class="button close-modal" data-target="add-character-modal">Cancel</button>
@@ -114,18 +144,19 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div id="edit-character-modal" class="modal">
         <div class="modal-background close-modal" data-target="edit-character-modal"></div>
-        <div class="modal-card">
+        <div class="modal-card" style="width: 800px; max-width: 95%;"> 
             <form id="edit-character-form" method="POST" action="">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id">
+                
                 <header class="modal-card-head">
                     <p class="modal-card-title">Edit Character</p>
                     <button type="button" class="delete close-modal" data-target="edit-character-modal"></button>
                 </header>
+                
                 <section class="modal-card-body">
                     <div class="field">
                         <label class="label">Name</label>
@@ -134,12 +165,14 @@
                             <span class="icon left"><i class="mdi mdi-account"></i></span>
                         </div>
                     </div>
+                    
                     <div class="field">
                         <label class="label">Description</label>
                         <div class="control">
-                            <textarea class="textarea" name="description" placeholder="Character Description"></textarea>
+                            <textarea id="editDescriptionEditor" name="description" placeholder="Character Description"></textarea>
                         </div>
                     </div>
+                    
                     <div class="field">
                         <label class="label">Type</label>
                         <div class="select w-full">
@@ -151,6 +184,7 @@
                         </div>
                     </div>
                 </section>
+                
                 <footer class="modal-card-foot">
                     <button type="submit" class="button green">Update</button>
                     <button type="button" class="button close-modal" data-target="edit-character-modal">Cancel</button>
@@ -159,7 +193,6 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
     <div id="delete-character-modal" class="modal">
         <div class="modal-background close-modal" data-target="delete-character-modal"></div>
         <div class="modal-card">
@@ -185,9 +218,9 @@
         <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color: #3b82f6; font-weight: bold;">Loading...</div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -195,7 +228,25 @@
             const allCharacters = @json($characters); 
             const allTypes = @json($categoryTypes);
 
-            // Render Table
+            // --- CKEditor Initialization ---
+            let addEditorInstance;
+            let editEditorInstance;
+
+            ClassicEditor
+                .create(document.querySelector('#addDescriptionEditor'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
+                })
+                .then(editor => { addEditorInstance = editor; })
+                .catch(error => { console.error(error); });
+
+            ClassicEditor
+                .create(document.querySelector('#editDescriptionEditor'), {
+                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
+                })
+                .then(editor => { editEditorInstance = editor; })
+                .catch(error => { console.error(error); });
+            // -------------------------------
+
             function renderTable(data) {
                 const tbody = document.getElementById('characterTableBody');
                 tbody.innerHTML = ''; 
@@ -229,17 +280,14 @@
 
             renderTable(allCharacters);
 
-            // Filter Logic
             function applyFilter() {
                 const nameQuery = document.getElementById('filterName').value.toLowerCase().trim();
                 const typeQuery = document.getElementById('filterType').value.toLowerCase().trim();
 
                 const filtered = allCharacters.filter(item => {
                     const nameMatch = item.name.toLowerCase().includes(nameQuery);
-                    
                     let itemTypeString = (item.types && item.types.length > 0) ? item.types.map(t => t.name).join(' ').toLowerCase() : '';
                     const typeMatch = itemTypeString.includes(typeQuery);
-
                     return nameMatch && typeMatch;
                 });
                 renderTable(filtered);
@@ -265,6 +313,7 @@
             }
 
             document.getElementById('btnAddCharacter').addEventListener('click', function() {
+                if(addEditorInstance) addEditorInstance.setData('');
                 toggleModal('add-character-modal', true);
             });
 
@@ -279,13 +328,12 @@
                     toggleModal('edit-character-modal', true);
                     $('#ajaxLoader').fadeIn();
 
-                    // FIX: Use correct route names
                     let editUrl = "{{ route('admin.characters.edit', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
                     let updateUrl = "{{ route('admin.characters.update', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
 
                     document.querySelector('#edit-character-form input[name="id"]').value = '';
                     document.querySelector('#edit-character-form input[name="name"]').value = '';
-                    document.querySelector('#edit-character-form textarea[name="description"]').value = '';
+                    if(editEditorInstance) editEditorInstance.setData(''); 
                     editChoices.clearStore();
 
                     $.get(editUrl, function (data) {
@@ -293,7 +341,9 @@
                         
                         document.querySelector('#edit-character-form input[name="id"]').value = char.id;
                         document.querySelector('#edit-character-form input[name="name"]').value = char.name;
-                        document.querySelector('#edit-character-form textarea[name="description"]').value = char.description || '';
+                        
+                        if(editEditorInstance) editEditorInstance.setData(char.description || '');
+
                         document.getElementById('edit-character-form').action = updateUrl;
 
                         const selectedIds = char.types ? char.types.map(t => t.id) : [];
@@ -313,10 +363,7 @@
                 if (deleteBtn) {
                     const id = deleteBtn.getAttribute('data-id');
                     const name = deleteBtn.getAttribute('data-name');
-                    
-                    // FIX: Use correct route name
                     let deleteUrl = "{{ route('admin.characters.destroy', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
-                    
                     document.getElementById('delete-character-form').action = deleteUrl;
                     document.querySelector('.characterName').innerText = name;
                     toggleModal('delete-character-modal', true);

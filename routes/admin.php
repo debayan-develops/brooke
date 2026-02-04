@@ -65,6 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUpload'])->name('shortStoryImageUpload');
         Route::post('/short-stories/image-upload/{id}', [ShortStories::class, 'shortStoryImageUploadStore'])->name('shortStoryImageUpload.store');
         Route::delete('/short-stories/image-upload/delete/{id}', [ShortStories::class, 'deleteSliderImage']);
+        Route::post('/admin/short-stories/update/{id}', [ShortStories::class, 'update'])->name('admin.shortStoriesUpdate');
 
         // --- USERS & PAGES ---
         Route::get('/users', [UserController::class, 'index'])->name('users');
