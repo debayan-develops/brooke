@@ -44,7 +44,6 @@
             </div>
         </section>
 
-        <!-- Filter Section -->
         <section class="section main-section" style="padding-bottom: 0;">
             <div class="filter-section">
                 <div class="filter-group">
@@ -80,15 +79,13 @@
                             </tr>
                         </thead>
                         <tbody id="blogTableBody">
-                            <!-- Populated by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -96,11 +93,12 @@
             // 1. Data Preparation
             const allBlogs = @json($blogs);
             
-            // Base Asset Path (Ensure it ends with /)
+            // Base Asset Path (Config Asset Path)
+            // Note: We remove the trailing slash if config path already has one to avoid double slashes, 
+            // but usually a safe concat works fine.
             const assetBase = "{{ asset(config('app.assets_path')) }}/"; 
             
             // Base Route for Edit (Use a unique string placeholder)
-            // We use 'BLOCK_ID' as a safe placeholder string
             const editRouteBase = "{{ route('admin.editBlogs', 'BLOG_ID') }}";
 
             // 2. Render Function
@@ -114,11 +112,13 @@
                 }
 
                 data.forEach(item => {
+                    // FIX: Use 'thumbnail_image' column and config path
                     // Image Logic
-                    let imgHtml = '<span class="text-gray-400">No Image</span>';
-                    if (item.thumbnail_photo) {
-                        imgHtml = `<img src="${assetBase}${item.thumbnail_photo}" class="thumb-img">`;
-                    }
+let imgHtml = '<span class="text-gray-400">No Image</span>';
+// FIX: Use 'thumbnail_image' from the database
+if (item.thumbnail_image) {
+    imgHtml = `<img src="${assetBase}${item.thumbnail_image}" class="thumb-img">`;
+}
 
                     // Date Logic
                     let dateStr = '-';
@@ -128,7 +128,6 @@
                     }
 
                     // Correct Edit URL Construction
-                    // Replace the placeholder with the numeric ID
                     let finalEditUrl = editRouteBase.replace('BLOG_ID', item.id);
 
                     let row = `

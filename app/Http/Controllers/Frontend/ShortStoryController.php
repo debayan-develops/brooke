@@ -5,38 +5,38 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ShortStories;
-use App\Admin\Content\Domain\Models\ContentCategory;
+use App\Admin\Content\Domain\Models\ContentCategory; // Adjust path if needed
+use App\Models\Tag;
 
 class ShortStoryController extends Controller
 {
-   public function index(Request $request)
+    public function index(Request $request)
     {
         // 1. Define Junk Categories to Exclude
         $excludedCategories = ['GGG', 'gfni', 'nbvnvn', 'vsdvds'];
 
-        // 2. Fetch Categories for Dropdown & Tags (Excluding Junk)
-        $categories = \App\Admin\Content\Domain\Models\ContentCategory::whereNotIn('name', $excludedCategories)
+        // 2. Fetch Categories for Dropdown (Excluding Junk)
+        $categories = ContentCategory::whereNotIn('name', $excludedCategories)
             ->orderBy('name')
             ->get();
 
         // 3. Prepare the Sections Collection
         $sections = collect();
-        // Inside your index function
-        $shortStories = ShortStories::with(['shortStoryCategories', 'sliderImages', 'shortStoryTags']) // <--- USE THIS EXACT NAME
-                ->where('status', 'active')
-                ->orderBy('created_at', 'desc')
-                ->paginate(12);
-        // 4. Logic: Is this a Filter/Search request?
-        // Note: We check if 'category_id' is set and is NOT 'all'
+
+        // 4. Check if we need to Filter (Search, Category, Tag, or Sort)
         $isFiltering = $request->filled('search') 
             || ($request->filled('category_id') && $request->category_id !== 'all') 
+            || ($request->filled('tag_id') && $request->tag_id !== 'all') // Tag Filter
             || $request->filled('sort');
 
         if ($isFiltering) {
             // --- FILTER MODE: Flat List ---
-            $query = \App\Models\ShortStories::query()->where('status', 1);
+            
+            // FIX: Changed 'active' back to 1
+            $query = ShortStories::with(['shortStoryCategories', 'sliderImages', 'shortStoryTags'])
+                     ->where('status', 1); 
 
-            // Search
+            // Search Logic
             if ($request->filled('search')) {
                 $search = $request->search;
                 $query->where(function($q) use ($search) {
@@ -48,10 +48,8 @@ class ShortStoryController extends Controller
             // Category Filter Logic
             if ($request->filled('category_id')) {
                 if ($request->category_id === 'recent') {
-                    // "Recently Uploaded" -> Just sort by newest
                     $query->orderBy('created_at', 'desc');
                 } elseif ($request->category_id !== 'all') {
-                    // Specific Category -> Filter by Relationship
                     $catId = $request->category_id;
                     $query->whereHas('shortStoryCategories', function($q) use ($catId) {
                         $q->where('content_categories.id', $catId);
@@ -59,48 +57,63 @@ class ShortStoryController extends Controller
                 }
             }
 
-            // Explicit Sort Dropdown (Overrides "Recent" if selected)
+            // Tag Filter Logic
+            if ($request->has('tag_id') && $request->tag_id != 'all') {
+                $query->whereHas('shortStoryTags', function($q) use ($request) {
+                    $q->where('tag_id', $request->tag_id);
+                });
+            }
+
+            // Sorting Logic
             if ($request->filled('sort')) {
                 if ($request->sort == 'oldest') $query->orderBy('created_at', 'asc');
                 else if ($request->sort == 'updated') $query->orderBy('updated_at', 'desc');
-                else if ($request->sort == 'popular') $query->orderBy('created_at', 'desc'); // Placeholder for popular
+                else if ($request->sort == 'popular') $query->orderBy('view_count', 'desc'); 
                 else $query->orderBy('created_at', 'desc');
             } elseif (!$request->filled('category_id') || $request->category_id !== 'recent') {
-                // Default sort if not "Recent" mode
                 $query->orderBy('created_at', 'desc');
             }
 
-            $results = $query->get();
+            // Get Results
+            $results = $query->paginate(12);
 
-            // Wrap results in a fake section object
+            // Wrap in a Section for the View
             if ($results->isNotEmpty()) {
                 $section = new \stdClass();
-                // Dynamic Heading based on filter
-                if ($request->category_id === 'recent') {
+                
+                // Dynamic Heading
+                if ($request->has('tag_id')) {
+                    $tagName = Tag::find($request->tag_id)->name ?? 'Tag';
+                    $section->name = "Stories tagged with #$tagName";
+                } elseif ($request->category_id === 'recent') {
                     $section->name = "Recently Uploaded Stories";
                 } elseif ($request->filled('search')) {
                     $section->name = "Search Results";
                 } else {
                     $section->name = "Filtered Stories";
                 }
+                
                 $section->stories = $results;
                 $sections->push($section);
             }
 
         } else {
             // --- DEFAULT MODE: Grouped by Category ---
-            // Fetch categories (Excluding Junk) that actually have active stories
-            $catGroups = \App\Admin\Content\Domain\Models\ContentCategory::whereNotIn('name', $excludedCategories)
+            
+            // FIX: Changed 'active' back to 1 here as well
+            $catGroups = ContentCategory::whereNotIn('name', $excludedCategories)
                 ->whereHas('shortStoryCategories', function($q) {
-                    $q->where('status', 1);
+                    $q->where('status', 1); 
                 })
                 ->with(['shortStoryCategories' => function($q) {
-                    $q->where('status', 1)->orderBy('created_at', 'desc');
+                    $q->where('status', 1)
+                      ->with('shortStoryTags') // Load Tags
+                      ->orderBy('created_at', 'desc');
                 }])
                 ->orderBy('name')
                 ->get();
 
-            // Add them to sections
+            // Push groups into sections
             foreach ($catGroups as $cat) {
                 $cat->stories = $cat->shortStoryCategories; 
                 $sections->push($cat);
@@ -109,10 +122,9 @@ class ShortStoryController extends Controller
 
         return view('frontend.short-stories.index', compact('sections', 'categories'));
     }
-    
+
     public function show($id)
     {
-        // 1. Fetch the Story with all its relationships
         $shortStory = ShortStories::with([
             'shortStoryCharacters', 
             'shortStoryTags', 
@@ -121,17 +133,14 @@ class ShortStoryController extends Controller
             'sliderImages'
         ])->findOrFail($id);
 
-        // 2. Fetch Global Lists for the Right Sidebar
-        // Exclude junk categories
         $excludedCategories = ['GGG', 'gfni', 'nbvnvn', 'vsdvds'];
         
-        $sidebarCategories = \App\Admin\Content\Domain\Models\ContentCategory::whereNotIn('name', $excludedCategories)
+        $sidebarCategories = ContentCategory::whereNotIn('name', $excludedCategories)
             ->orderBy('name')
             ->get();
 
-        $sidebarTags = \App\Models\Tag::all(); // Assuming you have a Tag model
+        $sidebarTags = Tag::all(); 
 
-        // 3. Pass everything to the View
         return view('frontend.short-stories.details', compact(
             'shortStory', 
             'sidebarCategories', 
