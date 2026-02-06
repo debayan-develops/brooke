@@ -101,7 +101,7 @@ public function index(Request $request)
                         ->get();
 
         // 5. Increment Views
-        $blog->increment('view_count');
+        //$blog->increment('view_count');
 
         return view('frontend.blog.details', compact('blog', 'sliderImages', 'relatedBlogs', 'categories'));
     }
