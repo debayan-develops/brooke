@@ -45,3 +45,31 @@ Route::prefix('/')->name('frontend.')->group(function () {
 
 // Include the admin routes
 require __DIR__.'/admin.php';
+
+// --- TEMPORARY FIX ROUTE (Delete after use) ---
+Route::get('/fix-category-types', function () {
+    $types = ['Blog', 'Novel', 'Short Story'];
+    
+    $results = [];
+    foreach ($types as $name) {
+        // 1. Check if it exists
+        $type = \App\Models\CategoryType::where('name', $name)->first();
+        
+        // 2. If not, create it manually to ensure slug is set
+        if (!$type) {
+            $type = new \App\Models\CategoryType();
+            $type->name = $name;
+            $type->slug = \Illuminate\Support\Str::slug($name);
+            $type->save(); // Save triggers the ID generation
+            $results[] = "Created: " . $type->name;
+        } else {
+            $results[] = "Exists: " . $type->name;
+        }
+    }
+    
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Category Types have been restored!',
+        'data' => $results
+    ]);
+});

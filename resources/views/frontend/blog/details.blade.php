@@ -31,9 +31,9 @@
                                  alt="Blog Slide" class="w-full h-[520px] object-cover rounded-lg" />
                         </div>
                     @endforeach
-                @elseif($blog->thumbnail_image)
+                @elseif($blog->thumbnail_photo)
                     <div class="swiper-slide">
-                        <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_image) }}" 
+                        <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" 
                              class="w-full h-[520px] object-cover rounded-lg" />
                     </div>
                 @endif
@@ -44,23 +44,26 @@
         </div>
 </section>
 
-<div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
-    <main class="lg:col-span-3 space-y-12 animate-fadeInUp">
-        <section class="space-y-4 text-gray-700 leading-relaxed">
-            {!! $blog->description !!}
-        </section>
-        
-        </main>
 
-    </div>
     <!-- Tags + Share Top -->
-    <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between flex-wrap gap-2 mb-6">
-        <div class="flex flex-wrap gap-2 text-white">
-            <span class="bg-gradient-to-r from-pink-400 to-pink-600 px-2 py-1 rounded-full shadow-sm">Blog</span>
-            <span class="bg-gradient-to-r from-green-400 to-green-600 px-2 py-1 rounded-full shadow-sm">Process</span>
-            <span class="bg-gradient-to-r from-indigo-400 to-indigo-600 px-2 py-1 rounded-full shadow-sm">Reflection</span>
-            <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 px-2 py-1 rounded-full shadow-sm">Epiphany</span>
-        </div>
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between flex-wrap gap-2 mb-0">
+        <div class="flex flex-wrap gap-2 text-xs text-white my-4">
+    @foreach($blog->blogTags as $index => $tag)
+        @php
+            $colors = [
+                'from-pink-400 to-pink-600', 
+                'from-green-400 to-green-600', 
+                'from-indigo-400 to-indigo-600', 
+                'from-yellow-400 to-yellow-600'
+            ];
+            $colorClass = $colors[$index % 4];
+        @endphp
+        <span class="bg-gradient-to-r {{ $colorClass }} px-2 py-1 rounded-full shadow-sm">
+            {{ $tag->name }}
+        </span>
+    @endforeach
+</div>
+
         <div class="flex gap-3 flex-wrap">
         <!-- Share buttons (Facebook, Twitter, LinkedIn, Copy) -->
             <!-- 🔗 Share Options at Bottom -->
@@ -104,19 +107,26 @@
     </div>
 
     <!-- Main Content + Sidebar -->
-<div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between flex-wrap gap-2 mb-6">
-    <div class="flex flex-wrap gap-2 text-white">
-       {{-- The '?? []' ensures it never crashes if null --}}
-@foreach($blog->categories ?? [] as $cat)
-            <span class="bg-gradient-to-r from-indigo-400 to-indigo-600 px-2 py-1 rounded-full shadow-sm">{{ $cat->name }}</span>
-        @endforeach
+</div> 
+
+    <div class="max-w-6xl mx-auto px-6">
+        @if($blog->blogCategories->count() > 0)
+            <div class="flex flex-wrap items-center gap-2 mt-0 mb-6">
+                <span class="text-sm font-bold text-gray-700 uppercase tracking-wide">Category:</span>
+                @foreach($blog->blogCategories as $category)
+                    <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full border border-blue-200">
+                        {{ $category->name }}
+                    </span>
+                @endforeach
+            </div>
+        @endif
     </div>
-</div>
+
 
 <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
     <main class="lg:col-span-3 space-y-12 animate-fadeInUp">
         <section class="space-y-4 text-gray-700 leading-relaxed">
-            {!! $blog->description !!}
+            {!! $blog->blog_details !!}
         </section>
         
         <div class="flex justify-end gap-3 mt-3">
@@ -170,7 +180,7 @@
                     {{ $related->title }}
                 </h4>
                 <p class="text-sm text-gray-600 line-clamp-2">
-                    {!! Str::limit(strip_tags($related->description), 80) !!}
+                    {!! Str::limit(strip_tags($related->blog_details), 80) !!}
                 </p>
             </a>
         </div>
@@ -182,66 +192,81 @@
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
+ <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    // 1. NEW: Main Blog Image Slider (The missing part)
+    const mySwiper = new Swiper(".mySwiper", {
+        loop: true,
+        spaceBetween: 10,
+        slidesPerView: 1,
+        centeredSlides: true,
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+    });
 
-    const swiper = new Swiper('.relatedSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 20,
-      breakpoints: {
-      640: { slidesPerView: 1 },
-      768: { slidesPerView: 2 },
-      1024: { slidesPerView: 2 }
-      },
-      // navigation: {
-      // nextEl: '.swiper-button-next',
-      // prevEl: '.swiper-button-prev'
-      // },
-      loop: true,
-      grabCursor: true,
-      autoplay: {
-      delay: 3000,
-      disableOnInteraction: false
-      },
-      // pagination: {
-      //   el: '.swiper-pagination',
-      //   clickable: true
-      // }
+    // 2. Existing: Related Articles Slider
+    const relatedSwiper = new Swiper('.relatedSwiper', {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        breakpoints: {
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 2 }
+        },
+        loop: true,
+        grabCursor: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false
+        }
+    });
 
-  });
+    // 3. Existing: Search & Typing Logic
+    const searchInput = document.getElementById('searchInput');
+    const typingStatus = document.getElementById('typingStatus');
+    const clearBtn = document.getElementById('clearBtn');
+    const genreSelect = document.getElementById('genre');
 
-    // Search input event listenersconst searchInput = document.getElementById('searchInput');
-      const searchInput = document.getElementById('searchInput');
-      const typingStatus = document.getElementById('typingStatus');
-      const clearBtn = document.getElementById('clearBtn');
-      const genreSelect = document.getElementById('genre');
+    // Live Typing + Clear Button
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            if (typingStatus) typingStatus.classList.add('opacity-100');
+            if (clearBtn) clearBtn.classList.remove('hidden');
 
-      // Live Typing + Clear Button
-      searchInput.addEventListener('input', () => {
-          typingStatus.classList.add('opacity-100');
-          clearBtn.classList.remove('hidden');
+            clearTimeout(window.typingTimeout);
+            window.typingTimeout = setTimeout(() => {
+                if (typingStatus) typingStatus.classList.remove('opacity-100');
+            }, 1200);
+        });
 
-          clearTimeout(window.typingTimeout);
-          window.typingTimeout = setTimeout(() => {
-          typingStatus.classList.remove('opacity-100');
-          }, 1200);
-      });
+        // Clear Input
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.classList.add('hidden');
+                if (typingStatus) typingStatus.classList.remove('opacity-100');
+                searchInput.focus();
+            });
+        }
+    }
 
-      // Clear Input
-      clearBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearBtn.classList.add('hidden');
-        typingStatus.classList.remove('opacity-100');
-        searchInput.focus();
-      });
-
-      // Update Placeholder Based on Genre
-      genreSelect.addEventListener('change', () => {
-        const selected = genreSelect.value;
-        searchInput.placeholder =
-        selected === 'all' ? 'Search Freshest...' : `Search ${selected} Freshest...`;
-      });
-
-    </script>
-
+    // Update Placeholder Based on Genre
+    if (genreSelect && searchInput) {
+        genreSelect.addEventListener('change', () => {
+            const selected = genreSelect.value;
+            searchInput.placeholder =
+                selected === 'all' ? 'Search Freshest...' : `Search ${selected} Freshest...`;
+        });
+    }
+</script>
 @include('frontend.includes.footer')
