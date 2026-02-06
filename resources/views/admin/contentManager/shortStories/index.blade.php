@@ -109,7 +109,7 @@
             // --- FIX START: URL GENERATION ---
             
             // 1. Frontend View URL (Relative Path to fix port issues)
-            const viewBase = "short-stories/";
+            const viewBase = "/demo/short-stories/";
             
             // 2. Admin Edit URL (Template Method)
             // We generate the route with a dummy ID '999999' using the 3rd argument 'false' for relative path
