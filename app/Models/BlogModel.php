@@ -10,6 +10,7 @@ class BlogModel extends Model
     protected $table = 'blogs';
     protected $fillable = [
         'title',
+        'article_type',
         // 'short_description',
         'thumbnail_photo',
         'blog_details',

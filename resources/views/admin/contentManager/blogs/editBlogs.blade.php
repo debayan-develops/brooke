@@ -91,7 +91,17 @@
                                 </div>
                             </div>
                         </div>
-
+<div class="field">
+    <label class="label">Article Type</label>
+    <div class="control">
+        <div class="select is-fullwidth">
+            <select name="article_type">
+                <option value="Blog" {{ (isset($blog) && $blog->article_type == 'Blog') ? 'selected' : '' }}>Blog</option>
+                <option value="Journal" {{ (isset($blog) && $blog->article_type == 'Journal') ? 'selected' : '' }}>Journal</option>
+            </select>
+        </div>
+    </div>
+</div>
                         <!-- Thumbnail Photo Upload with Preview -->
                         <div class="form-group">
                             <label for="thumbnailPhoto" class="label">
@@ -166,9 +176,15 @@
                                 <div class="select">
                                     <select id="suggestedArticles" multiple name="suggestedArticles[]">
                                         @foreach ($suggestedBlogs as $sBlog)
-                                            <option value="{{ $sBlog->id }}" {{ $blog->suggestedBlogs->contains($sBlog->id) ? 'selected' : '' }}>
+                                            <!-- <option value="{{ $sBlog->id }}" {{ $blog->suggestedBlogs->contains($sBlog->id) ? 'selected' : '' }}>
                                                 {{ $sBlog->title }}
-                                            </option>
+                                            </option> -->
+                                                                                @if($sBlog->id != $blog->id)
+                                        <option value="{{ $sBlog->id }}" 
+                                            {{ in_array($sBlog->id, $blog->suggestedBlogs->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                            {{ $sBlog->title }}
+                                        </option>
+                                    @endif
                                         @endforeach
                                     </select>
                                 </div>

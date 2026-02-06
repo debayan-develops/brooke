@@ -47,7 +47,7 @@ class BlogController extends Controller
         $blog = (!empty($id)) ? BlogModel::find($id) : new BlogModel();
         
         $blog->title = $validated['title'];
-        
+        $blog->article_type = $request->article_type;
         // Handle file upload
         if ($request->hasFile('thumbnail_photo')) {
             if (!empty($id) && $blog->thumbnail_photo) {
@@ -81,6 +81,7 @@ class BlogController extends Controller
         if (isset($validated['categories'])) {
             $blog->blogCategories()->sync($validated['categories']);
         }
+        
         if(isset($validated['suggestedArticles'])) {
             $blog->suggestedBlogs()->sync($validated['suggestedArticles']);
         }

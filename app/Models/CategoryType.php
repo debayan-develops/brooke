@@ -23,6 +23,7 @@ class CategoryType extends Model
         return $this->belongsToMany(ContentCategory::class, 'category_type_map', 'category_type_id', 'content_category_id')->withTimestamps();
     }
 
+    // FIX: Explicitly define 'category_type_id' as the foreign key
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'tags_type_map', 'category_type_id', 'tag_id')->withTimestamps();
@@ -32,9 +33,4 @@ class CategoryType extends Model
     {
         return $this->belongsToMany(Character::class, 'character_type_map', 'category_type_id', 'character_id')->withTimestamps();
     }
-
-    public function shortStories() {
-    return $this->belongsToMany(ShortStories::class, 'short_story_categories', 'category_id', 'short_story_id');
-}
-
 }

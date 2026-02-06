@@ -116,7 +116,17 @@
                                 </div>
                             </div>
                         </div>
-
+<div class="field">
+    <label class="label">Article Type</label>
+    <div class="control">
+        <div class="select is-fullwidth">
+            <select name="article_type">
+                <option value="Blog" {{ (isset($blog) && $blog->article_type == 'Blog') ? 'selected' : '' }}>Blog</option>
+                <option value="Journal" {{ (isset($blog) && $blog->article_type == 'Journal') ? 'selected' : '' }}>Journal</option>
+            </select>
+        </div>
+    </div>
+</div>
                         <!-- Thumbnail Photo Upload with Preview & Error Message -->
                         <div class="form-group">
                             <label for="thumbnailPhoto" class="label">
