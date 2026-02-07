@@ -91,24 +91,32 @@
                                 </div>
                             </div>
                         </div>
-
+<div class="field">
+    <label class="label">Article Type</label>
+    <div class="control">
+        <div class="select is-fullwidth">
+            <select name="article_type">
+                <option value="Blog" {{ (isset($blog) && $blog->article_type == 'Blog') ? 'selected' : '' }}>Blog</option>
+                <option value="Journal" {{ (isset($blog) && $blog->article_type == 'Journal') ? 'selected' : '' }}>Journal</option>
+            </select>
+        </div>
+    </div>
+</div>
                         <!-- Thumbnail Photo Upload with Preview -->
                         <div class="form-group">
                             <label for="thumbnailPhoto" class="label">
                                 Upload Thumbnail Photo <span class="form-hint">(JPG, PNG, WEBP • Max 2MB)</span>
                             </label>
-                            <input id="thumbnailPhoto" name="thumbnail_image" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
+                            <input id="thumbnailPhoto" name="thumbnail_photo" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-input" />
                             
                             <div id="thumbnailPreview" class="preview-box">
-                                {{-- FIX: Check 'thumbnail_image' (Database Column) instead of 'thumbnail_photo' --}}
-                                @if($blog->thumbnail_image)
-                                    <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_image) }}" 
-                                         style="max-width: 200px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                @if($blog->thumbnail_photo)
+                                    <img src="{{ asset(config('app.assets_path') . $blog->thumbnail_photo) }}" style="max-width: 200px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                 @endif
                             </div>
                             <p id="thumbnailError" class="error-text hidden"></p>
 
-                            @error('thumbnail_image')
+                            @error('thumbnail_photo')
                                 <p class="text-red-500 text-sm">{{ $message }}</p>
                             @enderror
                         </div>
@@ -168,9 +176,15 @@
                                 <div class="select">
                                     <select id="suggestedArticles" multiple name="suggestedArticles[]">
                                         @foreach ($suggestedBlogs as $sBlog)
-                                            <option value="{{ $sBlog->id }}" {{ $blog->suggestedBlogs->contains($sBlog->id) ? 'selected' : '' }}>
+                                            <!-- <option value="{{ $sBlog->id }}" {{ $blog->suggestedBlogs->contains($sBlog->id) ? 'selected' : '' }}>
                                                 {{ $sBlog->title }}
-                                            </option>
+                                            </option> -->
+                                                                                @if($sBlog->id != $blog->id)
+                                        <option value="{{ $sBlog->id }}" 
+                                            {{ in_array($sBlog->id, $blog->suggestedBlogs->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                            {{ $sBlog->title }}
+                                        </option>
+                                    @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -180,11 +194,14 @@
 
                         <!-- Modern CKEditor -->
                         <div class="field">
-    <label class="label">Blog Details</label>
-    <div class="control">
-        <textarea class="textarea" name="blog_details" placeholder="Write your blog content here..." rows="10">{{ old('blog_details', $blog->description) }}</textarea>
-    </div>
-</div>
+                            <label class="label">Blog Details</label>
+                            <div class="control">
+                                <textarea class="textarea editor" id="blog_details" name="blog_details">{{ old('blog_details', $blog->blog_details) }}</textarea>
+                            </div>
+                            @error('blog_details')
+                                <p class="text-red-500 text-sm">{{ $message }}</p>
+                            @enderror
+                        </div>
                         
                         <!-- Status -->
                         <div class="field">

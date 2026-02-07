@@ -23,6 +23,7 @@ class StoreBlogs extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
+            'article_type' => 'required|string|in:Blog,Journal',
             // 'short_description' => 'required',
             'thumbnail_photo' => [
                 'nullable',
@@ -38,6 +39,7 @@ class StoreBlogs extends FormRequest
             'tags.*' => 'exists:tags,id',
             'categories' => 'array',
             'categories.*' => 'exists:content_categories,id',
+            'suggestedArticles' => 'nullable|array', 
         ];
     }
 }
