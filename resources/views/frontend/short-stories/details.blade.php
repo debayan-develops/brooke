@@ -187,7 +187,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
             <div class="lg:col-span-8">
-                <div class="story-body">
+                <div class="story-body html-content">
                     {!! $shortStory->short_story_details !!}
                 </div>
 
