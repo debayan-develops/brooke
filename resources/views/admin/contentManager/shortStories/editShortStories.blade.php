@@ -13,6 +13,30 @@
     .ck-content ol { list-style-type: decimal !important; }
     .ck-content ul { list-style-type: disc !important; }
     .ck-content li { margin-bottom: 5px; }
+    /* FIX: Content Headings in Admin CKEditor */
+    .ck-editor__editable h2 { 
+        font-size: 1.875rem !important; /* 30px */
+        font-weight: 800 !important; 
+        color: #111827; 
+        margin-top: 1.5em !important; 
+        margin-bottom: 0.8em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h3 { 
+        font-size: 1.5rem !important; /* 24px */
+        font-weight: 700 !important; 
+        color: #374151; 
+        margin-top: 1.2em !important; 
+        margin-bottom: 0.6em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h4 { 
+        font-size: 1.25rem !important; /* 20px */
+        font-weight: 600 !important; 
+        color: #4B5563; 
+        margin-top: 1em !important; 
+        margin-bottom: 0.5em !important; 
+    }
 
     /* Choices.js Custom Overrides for this theme */
     .choices__inner {

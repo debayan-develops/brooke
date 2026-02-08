@@ -25,6 +25,58 @@
     .ck-content li {
         margin-bottom: 0.5rem;
     }
+    .ck-content h2 { 
+        font-size: 1.75rem !important; /* H2 - Large */
+        font-weight: 800 !important; 
+        color: #1a202c; 
+        margin-top: 2rem !important; 
+        margin-bottom: 1rem !important;
+        line-height: 1.3;
+    }
+    .ck-content h3 { 
+        font-size: 1.5rem !important; /* H3 - Medium */
+        font-weight: 700 !important; 
+        color: #2d3748; 
+        margin-top: 1.5rem !important; 
+        margin-bottom: 0.75rem !important;
+    }
+    .ck-content h4 { 
+        font-size: 1.25rem !important; /* H4 - Small */
+        font-weight: 600 !important; 
+        color: #4a5568; 
+        margin-top: 1.25rem !important; 
+        margin-bottom: 0.5rem !important;
+    }
+ 
+ /* FIX: Blockquotes (Quotation Blocks) - Blue Line Only */
+    .ck-content blockquote {
+        border-left: 5px solid #3b82f6 !important; /* Blue vertical line */
+        background-color: transparent !important; /* REMOVED: Gray background */
+        padding: 0.5rem 0 0.5rem 1.5rem !important; /* Adjusted padding for clean look */
+        margin: 1.5rem 0 !important;
+        font-style: italic !important;
+        color: #4b5563 !important;
+        /* Removed border-radius as it's not needed without background */
+    }
+
+    /* FIX: Tables (Visible Black Borders) */
+    .ck-content table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 1.5rem 0 !important;
+        border: 1px solid black !important; /* Outer black border */
+    }
+    .ck-content th, 
+    .ck-content td {
+        border: 1px solid black !important; /* Inner black borders */
+        padding: 10px !important;
+        text-align: left !important;
+    }
+    .ck-content th {
+        background-color: #e5e7eb !important; /* Slight gray header */
+        font-weight: bold !important;
+    }
+    
 </style>
 <header class="sticky top-0 lg:top-20 z-40 bg-white lg:mt-20 border-b border-gray-200 ">
     <div class="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 max-w-6xl mx-auto">

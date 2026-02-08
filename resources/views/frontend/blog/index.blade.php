@@ -137,7 +137,7 @@
 
 
 
- <section id="journal-section" class="bg-gradient-to-b from-white via-blue-50 to-white py-12 px-6 rounded-xl shadow-inner animate-fade-in-up">
+ <section id="blog-section" class="bg-gradient-to-b from-white via-blue-50 to-white py-12 px-6 max-w-7xl mx-auto rounded-xl shadow-inner animate-fade-in-up">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 border-b border-gray-300 pb-2 px-4">
         <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-800 tracking-tight animate-fade-in-down">
             Featured Blog

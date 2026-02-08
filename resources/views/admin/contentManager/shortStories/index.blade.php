@@ -108,13 +108,14 @@
            
             // --- FIX START: URL GENERATION ---
             
-            // 1. Frontend View URL (Relative Path to fix port issues)
-            const viewBase = "/demo/short-stories/";
+           // --- FIX START: URL GENERATION ---
             
-            // 2. Admin Edit URL (Template Method)
-            // We generate the route with a dummy ID '999999' using the 3rd argument 'false' for relative path
+            // 1. Frontend View URL (Dynamic Template)
+            // We use '999999' as a placeholder to replace later
+            const viewUrlTemplate = "{{ route('frontend.short-story.show', '999999') }}";
+            
+            // 2. Admin Edit URL (Dynamic Template)
             const editUrlTemplate = "{{ route('admin.editShortStories', '999999') }}";
-
             // ---------------------
 
             // 2. Render Function
@@ -144,27 +145,29 @@
                     // --- GENERATE LINKS ---
                     
                     // View Link: Simple Append
-                    let finalViewUrl = viewBase + item.id;
+                    let finalViewUrl = viewUrlTemplate.replace('999999', item.id);
                     
                     // Edit Link: Search and Replace '999999' with real ID
                     // This ensures '/edit' or other URL parts are preserved
                     let finalEditUrl = editUrlTemplate.replace('999999', item.id);
 
-                    let row = `
+let row = `
                         <tr>
                             <td data-label="ID">${item.id}</td>
                             <td data-label="Image">${imgHtml}</td>
                             
                             <td data-label="Title" style="font-weight: 600;">
-                                <a href="${finalViewUrl}" target="_blank" class="title-link">
-                                    ${item.title} 
-                                    <i class="mdi mdi-open-in-new" style="font-size: 0.8em; margin-left: 4px;"></i>
-                                </a>
+                                ${item.title}
                             </td>
 
                             <td data-label="Created"><small class="text-gray-500">${dateStr}</small></td>
+                            
                             <td class="actions-cell">
-                                <div class="buttons right nowrap">
+                                <div class="buttons nowrap" style="justify-content: left;">
+                                    <a href="${finalViewUrl}" target="_blank" class="button small blue" style="margin-right: 5px;">
+                                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                    </a>
+
                                     <a href="${finalEditUrl}" class="button small blue">
                                         <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                                     </a>

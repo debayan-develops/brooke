@@ -96,12 +96,16 @@
             // 1. Data Preparation
             const allBlogs = @json($blogs);
             
-            // Base Asset Path (Ensure it ends with /)
+            // Base Asset Path
             const assetBase = "{{ asset(config('app.assets_path')) }}/"; 
             
-            // Base Route for Edit (Use a unique string placeholder)
-            // We use 'BLOCK_ID' as a safe placeholder string
+            // Base Route for Edit
             const editRouteBase = "{{ route('admin.editBlogs', 'BLOG_ID') }}";
+
+            // ✅ NEW: Base Route for View (Frontend Details)
+            // uses '999999' as placeholder
+            const viewRouteTemplate = "{{ route('frontend.blog.show', '999999') }}";
+            const viewRouteBase = "{{ route('frontend.blog.show', 'BLOG_ID') }}";
 
             // 2. Render Function
             function renderTable(data) {
@@ -130,15 +134,21 @@
                     // Correct Edit URL Construction
                     // Replace the placeholder with the numeric ID
                     let finalEditUrl = editRouteBase.replace('BLOG_ID', item.id);
-
-                    let row = `
+                    
+                    // ✅ NEW: Correct View URL Construction
+                    let finalViewUrl = viewRouteTemplate.replace('999999', item.id);
+let row = `
                         <tr>
                             <td data-label="ID">${item.id}</td>
                             <td data-label="Image">${imgHtml}</td>
                             <td data-label="Title" style="font-weight: 600;">${item.title}</td>
                             <td data-label="Created"><small class="text-gray-500">${dateStr}</small></td>
                             <td class="actions-cell">
-                                <div class="buttons right nowrap">
+                                <div class="buttons nowrap" style="justify-content: left;">
+                                    <a href="${finalViewUrl}" target="_blank" class="button small blue" style="margin-right: 5px;">
+                                        <span class="icon"><i class="mdi mdi-eye"></i></span>
+                                    </a>
+
                                     <a href="${finalEditUrl}" class="button small blue">
                                         <span class="icon"><i class="mdi mdi-square-edit-outline"></i></span>
                                     </a>
