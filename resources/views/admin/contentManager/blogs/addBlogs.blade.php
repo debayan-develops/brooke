@@ -55,9 +55,30 @@
         outline: none !important;
     }
 
-    /* Content Headings */
-    .ck-content h2 { font-size: 1.75em; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; color: #111827; }
-    .ck-content h3 { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; color: #1F2937; }
+    /* FIX: Content Headings in Admin CKEditor */
+    .ck-editor__editable h2 { 
+        font-size: 1.875rem !important; /* 30px */
+        font-weight: 800 !important; 
+        color: #111827; 
+        margin-top: 1.5em !important; 
+        margin-bottom: 0.8em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h3 { 
+        font-size: 1.5rem !important; /* 24px */
+        font-weight: 700 !important; 
+        color: #374151; 
+        margin-top: 1.2em !important; 
+        margin-bottom: 0.6em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h4 { 
+        font-size: 1.25rem !important; /* 20px */
+        font-weight: 600 !important; 
+        color: #4B5563; 
+        margin-top: 1em !important; 
+        margin-bottom: 0.5em !important; 
+    }
     .ck-content blockquote {
         border-left: 4px solid #3B82F6;
         padding-left: 1em;
