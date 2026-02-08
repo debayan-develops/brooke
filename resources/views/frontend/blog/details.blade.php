@@ -241,7 +241,7 @@
                 <!-- Swiper Container -->
                 <div class="swiper relatedSwiper">
                    <div class="swiper-wrapper">
-    @foreach($relatedBlogs as $related)
+@foreach($categoryRelatedBlogs as $related)
         <div class="swiper-slide">
             <a href="{{ route('frontend.blog.show', $related->id) }}" class="block bg-white p-4 rounded-lg shadow hover:shadow-md transition hover:-translate-y-1 hover:scale-[1.02] transform duration-300">
                 <h4 class="text-lg font-semibold text-blue-600 mb-2 hover:underline line-clamp-1">
