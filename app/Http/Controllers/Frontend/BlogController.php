@@ -89,8 +89,18 @@ public function index(Request $request)
 
         // 3. Fetch Suggested Articles (Selected in Admin)
         $relatedBlogs = $blog->suggestedBlogs()->where('status', 1)->get();
+        // 4. NEW: Fetch Related Articles (For Slider - Same Category)
+        // Get the list of category IDs for the current blog
+        $categoryIds = $blog->blogCategories->pluck('id');
 
-        // 4. FIX: Fetch ONLY 'Blog' Categories
+        $categoryRelatedBlogs = \App\Models\BlogModel::whereHas('blogCategories', function($q) use ($categoryIds) {
+                $q->whereIn('content_categories.id', $categoryIds);
+            })
+            ->where('id', '!=', $id) // Exclude the current blog
+            ->where('status', 1)     // Active only
+            ->take(8)               // Limit to 8 items
+            ->get();
+        // 5. FIX: Fetch ONLY 'Blog' Categories
         // We join the map table to filter only categories linked to the 'Blog' type
         $categories = \Illuminate\Support\Facades\DB::table('content_categories')
                         ->join('category_type_map', 'content_categories.id', '=', 'category_type_map.content_category_id')
@@ -100,9 +110,9 @@ public function index(Request $request)
                         ->distinct()
                         ->get();
 
-        // 5. Increment Views
+        // 6. Increment Views
         //$blog->increment('view_count');
 
-        return view('frontend.blog.details', compact('blog', 'sliderImages', 'relatedBlogs', 'categories'));
+return view('frontend.blog.details', compact('blog', 'sliderImages', 'relatedBlogs', 'categoryRelatedBlogs', 'categories'));
     }
 }

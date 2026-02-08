@@ -22,7 +22,29 @@
         margin-left: 1.5rem !important; 
         margin-bottom: 1rem; 
     }
-    
+    /* FIX: Restore Heading Styles for Short Stories (Using .html-content) */
+    .html-content h2 { 
+        font-size: 1.875rem !important; /* 30px */
+        font-weight: 800 !important; 
+        color: #111; 
+        margin-top: 2rem !important; 
+        margin-bottom: 1rem !important;
+        line-height: 1.2;
+    }
+    .html-content h3 { 
+        font-size: 1.5rem !important; /* 24px */
+        font-weight: 700 !important; 
+        color: #333; 
+        margin-top: 1.5rem !important; 
+        margin-bottom: 0.75rem !important;
+    }
+    .html-content h4 { 
+        font-size: 1.25rem !important; /* 20px */
+        font-weight: 600 !important; 
+        color: #555; 
+        margin-top: 1.25rem !important; 
+        margin-bottom: 0.5rem !important;
+    }
     .html-content li { margin-bottom: 0.25rem; }
     .html-content strong { font-weight: 700; color: #111; }
     .html-content em { font-style: italic; }
@@ -32,6 +54,23 @@
         color: #555;
         font-style: italic;
         margin: 1rem 0;
+    }
+    /* FIX: Tables for Short Stories (Visible Black Borders) */
+    .html-content table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 1.5rem 0 !important;
+        border: 1px solid black !important;
+    }
+    .html-content th, 
+    .html-content td {
+        border: 1px solid black !important;
+        padding: 10px !important;
+        text-align: left !important;
+    }
+    .html-content th {
+        background-color: #e5e7eb !important;
+        font-weight: bold !important;
     }
     /* TYPOGRAPHY: Classic Serif Look */
     body {
@@ -187,7 +226,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
             <div class="lg:col-span-8">
-                <div class="story-body">
+                <div class="story-body html-content">
                     {!! $shortStory->short_story_details !!}
                 </div>
 

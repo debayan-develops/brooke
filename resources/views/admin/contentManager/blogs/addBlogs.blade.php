@@ -55,9 +55,30 @@
         outline: none !important;
     }
 
-    /* Content Headings */
-    .ck-content h2 { font-size: 1.75em; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; color: #111827; }
-    .ck-content h3 { font-size: 1.5em; font-weight: 600; margin-top: 1.2em; margin-bottom: 0.5em; color: #1F2937; }
+    /* FIX: Content Headings in Admin CKEditor */
+    .ck-editor__editable h2 { 
+        font-size: 1.875rem !important; /* 30px */
+        font-weight: 800 !important; 
+        color: #111827; 
+        margin-top: 1.5em !important; 
+        margin-bottom: 0.8em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h3 { 
+        font-size: 1.5rem !important; /* 24px */
+        font-weight: 700 !important; 
+        color: #374151; 
+        margin-top: 1.2em !important; 
+        margin-bottom: 0.6em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h4 { 
+        font-size: 1.25rem !important; /* 20px */
+        font-weight: 600 !important; 
+        color: #4B5563; 
+        margin-top: 1em !important; 
+        margin-bottom: 0.5em !important; 
+    }
     .ck-content blockquote {
         border-left: 4px solid #3B82F6;
         padding-left: 1em;
@@ -174,7 +195,7 @@
                             </div>
                         </div>
 
-                        <div class="field">
+                        <!-- <div class="field">
                             <label class="label">Article Type</label>
                             <div class="control icons-left icons-right">
                                 <div class="select">
@@ -186,7 +207,7 @@
                                 </div>
                                 @error('blogTypes') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="field">
                             <label class="label">Suggested Articles</label>
@@ -252,56 +273,52 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    
-    <!-- CKEditor 5 Main Script -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            
             // 1. Initialize Choices.js
             new Choices('#tags', { removeItemButton: true, searchEnabled: true });
             new Choices('#categories', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
-            new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            
+            // Check if blogTypes select exists before initializing (it is commented out in HTML)
+            const blogTypesEl = document.getElementById('blogTypes');
+            if (blogTypesEl) {
+                new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            }
 
-            // 2. Initialize Advanced & Modern CKEditor
+            // 2. CKEditor Configuration (Stable Classic Setup)
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'outdent', 'indent', '|',
+                        'blockQuote', 'insertTable', 'undo', 'redo'
+                    ]
+                },
+                language: 'en',
+                table: {
+                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+                }
+            };
+
+            // 3. Initialize Editor
+            // Targeting ID '#blog_details' ensures we attach to the correct textarea
             ClassicEditor
-                .create(document.querySelector('.editor'), {
-                    toolbar: {
-                        items: [
-                            'heading',
-                            '|',
-                            'bold', 'italic', 'strikethrough', 'underline', 'code',
-                            '|',
-                            'bulletedList', 'numberedList', 'todoList',
-                            '|',
-                            'outdent', 'indent',
-                            '|',
-                            'link', 'blockQuote', 'insertTable', 'mediaEmbed',
-                            '|',
-                            'undo', 'redo'
-                        ],
-                        shouldNotGroupWhenFull: true
-                    },
-                    language: 'en',
-                    placeholder: 'Start writing your amazing content here...',
-                    table: {
-                        contentToolbar: [
-                            'tableColumn',
-                            'tableRow',
-                            'mergeTableCells'
-                        ]
-                    }
-                })
+                .create(document.querySelector('#blog_details'), editorConfig)
                 .then(editor => {
-                    console.log('Advanced Editor initialized', editor);
+                    console.log('Blog Editor initialized', editor);
                 })
                 .catch(error => {
                     console.error('Editor initialization error:', error);
                 });
 
-            // 3. Thumbnail Preview & Validation Logic
+            // 4. Thumbnail Preview Logic
             const thumbnailInput = document.getElementById('thumbnailPhoto');
             if(thumbnailInput) {
                 thumbnailInput.addEventListener('change', function(event) {
@@ -309,17 +326,15 @@
                     const previewBox = document.getElementById('thumbnailPreview');
                     const errorText = document.getElementById('thumbnailError');
                     
-                    // Clear previous state
                     previewBox.innerHTML = '';
                     errorText.classList.add('hidden');
                     errorText.textContent = '';
 
                     if (file) {
-                        // Validate size (2MB)
                         if (file.size > 2 * 1024 * 1024) {
-                            errorText.textContent = "Error: File size is too large. Please upload an image under 2MB.";
+                            errorText.textContent = "Error: File size is too large (Max 2MB).";
                             errorText.classList.remove('hidden');
-                            this.value = ''; // Reset input so user must select again
+                            this.value = ''; 
                             return;
                         }
 

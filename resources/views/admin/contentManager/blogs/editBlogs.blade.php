@@ -34,6 +34,30 @@
         line-height: 1.6;
         color: #374151;
     }
+    /* FIX: Content Headings in Admin CKEditor */
+    .ck-editor__editable h2 { 
+        font-size: 1.875rem !important; /* 30px */
+        font-weight: 800 !important; 
+        color: #111827; 
+        margin-top: 1.5em !important; 
+        margin-bottom: 0.8em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h3 { 
+        font-size: 1.5rem !important; /* 24px */
+        font-weight: 700 !important; 
+        color: #374151; 
+        margin-top: 1.2em !important; 
+        margin-bottom: 0.6em !important; 
+        line-height: 1.3 !important;
+    }
+    .ck-editor__editable h4 { 
+        font-size: 1.25rem !important; /* 20px */
+        font-weight: 600 !important; 
+        color: #4B5563; 
+        margin-top: 1em !important; 
+        margin-bottom: 0.5em !important; 
+    }
     .ck-toolbar {
         border-top-left-radius: 0.5rem !important;
         border-top-right-radius: 0.5rem !important;
@@ -154,7 +178,7 @@
                             </div>
                         </div>
 
-                        <div class="field">
+                        <!-- <div class="field">
                             <label class="label">Article Type</label>
                             <div class="control icons-left icons-right">
                                 <div class="select">
@@ -168,7 +192,7 @@
                                 </div>
                                 @error('blogTypes') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="field">
                             <label class="label">Suggested Articles</label>
@@ -254,39 +278,48 @@
 </form>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Choices.js
+            
+            // 1. Initialize Choices.js (Dropdowns)
             new Choices('#tags', { removeItemButton: true, searchEnabled: true });
             new Choices('#categories', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
-            new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            // Note: If you have an element with ID 'blogTypes', uncomment the line below
+            // new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
 
-            // CKEditor 5 (Advanced Config)
+            // 2. CKEditor Configuration (Replicated from Short Stories)
+            const editorConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'outdent', 'indent', '|',
+                        'blockQuote', 'insertTable', 'undo', 'redo'
+                    ]
+                },
+                language: 'en',
+                table: {
+                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+                }
+            };
+
+            // 3. Initialize Editor
+            // Targeting the ID '#blog_details' is safer than class '.editor'
             ClassicEditor
-                .create(document.querySelector('.editor'), {
-                    toolbar: {
-                        items: [
-                            'heading', '|',
-                            'bold', 'italic', 'strikethrough', 'underline', 'code', '|',
-                            'bulletedList', 'numberedList', 'todoList', '|',
-                            'outdent', 'indent', '|',
-                            'link', 'blockQuote', 'insertTable', 'mediaEmbed', '|',
-                            'undo', 'redo'
-                        ],
-                        shouldNotGroupWhenFull: true
-                    },
-                    language: 'en',
-                    table: {
-                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
-                    }
+                .create(document.querySelector('#blog_details'), editorConfig)
+                .then(editor => {
+                    console.log('Blog Editor initialized', editor);
                 })
-                .catch(error => { console.error(error); });
+                .catch(error => {
+                    console.error('Editor initialization error:', error);
+                });
 
-            // Thumbnail Preview Logic
+            // 4. Thumbnail Preview Logic (Preserved)
             const thumbnailInput = document.getElementById('thumbnailPhoto');
             if(thumbnailInput) {
                 thumbnailInput.addEventListener('change', function(event) {
@@ -300,7 +333,7 @@
 
                     if (file) {
                         if (file.size > 2 * 1024 * 1024) {
-                            errorText.textContent = "Error: File size is too large. Please upload an image under 2MB.";
+                            errorText.textContent = "Error: File size is too large (Max 2MB).";
                             errorText.classList.remove('hidden');
                             this.value = ''; 
                             return;

@@ -10,6 +10,74 @@
 
     <!-- Blog Title with Share Buttons -->
     <!-- Sticky Blog Title + Author -->
+     <style>
+    /* Restore CKEditor List Styles */
+    .ck-content ul {
+        list-style-type: disc !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .ck-content ol {
+        list-style-type: decimal !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .ck-content li {
+        margin-bottom: 0.5rem;
+    }
+    .ck-content h2 { 
+        font-size: 1.75rem !important; /* H2 - Large */
+        font-weight: 800 !important; 
+        color: #1a202c; 
+        margin-top: 2rem !important; 
+        margin-bottom: 1rem !important;
+        line-height: 1.3;
+    }
+    .ck-content h3 { 
+        font-size: 1.5rem !important; /* H3 - Medium */
+        font-weight: 700 !important; 
+        color: #2d3748; 
+        margin-top: 1.5rem !important; 
+        margin-bottom: 0.75rem !important;
+    }
+    .ck-content h4 { 
+        font-size: 1.25rem !important; /* H4 - Small */
+        font-weight: 600 !important; 
+        color: #4a5568; 
+        margin-top: 1.25rem !important; 
+        margin-bottom: 0.5rem !important;
+    }
+ 
+ /* FIX: Blockquotes (Quotation Blocks) - Blue Line Only */
+    .ck-content blockquote {
+        border-left: 5px solid #3b82f6 !important; /* Blue vertical line */
+        background-color: transparent !important; /* REMOVED: Gray background */
+        padding: 0.5rem 0 0.5rem 1.5rem !important; /* Adjusted padding for clean look */
+        margin: 1.5rem 0 !important;
+        font-style: italic !important;
+        color: #4b5563 !important;
+        /* Removed border-radius as it's not needed without background */
+    }
+
+    /* FIX: Tables (Visible Black Borders) */
+    .ck-content table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 1.5rem 0 !important;
+        border: 1px solid black !important; /* Outer black border */
+    }
+    .ck-content th, 
+    .ck-content td {
+        border: 1px solid black !important; /* Inner black borders */
+        padding: 10px !important;
+        text-align: left !important;
+    }
+    .ck-content th {
+        background-color: #e5e7eb !important; /* Slight gray header */
+        font-weight: bold !important;
+    }
+    
+</style>
 <header class="sticky top-0 lg:top-20 z-40 bg-white lg:mt-20 border-b border-gray-200 ">
     <div class="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 max-w-6xl mx-auto">
         <h1 class="text-4xl font-extrabold text-gray-900 mb-1 tracking-tight leading-snug">
@@ -125,9 +193,9 @@
 
 <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
     <main class="lg:col-span-3 space-y-12 animate-fadeInUp">
-        <section class="space-y-4 text-gray-700 leading-relaxed">
-            {!! $blog->blog_details !!}
-        </section>
+        <section class="ck-content space-y-4 text-gray-700 leading-relaxed">
+    {!! $blog->blog_details !!}
+</section>
         
         <div class="flex justify-end gap-3 mt-3">
              </div>
@@ -173,7 +241,7 @@
                 <!-- Swiper Container -->
                 <div class="swiper relatedSwiper">
                    <div class="swiper-wrapper">
-    @foreach($relatedBlogs as $related)
+@foreach($categoryRelatedBlogs as $related)
         <div class="swiper-slide">
             <a href="{{ route('frontend.blog.show', $related->id) }}" class="block bg-white p-4 rounded-lg shadow hover:shadow-md transition hover:-translate-y-1 hover:scale-[1.02] transform duration-300">
                 <h4 class="text-lg font-semibold text-blue-600 mb-2 hover:underline line-clamp-1">
