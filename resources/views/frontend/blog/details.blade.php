@@ -10,6 +10,22 @@
 
     <!-- Blog Title with Share Buttons -->
     <!-- Sticky Blog Title + Author -->
+     <style>
+    /* Restore CKEditor List Styles */
+    .ck-content ul {
+        list-style-type: disc !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .ck-content ol {
+        list-style-type: decimal !important;
+        margin-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .ck-content li {
+        margin-bottom: 0.5rem;
+    }
+</style>
 <header class="sticky top-0 lg:top-20 z-40 bg-white lg:mt-20 border-b border-gray-200 ">
     <div class="px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 max-w-6xl mx-auto">
         <h1 class="text-4xl font-extrabold text-gray-900 mb-1 tracking-tight leading-snug">
@@ -125,9 +141,9 @@
 
 <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-4 gap-8 mt-12">
     <main class="lg:col-span-3 space-y-12 animate-fadeInUp">
-        <section class="space-y-4 text-gray-700 leading-relaxed">
-            {!! $blog->blog_details !!}
-        </section>
+        <section class="ck-content space-y-4 text-gray-700 leading-relaxed">
+    {!! $blog->blog_details !!}
+</section>
         
         <div class="flex justify-end gap-3 mt-3">
              </div>
