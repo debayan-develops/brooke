@@ -68,6 +68,15 @@
 
             <div class="lg:col-span-8">
                 
+                @if($character->image)
+                    <div class="mb-8">
+                        <img src="{{ asset('storage/' . $character->image) }}" 
+                             alt="{{ $character->name }}" 
+                             class="w-full h-auto rounded-lg shadow-md object-cover" 
+                             style="max-height: 500px;">
+                    </div>
+                @endif
+                
                 <h1 class="char-title">{{ $character->name }}</h1>
 
                 <div class="meta-row">

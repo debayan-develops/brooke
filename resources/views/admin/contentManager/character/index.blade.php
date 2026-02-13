@@ -99,100 +99,114 @@
     </div>
 
     <div id="add-character-modal" class="modal">
-        <div class="modal-background close-modal" data-target="add-character-modal"></div>
-        <div class="modal-card" style="width: 800px; max-width: 95%;"> 
-            <form method="POST" action="{{ route('admin.characters.store') }}">
-                @csrf
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Add New Character</p>
-                    <button type="button" class="delete close-modal" data-target="add-character-modal"></button>
-                </header>
+    <div class="modal-background close-modal" data-target="add-character-modal"></div>
+    <div class="modal-card" style="width: 800px; max-width: 95%;"> 
+        <form method="POST" action="{{ route('admin.characters.store') }}" enctype="multipart/form-data">
+            @csrf
+            <header class="modal-card-head">
+                <p class="modal-card-title">Add New Character</p>
+                <button type="button" class="delete close-modal" data-target="add-character-modal"></button>
+            </header>
+            
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control icons-left">
+                        <input class="input" type="text" name="name" required>
+                        <span class="icon left"><i class="mdi mdi-account"></i></span>
+                    </div>
+                </div>
                 
-                <section class="modal-card-body">
-                    <div class="field">
-                        <label class="label">Name</label>
-                        <div class="control icons-left">
-                            <input class="input" type="text" name="name" required>
-                            <span class="icon left"><i class="mdi mdi-account"></i></span>
-                        </div>
+                <div class="field">
+                    <label class="label">Character Image</label>
+                    <div class="control">
+                        <input class="input" type="file" name="image" accept="image/*">
                     </div>
-                    
-                    <div class="field">
-                        <label class="label">Description</label>
-                        <div class="control">
-                            <textarea id="addDescriptionEditor" name="description" placeholder="Character Description"></textarea>
-                        </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea id="addDescriptionEditor" name="description" placeholder="Character Description"></textarea>
                     </div>
-                    
-                    <div class="field">
-                        <label class="label">Type</label>
-                        <div class="select w-full">
-                            <select id="characterType" multiple name="categoryType[]">
-                                @foreach($categoryTypes as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </section>
+                </div>
                 
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button green">Save</button>
-                    <button type="button" class="button close-modal" data-target="add-character-modal">Cancel</button>
-                </footer>
-            </form>
-        </div>
+                <div class="field">
+                    <label class="label">Type</label>
+                    <div class="select w-full">
+                        <select id="characterType" multiple name="categoryType[]">
+                            @foreach($categoryTypes as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </section>
+            
+            <footer class="modal-card-foot">
+                <button type="submit" class="button green">Save</button>
+                <button type="button" class="button close-modal" data-target="add-character-modal">Cancel</button>
+            </footer>
+        </form>
     </div>
+</div>
 
     <div id="edit-character-modal" class="modal">
-        <div class="modal-background close-modal" data-target="edit-character-modal"></div>
-        <div class="modal-card" style="width: 800px; max-width: 95%;"> 
-            <form id="edit-character-form" method="POST" action="">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="id">
-                
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Edit Character</p>
-                    <button type="button" class="delete close-modal" data-target="edit-character-modal"></button>
-                </header>
-                
-                <section class="modal-card-body">
-                    <div class="field">
-                        <label class="label">Name</label>
-                        <div class="control icons-left">
-                            <input class="input" type="text" name="name" required>
-                            <span class="icon left"><i class="mdi mdi-account"></i></span>
-                        </div>
+    <div class="modal-background close-modal" data-target="edit-character-modal"></div>
+    <div class="modal-card" style="width: 800px; max-width: 95%;"> 
+        <form id="edit-character-form" method="POST" action="" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="id">
+            
+            <header class="modal-card-head">
+                <p class="modal-card-title">Edit Character</p>
+                <button type="button" class="delete close-modal" data-target="edit-character-modal"></button>
+            </header>
+            
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control icons-left">
+                        <input class="input" type="text" name="name" required>
+                        <span class="icon left"><i class="mdi mdi-account"></i></span>
                     </div>
-                    
-                    <div class="field">
-                        <label class="label">Description</label>
-                        <div class="control">
-                            <textarea id="editDescriptionEditor" name="description" placeholder="Character Description"></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="field">
-                        <label class="label">Type</label>
-                        <div class="select w-full">
-                            <select id="editCharacterType" multiple name="categoryType[]">
-                                @foreach($categoryTypes as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </section>
+                </div>
                 
-                <footer class="modal-card-foot">
-                    <button type="submit" class="button green">Update</button>
-                    <button type="button" class="button close-modal" data-target="edit-character-modal">Cancel</button>
-                </footer>
-            </form>
-        </div>
+                <div class="field">
+                    <label class="label">Character Image</label>
+                    <div class="control">
+                        <input class="input" type="file" name="image" accept="image/*">
+                    </div>
+                    <div id="editImagePreview" style="margin-top: 10px;"></div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Description</label>
+                    <div class="control">
+                        <textarea id="editDescriptionEditor" name="description" placeholder="Character Description"></textarea>
+                    </div>
+                </div>
+                
+                <div class="field">
+                    <label class="label">Type</label>
+                    <div class="select w-full">
+                        <select id="editCharacterType" multiple name="categoryType[]">
+                            @foreach($categoryTypes as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </section>
+            
+            <footer class="modal-card-foot">
+                <button type="submit" class="button green">Update</button>
+                <button type="button" class="button close-modal" data-target="edit-character-modal">Cancel</button>
+            </footer>
+        </form>
     </div>
-
+</div>
     <div id="delete-character-modal" class="modal">
         <div class="modal-background close-modal" data-target="delete-character-modal"></div>
         <div class="modal-card">
@@ -338,6 +352,11 @@
 
                     $.get(editUrl, function (data) {
                         const char = (Array.isArray(data)) ? data[0] : data;
+                        const previewDiv = document.getElementById('editImagePreview');
+                        previewDiv.innerHTML = '';
+                        if (char.image) {
+                            previewDiv.innerHTML = `<img src="/storage/${char.image}" style="max-width: 100px; border-radius: 5px;">`;
+                        }
                         
                         document.querySelector('#edit-character-form input[name="id"]').value = char.id;
                         document.querySelector('#edit-character-form input[name="name"]').value = char.name;
