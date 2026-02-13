@@ -59,4 +59,8 @@ class NovelModel extends Model
     {
         return $this->suggestedNovels();
     }
+    public function characters()
+    {
+        return $this->belongsToMany(\App\Models\Character::class, 'novel_characters', 'novel_id', 'character_id');
+    }
 }

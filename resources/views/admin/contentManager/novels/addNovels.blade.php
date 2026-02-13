@@ -15,6 +15,37 @@
     .ck-editor__editable_inline { 
         min-height: 400px !important; 
     }
+
+    .ck-editor__editable h2 { 
+        font-size: 1.75rem !important; 
+        font-weight: 800 !important; 
+        margin-top: 1rem !important; 
+        margin-bottom: 0.5rem !important; 
+        color: #111827;
+    }
+    /* UPDATED: H3 (Sub-heading) */
+    .ck-editor__editable h3 { 
+        font-size: 1.35rem !important; 
+        font-weight: 700 !important; 
+        margin-top: 1rem !important; 
+        margin-bottom: 0.5rem !important; 
+        color: #374151;
+        text-decoration: none !important; /* Removed underline */
+    }
+
+    /* NEW: H4 (Small Heading) */
+    .ck-editor__editable h4 { 
+        font-size: 1.15rem !important; 
+        font-weight: 600 !important; 
+        margin-top: 0.75rem !important; 
+        margin-bottom: 0.25rem !important; 
+        color: #4b5563;
+    }
+    /* FIX: Indentation/List Spacing */
+    .ck-content ol, .ck-content ul {
+        padding-left: 20px !important;
+        margin-left: 20px !important;
+    }
 </style>
 
 <style>
@@ -223,6 +254,25 @@
                     </div>
 
                     <div class="field">
+                        <div class="grid gap-6 grid-cols-1">
+                            <div class="field">
+                                <label class="label">Characters</label>
+                                <div class="control icons-left icons-right">
+                                    <div class="select">
+                                        <select id="characters" multiple name="characters[]">
+                                            @if(isset($characters) && count($characters) > 0)
+                                                @foreach($characters as $character)
+                                                    <option value="{{ $character->id }}">{{ $character->name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <label class="label">Short Description</label>
                         <div class="control">
                         <textarea class="textarea description" placeholder="Enter Text" name="description" rows="4">{{old('description')}}</textarea>
@@ -283,20 +333,29 @@
             // Initialize Choices.js
             new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
             new Choices('#relatedNovels', { removeItemButton: true, searchEnabled: true });
+            new Choices('#characters', { removeItemButton: true, searchEnabled: true });
 
-            // Initialize CKEditor for Short Description
-            ClassicEditor
-                .create( document.querySelector( '.textarea.description' ), {
-                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
-                })
-                .catch( error => { console.error( error ); } );
+              // CKEditor Configuration
+            const commonConfig = {
+                toolbar: {
+                    items: [
+                        'heading', '|', 
+                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'outdent', 'indent', '|',  // <--- Indentation Buttons
+                        'blockQuote', 'insertTable', 'undo', 'redo'
+                    ]
+                },
+                language: 'en'
+            };
 
-            // Initialize CKEditor for About Story
-            ClassicEditor
-                .create( document.querySelector( '.textarea.about_story' ), {
-                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
-                })
-                .catch( error => { console.error( error ); } );
+            // 1. Short Description Editor
+            ClassicEditor.create(document.querySelector('.textarea.description'), commonConfig)
+                .catch(error => console.error(error));
+
+            // 2. About Story Editor
+            ClassicEditor.create(document.querySelector('.textarea.about_story'), commonConfig)
+                .catch(error => console.error(error));
         });
     </script>
 @endsection

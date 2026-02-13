@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Character extends Model
 {
     protected $table = 'characters';
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'image'];
 
     public function types(): BelongsToMany
     {

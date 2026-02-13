@@ -25,7 +25,55 @@
         .animate-filterFade {
         animation: filterFade 0.6s ease-out forwards;
         }
+        /* FIX: Display CKEditor Content Correctly on Frontend */
+    .formatted-content h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 0.75rem;
+        margin-bottom: 0.5rem;
+        color: #1a202c;
+    }
+    /* UPDATED: H3 (Sub-heading) - Matches Admin */
+    .formatted-content h3 {
+        font-size: 1.35rem;        /* Larger, like a sub-title */
+        font-weight: 700;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        color: #374151;            /* Dark Gray */
+        text-decoration: none;     /* No underline */
+        line-height: 1.3;
+    }
 
+    /* NEW: H4 (Small Heading) - For deeper nesting */
+    .formatted-content h4 {
+        font-size: 1.15rem;        /* Smaller, distinct from paragraph */
+        font-weight: 600;
+        margin-top: 0.75rem;
+        margin-bottom: 0.25rem;
+        color: #4b5563;            /* Lighter Gray */
+        line-height: 1.4;
+    }
+    }
+    .formatted-content p {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+    .formatted-content ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .formatted-content ol {
+        list-style-type: decimal;
+        padding-left: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .formatted-content blockquote {
+        border-left: 4px solid #3b82f6;
+        padding-left: 1rem;
+        font-style: italic;
+        background-color: #f9fafb;
+    }
 
     </style>
     
@@ -41,82 +89,87 @@
             <!-- Flex Wrapper for horizontal centering -->
             <div class="flex justify-center px-4">
                 <!-- 🔍 Grid Search & Filter Container -->
-                <div class="grid grid-cols-1 md:grid-cols-10 gap-6 mt-5 items-start w-full max-w-6xl">
+                <form id="novelSearchForm" action="{{ route('frontend.novel.index') }}" method="GET" class="hidden"></form>
 
-                    <!-- Search Bar Wrapper -->
-                    <div class="relative md:col-span-4 w-full">
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="Search..."
-                            aria-label="Search novels"
-                            class="w-full py-3 pl-10 pr-10 text-sm text-gray-700 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-700 ease-in-out transform focus:scale-105"
-                        />
+<div class="grid grid-cols-1 md:grid-cols-10 gap-6 mt-5 items-start w-full max-w-6xl">
 
-                        <!-- Search Icon -->
-                        <div class="absolute left-3 top-3.5 text-gray-400 pointer-events-none">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </div>
+    <div class="relative md:col-span-4 w-full">
+        <input
+            type="text"
+            id="searchInput"
+            name="search"
+            value="{{ request('search') }}"
+            form="novelSearchForm"
+            placeholder="Search..."
+            aria-label="Search novels"
+            class="w-full py-3 pl-10 pr-10 text-sm text-gray-700 bg-white rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-700 ease-in-out transform focus:scale-105"
+        />
 
-                        <!-- Clear Button -->
-                        <button id="clearBtn" aria-label="Clear search"
-                            class="absolute right-3 top-3.5 text-gray-400 hover:text-red-500 hidden">
-                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+        <div class="absolute left-3 top-3.5 text-gray-400 pointer-events-none">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+        </div>
 
-                        <!-- Typing Hint -->
-                        <p id="typingStatus"
-                            class="text-xs text-gray-400 mt-2 ml-1 opacity-0 transition-opacity duration-500">
-                            Typing…
-                        </p>
-                    </div>
+        <button id="clearBtn" aria-label="Clear search"
+            class="absolute right-3 top-3.5 text-gray-400 hover:text-red-500 hidden">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
 
-                    <!-- Filter Controls -->
-                    <div class="flex flex-col sm:flex-row flex-wrap gap-4 animate-fadeInUp md:col-span-6 w-full mb-6 lg:mb-0">
-                        <!-- Category Filter -->
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto ">
-                            <label for="genre" class="text-sm font-medium text-gray-700">Filters</label>
-                            <select id="genre"
-                            class="p-2 border border-gray-300 rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto">
-                                <option disabled selected>-- Select category --</option>
-                                <option value="cat1">Category 1</option>
-                                <option value="cat2">Category 2</option>
-                                <option value="cat3">Category 3</option>
-                                <option value="cat4">Category 4</option>
-                                <option value="cat5">Category 5</option>
-                                <option value="cat6">Category 6</option>
-                            </select>
-                        </div>
+        <p id="typingStatus"
+            class="text-xs text-gray-400 mt-2 ml-1 opacity-0 transition-opacity duration-500">
+            Typing…
+        </p>
+    </div>
 
-                        <!-- Date Sort Filter -->
-                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
-                            <select id="dateSort"
-                            class="p-2 border border-gray-300 rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto">
-                            <option disabled selected>-- Select sort option --</option>
-                            <option value="newest">Newest to Oldest</option>
-                            <option value="oldest">Oldest to Newest</option>
-                            <option value="updated">Recently Updated</option>
-                            <option value="popular">Most Popular</option>
-                            </select>
-                        </div>
+    <div class="flex flex-col sm:flex-row flex-wrap gap-4 animate-fadeInUp md:col-span-6 w-full mb-6 lg:mb-0">
+        
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+            <label for="genre" class="text-sm font-medium text-gray-700">Filters</label>
+            <select id="genre"
+                name="category"
+                form="novelSearchForm"
+                class="p-2 border border-gray-300 rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto">
+                <option disabled {{ request('category') ? '' : 'selected' }}>-- Select category --</option>
+                <option value="cat1" {{ request('category') == 'cat1' ? 'selected' : '' }}>Category 1</option>
+                <option value="cat2" {{ request('category') == 'cat2' ? 'selected' : '' }}>Category 2</option>
+                <option value="cat3" {{ request('category') == 'cat3' ? 'selected' : '' }}>Category 3</option>
+                <option value="cat4" {{ request('category') == 'cat4' ? 'selected' : '' }}>Category 4</option>
+                <option value="cat5" {{ request('category') == 'cat5' ? 'selected' : '' }}>Category 5</option>
+                <option value="cat6" {{ request('category') == 'cat6' ? 'selected' : '' }}>Category 6</option>
+            </select>
+        </div>
 
-                        <!-- Go Button -->
-                        <div class="w-full sm:w-auto">
-                            <button
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:scale-105 transition duration-300 transform w-full sm:w-auto">
-                            Go
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+            <select id="dateSort"
+                name="sort"
+                form="novelSearchForm"
+                onchange="document.getElementById('novelSearchForm').submit()"
+                class="p-2 border border-gray-300 rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto">
+                <option disabled {{ request('sort') ? '' : 'selected' }}>-- Select sort option --</option>
+                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest to Oldest</option>
+                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest to Newest</option>
+                <option value="updated" {{ request('sort') == 'updated' ? 'selected' : '' }}>Recently Updated</option>
+                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>Most Popular</option>
+            </select>
+        </div>
+
+        <div class="w-full sm:w-auto">
+            <button
+                type="submit"
+                form="novelSearchForm"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:scale-105 transition duration-300 transform w-full sm:w-auto">
+                Go
+            </button>
+        </div>
+    </div>
+</div>
             </div>
 
 
@@ -132,360 +185,99 @@
 
             <p class="text-gray-600 mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non placerat dolor, eget lacinia ipsum. Donec posuere eu ante eu elementum. Ut eu porta leo, a ultricies urna. </p>
 
-            <!-- Story Section 1 -->
-            <div class="max-w-4xl mx-auto bg-white rounded-lg" data-id="story-1">
+            @forelse($novels as $novel)
+            <div class="max-w-4xl mx-auto bg-white rounded-lg mb-6" data-id="story-{{ $novel->id }}">
                 <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 border-t border-gray-300 pt-6">
                     
-                    <!-- Image -->
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
-                        class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
+                        <img src="{{ asset('storage/' . $novel->thumbnail) }}" alt="{{ $novel->title }}"
+                            class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 
-                    <!-- Info -->
                     <div class="flex-1 w-full">
-                    <a href="{{ route('frontend.novel.chapters') }}">
-                        <h2 class="text-xl sm:text-2xl font-semibold mb-3 hover:text-blue-600 text-center sm:text-left">
-                        The Journey from Hardcopy to Semi-Digital Pt. 1
-                        </h2>
-                    </a>
+                        <a href="{{ route('frontend.novel.chapters', $novel->id) }}">
+                            <h2 class="text-xl sm:text-2xl font-semibold mb-3 hover:text-blue-600 text-center sm:text-left">
+                                {{ $novel->title }}
+                            </h2>
+                        </a>
 
-                    <!-- Tags -->
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-sm text-gray-600 mb-4">
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 1</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 2</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 3</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 4</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 5</span>
-                    </div>
-
-                    <!-- Stats + View More Button Wrapper -->
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm text-gray-700 gap-4">
-                        
-                        <!-- Stats Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 16h8M8 12h8M8 8h8M4 4h16v16H4V4z" />
-                                </svg>
-                                <strong>Pages:</strong> 932
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                                </svg>
-                                <strong>Chapters:</strong> 49
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <strong>Date:</strong> July 06, 2023
-                            </div>
-
-                            <button onclick="toggleFavorite(this)"
-                                class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
-                                    <svg class="w-5 h-5 favorite-icon text-gray-500 transition" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6C9 5.5 11 7 12 8.5C13 7 15 5.5 17 6C20 7 21 10.5 19 13.5C17 16.5 12 21 12 21Z" />
-                                    </svg>
-                                    <span class="favorite-count">1</span>
-                            </button>
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-sm text-gray-600 mb-4">
+                            @foreach($novel->tags as $tag)
+                                <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">{{ $tag->name }}</span>
+                            @endforeach
                         </div>
 
-                        <!-- View More Button -->
-                        <div class="lg:self-center lg:justify-self-end">
-                            <button onclick="toggleStoryDetails(this, 'story-1')"
-                                class="icon-toggle flex items-center justify-center lg:justify-end gap-2 text-gray-600 hover:text-gray-900 transition-transform duration-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none transform" fill="none"
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm text-gray-700 gap-4">
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
-                                    <path class="icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 16h8M8 12h8M8 8h8M4 4h16v16H4V4z" />
                                     </svg>
-                                    <span class="toggle-label text-sm font-medium">View More</span>
-                            </button>
-                        </div>
-                    </div>
+                                    <strong>Pages:</strong> - 
+                                </div>
 
-                    <!-- Hidden Expandable Section -->
-                    <div class="hidden extra-details mt-4 space-y-2 text-sm text-gray-700 transition-all duration-700 ease-in-out px-4">
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non placerat dolor, eget lacinia ipsum. Donec posuere eu ante eu elementum. Ut eu porta leo, a ultricies urna.
-                        </p>
-                    </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
+                                    </svg>
+                                    <strong>Chapters:</strong> {{ $novel->chapters->count() }}
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <strong>Date:</strong> {{ $novel->created_at->format('F d, Y') }}
+                                </div>
+
+                                <button onclick="toggleFavorite(this)"
+                                    class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
+                                        <svg class="w-5 h-5 favorite-icon text-gray-500 transition" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6C9 5.5 11 7 12 8.5C13 7 15 5.5 17 6C20 7 21 10.5 19 13.5C17 16.5 12 21 12 21Z" />
+                                        </svg>
+                                        <span class="favorite-count">0</span>
+                                </button>
+                            </div>
+
+                            <div class="lg:self-center lg:justify-self-end">
+                                <button onclick="toggleStoryDetails(this, 'story-{{ $novel->id }}')"
+                                    class="icon-toggle flex items-center justify-center lg:justify-end gap-2 text-gray-600 hover:text-gray-900 transition-transform duration-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none transform" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path class="icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        <span class="toggle-label text-sm font-medium">View More</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="hidden extra-details mt-4 space-y-2 text-sm text-gray-700 transition-all duration-700 ease-in-out px-4">
+                           <div class="formatted-content text-gray-700">
+                             {!! $novel->description !!}
+                           </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
-
-            <!-- Story Section 2 -->
-            <div class="max-w-4xl mx-auto bg-white rounded-lg" data-id="story-1">
-                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 border-t border-gray-300 pt-6">
-                    
-                    <!-- Image -->
-                    <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
-                        class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
-                    </div>
-
-                    <!-- Info -->
-                    <div class="flex-1 w-full">
-                    <a href="{{ route('frontend.novel.chapters') }}">
-                        <h2 class="text-xl sm:text-2xl font-semibold mb-3 hover:text-blue-600 text-center sm:text-left">
-                        The Journey from Hardcopy to Semi-Digital Pt. 1
-                        </h2>
-                    </a>
-
-                    <!-- Tags -->
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-sm text-gray-600 mb-4">
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 1</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 2</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 3</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 4</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 5</span>
-                    </div>
-
-                    <!-- Stats + View More Button Wrapper -->
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm text-gray-700 gap-4">
-                        
-                        <!-- Stats Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 16h8M8 12h8M8 8h8M4 4h16v16H4V4z" />
-                                </svg>
-                                <strong>Pages:</strong> 932
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                                </svg>
-                                <strong>Chapters:</strong> 49
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <strong>Date:</strong> July 06, 2023
-                            </div>
-
-                            <button onclick="toggleFavorite(this)"
-                                class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
-                                    <svg class="w-5 h-5 favorite-icon text-gray-500 transition" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6C9 5.5 11 7 12 8.5C13 7 15 5.5 17 6C20 7 21 10.5 19 13.5C17 16.5 12 21 12 21Z" />
-                                    </svg>
-                                    <span class="favorite-count">1</span>
-                            </button>
-                        </div>
-
-                        <!-- View More Button -->
-                        <div class="lg:self-center lg:justify-self-end">
-                            <button onclick="toggleStoryDetails(this, 'story-1')"
-                                class="icon-toggle flex items-center justify-center lg:justify-end gap-2 text-gray-600 hover:text-gray-900 transition-transform duration-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none transform" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path class="icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    <span class="toggle-label text-sm font-medium">View More</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Hidden Expandable Section -->
-                    <div class="hidden extra-details mt-4 space-y-2 text-sm text-gray-700 transition-all duration-700 ease-in-out px-4">
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non placerat dolor, eget lacinia ipsum. Donec posuere eu ante eu elementum. Ut eu porta leo, a ultricies urna.
-                        </p>
-                    </div>
-                    </div>
+            @empty
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-lg">No novels found at the moment.</p>
                 </div>
+            @endforelse
+
+            <div class="mt-12 flex justify-center">
+                {{ $novels->links() }}
             </div>
-            <!-- Story Section 3 -->
-            <div class="max-w-4xl mx-auto bg-white rounded-lg" data-id="story-1">
-                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 border-t border-gray-300 pt-6">
-                    
-                    <!-- Image -->
-                    <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
-                        class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
-                    </div>
-
-                    <!-- Info -->
-                    <div class="flex-1 w-full">
-                    <a href="{{ route('frontend.novel.chapters') }}">
-                        <h2 class="text-xl sm:text-2xl font-semibold mb-3 hover:text-blue-600 text-center sm:text-left">
-                        The Journey from Hardcopy to Semi-Digital Pt. 1
-                        </h2>
-                    </a>
-
-                    <!-- Tags -->
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-sm text-gray-600 mb-4">
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 1</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 2</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 3</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 4</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 5</span>
-                    </div>
-
-                    <!-- Stats + View More Button Wrapper -->
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm text-gray-700 gap-4">
-                        
-                        <!-- Stats Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 16h8M8 12h8M8 8h8M4 4h16v16H4V4z" />
-                                </svg>
-                                <strong>Pages:</strong> 932
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                                </svg>
-                                <strong>Chapters:</strong> 49
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <strong>Date:</strong> July 06, 2023
-                            </div>
-
-                            <button onclick="toggleFavorite(this)"
-                                class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
-                                    <svg class="w-5 h-5 favorite-icon text-gray-500 transition" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6C9 5.5 11 7 12 8.5C13 7 15 5.5 17 6C20 7 21 10.5 19 13.5C17 16.5 12 21 12 21Z" />
-                                    </svg>
-                                    <span class="favorite-count">1</span>
-                            </button>
-                        </div>
-
-                        <!-- View More Button -->
-                        <div class="lg:self-center lg:justify-self-end">
-                            <button onclick="toggleStoryDetails(this, 'story-1')"
-                                class="icon-toggle flex items-center justify-center lg:justify-end gap-2 text-gray-600 hover:text-gray-900 transition-transform duration-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 pointer-events-none transform" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path class="icon-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4v16m8-8H4" />
-                                    </svg>
-                                    <span class="toggle-label text-sm font-medium">View More</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Hidden Expandable Section -->
-                    <div class="hidden extra-details mt-4 space-y-2 text-sm text-gray-700 transition-all duration-700 ease-in-out px-4">
-                        <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non placerat dolor, eget lacinia ipsum. Donec posuere eu ante eu elementum. Ut eu porta leo, a ultricies urna.
-                        </p>
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Story Section 4 -->
-            <div class="max-w-4xl mx-auto bg-white rounded-lg" data-id="story-1">
-                <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 border-t border-gray-300 pt-6">
-                    
-                    <!-- Image -->
-                    <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                    <img src="{{ '/images/Indiana-Everglades-Icon-and-Banner-for-Articles.jpg' }}" alt="Indiana-Everglades-Icon-and-Banner-for-Articles"
-                        class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
-                    </div>
-
-                    <!-- Info -->
-                    <div class="flex-1 w-full">
-                    <a href="{{ route('frontend.novel.chapters') }}">
-                        <h2 class="text-xl sm:text-2xl font-semibold mb-3 hover:text-blue-600 text-center sm:text-left">
-                        The Journey from Hardcopy to Semi-Digital Pt. 1
-                        </h2>
-                    </a>
-
-                    <!-- Tags -->
-                    <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-sm text-gray-600 mb-4">
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 1</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 2</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 3</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 4</span>
-                        <span class="flex items-center gap-1 bg-gray-200 px-2 py-1 rounded">Tag 5</span>
-                    </div>
-
-                    <!-- Stats + View More Button Wrapper -->
-                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm text-gray-700 gap-4">
-                        
-                        <!-- Stats Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 16h8M8 12h8M8 8h8M4 4h16v16H4V4z" />
-                                </svg>
-                                <strong>Pages:</strong> 932
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 5v16l7-5 7 5V5a2 2 0 00-2-2H7a2 2 0 00-2 2z" />
-                                </svg>
-                                <strong>Chapters:</strong> 49
-                            </div>
-
-                            <div class="flex items-center gap-2">
-                                <svg class="w-5 h-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <strong>Date:</strong> July 06, 2023
-                            </div>
-
-                            <button onclick="toggleFavorite(this)"
-                                class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors duration-300">
-                                    <svg class="w-5 h-5 favorite-icon text-gray-500 transition" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 21C12 21 7 16.5 5 13.5C3 10.5 4 7 7 6C9 5.5 11 7 12 8.5C13 7 15 5.5 17 6C20 7 21 10.5 19 13.5C17 16.5 12 21 12 21Z" />
-                                    </svg>
-                                    <span class="favorite-count">1</span>
-                            </button>
-                        </div>
-
                         <!-- View More Button -->
                         <div class="lg:self-center lg:justify-self-end">
                             <button onclick="toggleStoryDetails(this, 'story-1')"
