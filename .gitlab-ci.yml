@@ -59,10 +59,10 @@ deploy_aws:
   when: manual # This adds a 'Play' button in GitLab so you approve the costs
 
   destroy:
-  stage: destroy
-  script:
-    - cd ${TF_ROOT}
-    - gitlab-terraform destroy -auto-approve
-  when: manual # <--- This creates the "Play" button in GitLab
-  only:
-    - master
+    stage: destroy
+    script:
+      - cd ${TF_ROOT}
+      - gitlab-terraform destroy -auto-approve
+    when: manual # <--- This creates the "Play" button in GitLab
+    only:
+      - master
