@@ -1,6 +1,6 @@
 # 1. Security Group
 resource "aws_security_group" "brooke_web_sg" {
-  name = "laravel-sg"
+  name = "brooke-web-sg"
   ingress { 
     from_port = 80 
     to_port = 80 

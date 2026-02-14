@@ -54,5 +54,5 @@ deploy_aws:
     - cd ${TF_ROOT}
     - gitlab-terraform apply
   only:
-    - main
+    - master
   when: manual # This adds a 'Play' button in GitLab so you approve the costs
