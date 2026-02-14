@@ -190,7 +190,7 @@
                 <div class="flex flex-col sm:flex-row sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 border-t border-gray-300 pt-6">
                     
                     <div class="w-36 h-44 overflow-hidden rounded-md mx-auto sm:mx-0">
-                        <img src="{{ asset('storage/' . $novel->thumbnail) }}" alt="{{ $novel->title }}"
+                        <img src="{{ asset(config('app.assets_path') . $novel->thumbnail) }}" alt="{{ $novel->title }}"
                             class="w-full h-full object-cover transform transition duration-300 hover:scale-105 hover:brightness-90">
                     </div>
 
