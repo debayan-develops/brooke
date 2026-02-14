@@ -41,9 +41,35 @@ resource "aws_db_instance" "brooke_web_db" {
 }
 
 # 3. EC2 Server
+# resource "aws_instance" "brooke_web" {
+#   ami           = "ami-0c55b159cbfafe1f0" # Ubuntu 22.04
+#   instance_type = "t2.micro"
+#   vpc_security_group_ids = [aws_security_group.brooke_web_sg.id]
+
+#   user_data = templatefile("../setup.sh", {
+#     gitlab_token = var.gitlab_token,
+#     db_password  = var.db_password,
+#     db_host      = aws_db_instance.brooke_web_db.address,
+#     db_name      = aws_db_instance.brooke_web_db.db_name,
+#     repo_url     = "https://gitlab.com/dexterwebtech/brook-app.git" # <-- CHANGE THIS
+#   })
+
+  # 1. Automatically find the latest Free Tier Ubuntu 24.04 image
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Official Canonical ID
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+}
+
+# 2. Create the Free Tier Server
 resource "aws_instance" "brooke_web" {
-  ami           = "ami-0c55b159cbfafe1f0" # Ubuntu 22.04
-  instance_type = "t2.micro"
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro" # Standard Free Tier in us-east-2 (2026)
+  
   vpc_security_group_ids = [aws_security_group.brooke_web_sg.id]
 
   user_data = templatefile("../setup.sh", {
@@ -51,6 +77,10 @@ resource "aws_instance" "brooke_web" {
     db_password  = var.db_password,
     db_host      = aws_db_instance.brooke_web_db.address,
     db_name      = aws_db_instance.brooke_web_db.db_name,
-    repo_url     = "https://gitlab.com/dexterwebtech/brook-app.git" # <-- CHANGE THIS
+    repo_url     = "https://gitlab.com/dexterwebtech/brook-app.git"
   })
+
+  tags = {
+    Name = "Brooke-Web"
+  }
 }
