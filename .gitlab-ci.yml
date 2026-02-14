@@ -48,6 +48,15 @@ plan:
     reports:
       terraform: ${TF_ROOT}/plan.json
 
+destroy_aws:
+    stage: destroy
+    script:
+      - cd ${TF_ROOT}
+      - gitlab-terraform destroy -auto-approve
+    when: manual # <--- This creates the "Play" button in GitLab
+    only:
+      - master
+
 # 4. Apply the changes (Manual trigger for safety)
 deploy_aws:
   stage: deploy
@@ -57,12 +66,3 @@ deploy_aws:
   only:
     - master
   when: manual # This adds a 'Play' button in GitLab so you approve the costs
-
-  destroy:
-    stage: destroy
-    script:
-      - cd ${TF_ROOT}
-      - gitlab-terraform destroy -auto-approve
-    when: manual # <--- This creates the "Play" button in GitLab
-    only:
-      - master
