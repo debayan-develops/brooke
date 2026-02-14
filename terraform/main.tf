@@ -72,20 +72,20 @@ resource "aws_instance" "brooke_web" {
   
   vpc_security_group_ids = [aws_security_group.brooke_web_sg.id]
 
-#   user_data = templatefile("../setup.sh", {
-#     gitlab_token = var.gitlab_token,
-#     db_password  = var.db_password,
-#     db_host      = aws_db_instance.brooke_web_db.address,
-#     db_name      = aws_db_instance.brooke_web_db.db_name,
-#     repo_url     = "https://gitlab.com/dexterwebtech/brook-app.git"
-#   })
-
-user_data = templatefile("${path.module}/../setup.sh", {
+  user_data = templatefile("../setup.sh", {
     gitlab_token = var.gitlab_token,
     db_password  = var.db_password,
     db_host      = aws_db_instance.brooke_web_db.address,
-    db_name      = aws_db_instance.brooke_web_db.db_name
-})
+    db_name      = aws_db_instance.brooke_web_db.db_name,
+    repo_url     = "https://gitlab.com/dexterwebtech/brook-app.git"
+  })
+
+# user_data = templatefile("${path.module}/../setup.sh", {
+#     gitlab_token = var.gitlab_token,
+#     db_password  = var.db_password,
+#     db_host      = aws_db_instance.brooke_web_db.address,
+#     db_name      = aws_db_instance.brooke_web_db.db_name
+# })
 
   tags = {
     Name = "Brooke-Web"
