@@ -355,8 +355,12 @@
                         const previewDiv = document.getElementById('editImagePreview');
                         previewDiv.innerHTML = '';
                         if (char.image) {
-                            previewDiv.innerHTML = `<img src="/storage/${char.image}" style="max-width: 100px; border-radius: 5px;">`;
-                        }
+    // Dynamically pull the correct base path from your config
+    let basePath = "{{ asset(config('app.assets_path')) }}/";
+    
+    // Create the image tag using the dynamic path
+    previewDiv.innerHTML = `<img src="${basePath}${char.image}" style="max-width: 100px; border-radius: 5px;">`;
+}
                         
                         document.querySelector('#edit-character-form input[name="id"]').value = char.id;
                         document.querySelector('#edit-character-form input[name="name"]').value = char.name;
