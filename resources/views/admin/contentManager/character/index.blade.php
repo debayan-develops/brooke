@@ -236,162 +236,164 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            
-            const allCharacters = @json($characters); 
-            const allTypes = @json($categoryTypes);
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        const allCharacters = @json($characters); 
 
-            // --- CKEditor Initialization ---
-            let addEditorInstance;
-            let editEditorInstance;
+        // 1. GUARANTEE TABLE RENDERS FIRST
+        function renderTable(data) {
+            const tbody = document.getElementById('characterTableBody');
+            tbody.innerHTML = ''; 
 
-            ClassicEditor
-                .create(document.querySelector('#addDescriptionEditor'), {
-                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
-                })
-                .then(editor => { addEditorInstance = editor; })
-                .catch(error => { console.error(error); });
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">No records found</td></tr>';
+                return;
+            }
 
-            ClassicEditor
-                .create(document.querySelector('#editDescriptionEditor'), {
-                    toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
-                })
-                .then(editor => { editEditorInstance = editor; })
-                .catch(error => { console.error(error); });
-            // -------------------------------
-
-            function renderTable(data) {
-                const tbody = document.getElementById('characterTableBody');
-                tbody.innerHTML = ''; 
-
-                if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4">No records found</td></tr>';
-                    return;
+            data.forEach((item, index) => {
+                let typeNames = 'None';
+                if (item.types && item.types.length > 0) {
+                    typeNames = item.types.map(t => t.name).join(', ');
                 }
 
-                data.forEach((item, index) => {
-                    let typeNames = 'None';
-                    if (item.types && item.types.length > 0) {
-                        typeNames = item.types.map(t => t.name).join(', ');
+                let row = `
+                    <tr>
+                        <td data-label="sl">${index + 1}</td>
+                        <td data-label="Name">${item.name}</td>
+                        <td data-label="Type"><span class="tag is-light">${typeNames}</span></td>
+                        <td class="actions-cell">
+                            <div class="buttons right nowrap">
+                                <button type="button" class="button small blue edit-btn" data-id="${item.id}"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
+                                <button type="button" class="button small red delete-btn" data-id="${item.id}" data-name="${item.name}"><span class="icon"><i class="mdi mdi-trash-can"></i></span></button>
+                            </div>
+                        </td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        renderTable(allCharacters); 
+
+        // 2. INITIALIZE EDITORS (Capture instances to set data later)
+        let addEditorInstance, editEditorInstance;
+        
+        if (typeof ClassicEditor !== 'undefined') {
+            ClassicEditor.create(document.querySelector('#addDescriptionEditor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
+            }).then(editor => { addEditorInstance = editor; }).catch(err => console.error(err));
+
+            ClassicEditor.create(document.querySelector('#editDescriptionEditor'), {
+                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
+            }).then(editor => { editEditorInstance = editor; }).catch(err => console.error(err));
+        }
+
+        // 3. FILTER LOGIC
+        function applyFilter() {
+            const nameQuery = document.getElementById('filterName').value.toLowerCase().trim();
+            const typeQuery = document.getElementById('filterType').value.toLowerCase().trim();
+
+            const filtered = allCharacters.filter(item => {
+                const nameMatch = item.name.toLowerCase().includes(nameQuery);
+                let itemTypeString = (item.types && item.types.length > 0) ? item.types.map(t => t.name).join(' ').toLowerCase() : '';
+                const typeMatch = itemTypeString.includes(typeQuery);
+                return nameMatch && typeMatch;
+            });
+            renderTable(filtered);
+        }
+
+        document.getElementById('btnFilter').addEventListener('click', applyFilter);
+        document.getElementById('filterName').addEventListener('keyup', applyFilter);
+        document.getElementById('filterType').addEventListener('keyup', applyFilter);
+        document.getElementById('btnReset').addEventListener('click', function() {
+            document.getElementById('filterName').value = '';
+            document.getElementById('filterType').value = '';
+            renderTable(allCharacters);
+        });
+
+        // 4. MODAL & AJAX LOGIC
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (show) modal.classList.add('is-active');
+            else modal.classList.remove('is-active');
+        }
+
+        document.getElementById('btnAddCharacter').addEventListener('click', function() {
+            if(addEditorInstance) addEditorInstance.setData('');
+            toggleModal('add-character-modal', true);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('close-modal') || e.target.classList.contains('modal-background')) {
+                toggleModal(e.target.getAttribute('data-target'), false);
+            }
+
+            const editBtn = e.target.closest('.edit-btn');
+            if (editBtn) {
+                const id = editBtn.getAttribute('data-id');
+                toggleModal('edit-character-modal', true);
+                $('#ajaxLoader').fadeIn();
+
+                let editUrl = "{{ route('admin.characters.edit', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+                let updateUrl = "{{ route('admin.characters.update', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+
+                $.get(editUrl, function (data) {
+                    const char = (Array.isArray(data)) ? data[0] : data;
+                    
+                    // A. Populate Basic Fields
+                    document.querySelector('#edit-character-form input[name="id"]').value = char.id;
+                    document.querySelector('#edit-character-form input[name="name"]').value = char.name;
+                    document.getElementById('edit-character-form').action = updateUrl;
+
+                    // B. Safely Populate CKEditor Description (FIXED)
+                    let safeDesc = char.description ? char.description : '';
+                    if (editEditorInstance) {
+                        editEditorInstance.setData(safeDesc);
+                    } else {
+                        document.querySelector('#editDescriptionEditor').value = safeDesc;
                     }
 
-                    let row = `
-                        <tr>
-                            <td data-label="sl">${index + 1}</td>
-                            <td data-label="Name">${item.name}</td>
-                            <td data-label="Type"><span class="tag is-light">${typeNames}</span></td>
-                            <td class="actions-cell">
-                                <div class="buttons right nowrap">
-                                    <button type="button" class="button small blue edit-btn" data-id="${item.id}"><span class="icon"><i class="mdi mdi-square-edit-outline"></i></span></button>
-                                    <button type="button" class="button small red delete-btn" data-id="${item.id}" data-name="${item.name}"><span class="icon"><i class="mdi mdi-trash-can"></i></span></button>
-                                </div>
-                            </td>
-                        </tr>`;
-                    tbody.innerHTML += row;
-                });
-            }
-
-            renderTable(allCharacters);
-
-            function applyFilter() {
-                const nameQuery = document.getElementById('filterName').value.toLowerCase().trim();
-                const typeQuery = document.getElementById('filterType').value.toLowerCase().trim();
-
-                const filtered = allCharacters.filter(item => {
-                    const nameMatch = item.name.toLowerCase().includes(nameQuery);
-                    let itemTypeString = (item.types && item.types.length > 0) ? item.types.map(t => t.name).join(' ').toLowerCase() : '';
-                    const typeMatch = itemTypeString.includes(typeQuery);
-                    return nameMatch && typeMatch;
-                });
-                renderTable(filtered);
-            }
-
-            document.getElementById('btnFilter').addEventListener('click', applyFilter);
-            document.getElementById('filterName').addEventListener('keyup', applyFilter);
-            document.getElementById('filterType').addEventListener('keyup', applyFilter);
-
-            document.getElementById('btnReset').addEventListener('click', function() {
-                document.getElementById('filterName').value = '';
-                document.getElementById('filterType').value = '';
-                renderTable(allCharacters);
-            });
-
-            const addChoices = new Choices('#characterType', { removeItemButton: true });
-            const editChoices = new Choices('#editCharacterType', { removeItemButton: true });
-
-            function toggleModal(modalId, show) {
-                const modal = document.getElementById(modalId);
-                if (show) modal.classList.add('is-active');
-                else modal.classList.remove('is-active');
-            }
-
-            document.getElementById('btnAddCharacter').addEventListener('click', function() {
-                if(addEditorInstance) addEditorInstance.setData('');
-                toggleModal('add-character-modal', true);
-            });
-
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('close-modal') || e.target.classList.contains('modal-background')) {
-                    toggleModal(e.target.getAttribute('data-target'), false);
-                }
-
-                const editBtn = e.target.closest('.edit-btn');
-                if (editBtn) {
-                    const id = editBtn.getAttribute('data-id');
-                    toggleModal('edit-character-modal', true);
-                    $('#ajaxLoader').fadeIn();
-
-                    let editUrl = "{{ route('admin.characters.edit', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
-                    let updateUrl = "{{ route('admin.characters.update', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
-
-                    document.querySelector('#edit-character-form input[name="id"]').value = '';
-                    document.querySelector('#edit-character-form input[name="name"]').value = '';
-                    if(editEditorInstance) editEditorInstance.setData(''); 
-                    editChoices.clearStore();
-
-                    $.get(editUrl, function (data) {
-                        const char = (Array.isArray(data)) ? data[0] : data;
-                        const previewDiv = document.getElementById('editImagePreview');
+                    // C. Populate Image Preview
+                    const previewDiv = document.getElementById('editImagePreview');
+                    if (previewDiv) {
                         previewDiv.innerHTML = '';
                         if (char.image) {
-    // Dynamically pull the correct base path from your config
-    let basePath = "{{ asset(config('app.assets_path')) }}/";
-    
-    // Create the image tag using the dynamic path
-    previewDiv.innerHTML = `<img src="${basePath}${char.image}" style="max-width: 100px; border-radius: 5px;">`;
-}
-                        
-                        document.querySelector('#edit-character-form input[name="id"]').value = char.id;
-                        document.querySelector('#edit-character-form input[name="name"]').value = char.name;
-                        
-                        if(editEditorInstance) editEditorInstance.setData(char.description || '');
+                            let baseUrl = "{{ asset(config('app.assets_path', 'storage')) }}";
+                            if (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+                            let imgSrc = baseUrl + '/' + char.image;
+                            previewDiv.innerHTML = '<img src="' + imgSrc + '" style="max-width: 100px; border-radius: 5px; margin-top: 10px;">';
+                        }
+                    }
 
-                        document.getElementById('edit-character-form').action = updateUrl;
+                    // D. Populate Checkboxes (NEW USER-FRIENDLY UI)
+                    // First, uncheck everything
+                    document.querySelectorAll('.edit-type-checkbox').forEach(cb => cb.checked = false);
+                    // Then, check the ones this character belongs to
+                    if (char.types && char.types.length > 0) {
+                        char.types.forEach(type => {
+                            let checkbox = document.querySelector(`.edit-type-checkbox[value="${type.id}"]`);
+                            if (checkbox) checkbox.checked = true;
+                        });
+                    }
 
-                        const selectedIds = char.types ? char.types.map(t => t.id) : [];
-                        const choicesData = allTypes.map(type => ({
-                            value: type.id, label: type.name, selected: selectedIds.includes(type.id)
-                        }));
-                        editChoices.setChoices(choicesData, 'value', 'label', true);
-                        $('#ajaxLoader').fadeOut();
-                    }).fail(function() {
-                        $('#ajaxLoader').fadeOut();
-                        alert('Error fetching data');
-                        toggleModal('edit-character-modal', false);
-                    });
-                }
+                    $('#ajaxLoader').fadeOut();
+                }).fail(function() {
+                    $('#ajaxLoader').fadeOut();
+                    alert('Error fetching data');
+                    toggleModal('edit-character-modal', false);
+                });
+            }
 
-                const deleteBtn = e.target.closest('.delete-btn');
-                if (deleteBtn) {
-                    const id = deleteBtn.getAttribute('data-id');
-                    const name = deleteBtn.getAttribute('data-name');
-                    let deleteUrl = "{{ route('admin.characters.destroy', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
-                    document.getElementById('delete-character-form').action = deleteUrl;
-                    document.querySelector('.characterName').innerText = name;
-                    toggleModal('delete-character-modal', true);
-                }
-            });
+            const deleteBtn = e.target.closest('.delete-btn');
+            if (deleteBtn) {
+                const id = deleteBtn.getAttribute('data-id');
+                const name = deleteBtn.getAttribute('data-name');
+                let deleteUrl = "{{ route('admin.characters.destroy', 'DUMMY_ID') }}".replace('DUMMY_ID', id);
+                document.getElementById('delete-character-form').action = deleteUrl;
+                document.querySelector('.characterName').innerText = name;
+                toggleModal('delete-character-modal', true);
+            }
         });
-    </script>
+    });
+</script>
 @endsection
