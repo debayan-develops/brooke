@@ -78,15 +78,18 @@ deploy_app:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
+    - echo "Connecting to IP: ${EC2_PUBLIC_IP}"
     - |
       ssh -o StrictHostKeyChecking=no ubuntu@${EC2_PUBLIC_IP} "
+        # 1. Tell Git to trust this directory
+        git config --global --add safe.directory /var/www/html &&
+        
+        # 2. Now run your update commands
         cd /var/www/html &&
         git pull origin master &&
         composer install --no-interaction --optimize-autoloader &&
         php artisan migrate --force &&
-        php artisan config:cache &&
-        php artisan route:cache &&
-        php artisan view:cache
+        php artisan config:cache
       "
   only:
     - master
