@@ -41,7 +41,7 @@ resource "aws_db_instance" "brooke_web_db" {
 }
 
 resource "aws_key_pair" "brooke_deployer" {
-  key_name   = "Brooke_web"
+  key_name   = "Brooke_web_deployer"
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9/PC+/U3pOI+fP+o+GAH6F91K9U75emZ99L8SSuvjchtYLjQ3s7ue65t6xSyNg30TEPTmRY/4cMIVcMiZ6QklIYWoyBk1xW0L5xy/Ljw7mCvL9dHk6nicIl5rhF+Dbm5rW/spUQOoKGoqrx5umQddbBTLUhxuS/TWpP9NdvoxGzQRIy+jRCLlAW3gWO+E7SiHRYY/hpHt/nVxMzhV+NT9tZGOj25dr5TaBmjEVdh6kOLQtAUa7Yz0kuQUkhWF4DsVCDTPutj1AhAjhRXhbuNyV9YU13YWoxAwfayG/ThD/cwOfoMR7v6xpjzRA0psOaehsy/urx2A1m873z4386l/"
 }
 
