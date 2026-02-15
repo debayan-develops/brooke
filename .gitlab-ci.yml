@@ -18,35 +18,36 @@ stages:
   - validate
   - plan
   - deploy
-  - destroy
+  # - destroy
+  - ship_code
 
 # 1. Initialize the backend (GitLab-managed state)
-# init:
-#   stage: prepare
-#   script:
-#     - cd ${TF_ROOT}
-#     - gitlab-terraform init
+init:
+  stage: prepare
+  script:
+    - cd ${TF_ROOT}
+    - gitlab-terraform init
 
-# # 2. Check for syntax errors
-# validate:
-#   stage: validate
-#   script:
-#     - cd ${TF_ROOT}
-#     - gitlab-terraform validate
+# 2. Check for syntax errors
+validate:
+  stage: validate
+  script:
+    - cd ${TF_ROOT}
+    - gitlab-terraform validate
 
-# # 3. Create a plan and save it as an artifact
-# plan:
-#   stage: plan
-#   script:
-#     - cd ${TF_ROOT}
-#     - gitlab-terraform plan
-#     - gitlab-terraform plan-json
-#   artifacts:
-#     name: plan
-#     paths:
-#       - ${TF_ROOT}/plan.cache
-#     reports:
-#       terraform: ${TF_ROOT}/plan.json
+# 3. Create a plan and save it as an artifact
+plan:
+  stage: plan
+  script:
+    - cd ${TF_ROOT}
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+  artifacts:
+    name: plan
+    paths:
+      - ${TF_ROOT}/plan.cache
+    reports:
+      terraform: ${TF_ROOT}/plan.json
 
 # destroy_aws:
 #     stage: destroy
@@ -58,13 +59,13 @@ stages:
 #       - master
 
 # 4. Apply the changes (Manual trigger for safety)
-# deploy_aws:
-#   stage: deploy
-#   script:
-#     - cd ${TF_ROOT}
-#     - gitlab-terraform apply
-#   only:
-#     - master
+deploy_aws:
+  stage: deploy
+  script:
+    - cd ${TF_ROOT}
+    - gitlab-terraform apply
+  only:
+    - master
 #   when: manual # This adds a 'Play' button in GitLab so you approve the costs
 
 deploy_app:
