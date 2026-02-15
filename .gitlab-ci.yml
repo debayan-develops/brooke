@@ -78,7 +78,6 @@ deploy_app:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - echo "Connecting to IP: ${EC2_PUBLIC_IP}"
     - |
       ssh -o StrictHostKeyChecking=no ubuntu@${EC2_PUBLIC_IP} "
         # 1. Tell Git to trust this directory
