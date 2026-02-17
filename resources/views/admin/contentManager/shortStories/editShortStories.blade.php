@@ -260,6 +260,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    
+
+    <script src="{{ asset('js/rich-editor.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         
@@ -315,21 +318,10 @@
         });
         
         // CKEditor Config (Keep existing)
-        const editorConfig = {
-            toolbar: {
-                items: [
-                    'heading', '|',
-                    'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
-                    'bulletedList', 'numberedList', '|',
-                    'outdent', 'indent', '|',
-                    'blockQuote', 'insertTable', 'undo', 'redo'
-                ]
-            },
-            language: 'en'
-        };
-
-        ClassicEditor.create(document.querySelector('.editor'), editorConfig).catch(error => { console.error(error); });
-        ClassicEditor.create(document.querySelector('.editor2'), editorConfig).catch(error => { console.error(error); });
+        
+    // Initialize Central Rich Editors
+    initializeRichEditor('.editor');
+    initializeRichEditor('.editor2');
     });
 </script>
 
