@@ -67,8 +67,17 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
             <div class="lg:col-span-8">
-                
-                <h1 class="char-title">{{ $character->name }}</h1>
+    
+    @if($character->image)
+        <div class="mb-8">
+            <img src="{{ asset(config('app.assets_path') . '/' . $character->image) }}" 
+                 alt="{{ $character->name }}" 
+                 class="w-full h-auto rounded-lg shadow-md object-cover" 
+                 style="max-height: 500px;">
+        </div>
+    @endif
+
+    <h1 class="char-title">{{ $character->name }}</h1>
 
                 <div class="meta-row">
                     Character by <span class="font-bold text-gray-800">Brooke Hennen</span>

@@ -103,9 +103,13 @@ class ContentManagementController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'categoryType' => 'nullable|array'
+            'categoryType' => 'nullable|array',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
-
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('characters', 'public');
+            $data['image'] = $path;
+        }
         $character = Character::create([
             'name' => $request->name,
             'description' => $request->description
@@ -125,25 +129,48 @@ class ContentManagementController extends Controller
     }
 
     public function updateCharacter(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'categoryType' => 'nullable|array'
-        ]);
+{
+    // 1. Validate the incoming request data
+    $request->validate([
+        'name'         => 'required|string|max:255',
+        'description'  => 'nullable|string',
+        'categoryType' => 'nullable|array',
+        'image'        => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+    ]);
 
-        $character = Character::findOrFail($id);
-        $character->update([
-            'name' => $request->name,
-            'description' => $request->description
-        ]);
+    // 2. Find the character or fail with 404
+    $character = Character::findOrFail($id);
+    
+    // 3. Prepare basic data for update
+    $data = [
+        'name'        => $request->name,
+        'description' => $request->description
+    ];
 
-        if ($request->has('categoryType')) {
-            $character->types()->sync($request->categoryType);
+    // 4. Handle Image Upload & Delete Old Image
+    if ($request->hasFile('image')) {
+        // Delete old image if it exists in storage
+        if ($character->image && Storage::disk('public')->exists($character->image)) {
+            Storage::disk('public')->delete($character->image);
         }
-
-        return redirect()->route('admin.character')->with('success', 'Character updated successfully');
+        
+        // Store new image and update the data array
+        $path = $request->file('image')->store('characters', 'public');
+        $data['image'] = $path;
     }
+
+    // 5. Update the character record
+    $character->update($data);
+
+    // 6. Sync Many-to-Many Relationship (Categories)
+    // Note: This only updates categories if 'categoryType' is present in the request.
+    if ($request->has('categoryType')) {
+        $character->types()->sync($request->categoryType);
+    }
+
+    // 7. Redirect back with success message
+    return redirect()->route('admin.character')->with('success', 'Character updated successfully');
+}
 
     public function deleteCharacter($id)
     {

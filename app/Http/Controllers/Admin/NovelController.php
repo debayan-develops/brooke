@@ -24,14 +24,20 @@ class NovelController extends Controller
 
     public function addBNovels()
     {
-        // Initialize empty arrays to prevent "Undefined variable" errors
-        $tags = []; 
-        $relatedNovels = []; // <--- Added this
+        // 1. FIX: Fetch only tags associated with 'novel' type
+        // This ensures the dropdown only shows relevant tags
+        $tags = \App\Models\Tag::whereHas('types', function ($query) {
+            $query->where('slug', 'novel');
+        })->get();
 
+        // Fetch active novels for the 'Related Novels' selection
+        $relatedNovels = Novel::where('status', 1)->get(); 
+        $characters = \App\Models\Character::all();
         return view('admin.contentManager.novels.addNovels', [
             'title' => 'Add Novel',
             'tags'  => $tags,
-            'relatedNovels' => $relatedNovels // <--- Passing it to the view
+            'relatedNovels' => $relatedNovels,
+            'characters' => $characters
         ]);
     }
 
@@ -79,24 +85,34 @@ class NovelController extends Controller
         if ($request->has('relatedNovels')) {
             $novel->relatedNovels()->sync($request->input('relatedNovels'));
         }
-
+        if ($request->has('characters')) {
+            $novel->characters()->sync($request->input('characters'));
+        }
         return redirect()->route('admin.novels')->with('success', 'Novel added successfully!');
     }
     // --- NOVEL EDIT / UPDATE / DELETE (Moved from ContentManagementController) ---
 
     public function editNovels($id)
     {
+        // Fetch the novel with its chapters, tags, and existing relations
         $novel = Novel::with(['chapters', 'tags', 'relatedNovels'])->findOrFail($id);
         
-        // Fetch lists for the dropdowns
-        $tags = \App\Models\Tag::all(); // Assuming your Tag model is here
-        $relatedNovels = Novel::where('id', '!=', $id)->get(); // Get all novels except self
+        // 2. FIX: Fetch only tags associated with 'novel' type
+        // (Previously it might have been showing all tags)
+        $tags = \App\Models\Tag::whereHas('types', function ($query) {
+            $query->where('slug', 'novel');
+        })->get();
+
+        // Fetch other novels for relation, excluding the current one to prevent self-linking
+        $relatedNovels = Novel::where('id', '!=', $id)->get(); 
+        $characters = \App\Models\Character::all();
 
         return view('admin.contentManager.novels.editNovels', [
             'title' => 'Edit Novel',
             'novel' => $novel,
             'tags'  => $tags,
-            'relatedNovels' => $relatedNovels
+            'relatedNovels' => $relatedNovels,
+            'characters' => $characters
         ]);
     }
 
@@ -149,6 +165,9 @@ class NovelController extends Controller
         }
         if ($request->has('relatedNovels')) {
             $novel->relatedNovels()->sync($request->input('relatedNovels'));
+        }
+        if ($request->has('characters')) {
+            $novel->characters()->sync($request->input('characters'));
         }
 
         return redirect()->route('admin.novels')->with('success', 'Novel updated successfully!');
