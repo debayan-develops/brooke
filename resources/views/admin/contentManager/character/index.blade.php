@@ -17,6 +17,46 @@
     .ck-content li {
         display: list-item !important; /* Forces the dot to appear */
     }
+    /* ---- CKEDITOR 5 NUCLEAR FIXES (Headings & Text) ---- */
+    .ck-editor__editable_inline {
+      min-height: 250px;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable h2 {
+        display: block !important;
+        font-size: 28px !important;
+        font-weight: 900 !important;
+        margin: 20px 0 10px 0 !important;
+        line-height: 1.2 !important;
+        color: #000 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable h3 {
+        display: block !important;
+        font-size: 24px !important;
+        font-weight: 800 !important;
+        margin: 18px 0 8px 0 !important;
+        line-height: 1.2 !important;
+        color: #222 !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable h4 {
+        display: block !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        margin: 16px 0 8px 0 !important;
+        line-height: 1.2 !important;
+        color: #333 !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable p {
+        display: block !important;
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 12px !important;
+    }
     /* Filter Section Styling */
     .filter-section { background: #f9fafb; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 20px; align-items: flex-end; }
     .filter-group { flex: 1; }
@@ -234,7 +274,8 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/super-build/ckeditor.js"></script>
+<script src="{{ asset('js/rich-editor.js') }}"></script>
 
    <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -275,19 +316,32 @@
 
         renderTable(allCharacters); 
 
-        // 2. INITIALIZE EDITORS (Capture instances to set data later)
-        let addEditorInstance, editEditorInstance;
+        // 2. INITIALIZE EDITORS (Using central config, crash-proof)
+        let addEditorInstance = null;
+        let editEditorInstance = null;
         
-        if (typeof ClassicEditor !== 'undefined') {
-            ClassicEditor.create(document.querySelector('#addDescriptionEditor'), {
-                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
-            }).then(editor => { addEditorInstance = editor; }).catch(err => console.error(err));
+        // Only run if the central function exists
+        if (typeof initializeRichEditor === 'function') {
+            
+            // Initialize Add Modal Editor
+            let addPromise = initializeRichEditor('#addDescriptionEditor');
+            if (addPromise) {
+                addPromise.then(editor => { 
+                    addEditorInstance = editor; 
+                }).catch(err => console.warn("Add Editor init skipped:", err));
+            }
 
-            ClassicEditor.create(document.querySelector('#editDescriptionEditor'), {
-                toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'insertTable', 'undo', 'redo']
-            }).then(editor => { editEditorInstance = editor; }).catch(err => console.error(err));
+            // Initialize Edit Modal Editor
+            let editPromise = initializeRichEditor('#editDescriptionEditor');
+            if (editPromise) {
+                editPromise.then(editor => { 
+                    editEditorInstance = editor; 
+                }).catch(err => console.warn("Edit Editor init skipped:", err));
+            }
+            
+        } else {
+            console.error("rich-editor.js is missing or not loaded correctly.");
         }
-
         // 3. FILTER LOGIC
         function applyFilter() {
             const nameQuery = document.getElementById('filterName').value.toLowerCase().trim();

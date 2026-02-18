@@ -334,8 +334,11 @@
             </div>
         </section>
     </div>
-        <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+       
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    
+
+    <script src="{{ asset('js/rich-editor.js') }}"></script>
     <script>
          document.addEventListener('DOMContentLoaded', function () {
             // Initialize Choices.js
@@ -345,29 +348,11 @@
             new Choices('#characters', { removeItemButton: true, searchEnabled: true });
 
             // Common CKEditor configuration for better text formatting
-            const editorConfig = {
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
-                        'bulletedList', 'numberedList', 'todoList', '|',
-                        'outdent', 'indent', '|',
-                        'blockQuote', 'insertTable', 'undo', 'redo'
-                    ]
-                },
-                language: 'en'
-            };
-
-            // Initialize Editor 1 (Short Description)
-            ClassicEditor
-            .create(document.querySelector('.editor'), editorConfig)
-            .catch(error => { console.error(error); });
-
-            // Initialize Editor 2 (Details)
-            ClassicEditor
-            .create(document.querySelector('.editor2'), editorConfig)
-            .catch(error => { console.error(error); });
-            
+           // Choices.js initializations - KEEP THESE
+    
+    // Initialize Central Rich Editors
+    initializeRichEditor('.editor');
+    initializeRichEditor('.editor2');
             // Thumbnail Preview Logic
             const thumbnailInput = document.getElementById('thumbnailPhoto');
             if(thumbnailInput) {

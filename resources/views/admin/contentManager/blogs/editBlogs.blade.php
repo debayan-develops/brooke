@@ -279,45 +279,27 @@
 
     <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    
+
+    <script src="{{ asset('js/rich-editor.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
-            // 1. Initialize Choices.js (Dropdowns)
+            // --- A. Initialize Choices.js (Kept exactly as is) ---
             new Choices('#tags', { removeItemButton: true, searchEnabled: true });
             new Choices('#categories', { removeItemButton: true, searchEnabled: true });
             new Choices('#suggestedArticles', { removeItemButton: true, searchEnabled: true });
-            // Note: If you have an element with ID 'blogTypes', uncomment the line below
-            // new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            
+            const blogTypesEl = document.getElementById('blogTypes');
+            if (blogTypesEl) {
+                new Choices('#blogTypes', { removeItemButton: true, searchEnabled: true });
+            }
 
-            // 2. CKEditor Configuration (Replicated from Short Stories)
-            const editorConfig = {
-                toolbar: {
-                    items: [
-                        'heading', '|',
-                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
-                        'bulletedList', 'numberedList', '|',
-                        'outdent', 'indent', '|',
-                        'blockQuote', 'insertTable', 'undo', 'redo'
-                    ]
-                },
-                language: 'en',
-                table: {
-                    contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
-                }
-            };
+            // --- B. Initialize Editor with New Alignment Feature ---
+            // This replaces the entire 'editorConfig' block you had before
+            initializeRichEditor('#blog_details');
 
-            // 3. Initialize Editor
-            // Targeting the ID '#blog_details' is safer than class '.editor'
-            ClassicEditor
-                .create(document.querySelector('#blog_details'), editorConfig)
-                .then(editor => {
-                    console.log('Blog Editor initialized', editor);
-                })
-                .catch(error => {
-                    console.error('Editor initialization error:', error);
-                });
 
             // 4. Thumbnail Preview Logic (Preserved)
             const thumbnailInput = document.getElementById('thumbnailPhoto');
