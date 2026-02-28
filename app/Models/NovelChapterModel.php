@@ -21,4 +21,9 @@ class NovelChapterModel extends Model
     {
         return $this->belongsTo(NovelModel::class, 'novel_id');
     }
+    // Add this relationship to link a chapter to its slider images
+    public function sliderImages()
+    {
+        return $this->hasMany(\App\Models\NovelChapterSliderImagesModel::class, 'novel_chapter_id');
+    }
 }
