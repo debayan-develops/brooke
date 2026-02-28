@@ -46,13 +46,44 @@ class NovelController extends Controller
         return view('frontend.novel.index', compact('novels'));
     }
 
-    public function chapters($id = null)
+    public function chapters($id)
     {
-        return view('frontend.novel.chapters');
+        // Fetch the novel along with its relations
+        $novel = \App\Models\NovelModel::with([
+            'tags', 
+            'chapters' => function($query) {
+                $query->where('is_active', 1)->orderBy('chapter_number', 'asc');
+            }, 
+            'relatedNovels', 
+            'characters'
+        ])->findOrFail($id);
+
+        return view('frontend.novel.chapters', compact('novel'));
     }
 
     public function chapterDetails($novelId, $chapterId)
     {
-        return view('frontend.novel.chapter-details');
+        // 1. Fetch the Novel
+        $novel = \App\Models\NovelModel::findOrFail($novelId);
+        
+        // 2. Fetch the Chapter with its Slider Images
+        $chapter = \App\Models\NovelChapterModel::with('sliderImages')
+                        ->where('novel_id', $novelId)
+                        ->findOrFail($chapterId);
+
+        // 3. Get Previous and Next Chapters for Pagination
+        $previousChapter = \App\Models\NovelChapterModel::where('novel_id', $novelId)
+                            ->where('is_active', 1)
+                            ->where('chapter_number', '<', $chapter->chapter_number)
+                            ->orderBy('chapter_number', 'desc')
+                            ->first();
+
+        $nextChapter = \App\Models\NovelChapterModel::where('novel_id', $novelId)
+                            ->where('is_active', 1)
+                            ->where('chapter_number', '>', $chapter->chapter_number)
+                            ->orderBy('chapter_number', 'asc')
+                            ->first();
+
+        return view('frontend.novel.chapter-details', compact('novel', 'chapter', 'previousChapter', 'nextChapter'));
     }
 }

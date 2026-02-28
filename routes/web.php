@@ -16,7 +16,7 @@ Route::prefix('/')->name('frontend.')->group(function () {
     // Novel Routes
     Route::prefix('novels')->name('novel.')->group(function () {
         Route::get('/', [NovelController::class, 'index'])->name('index');
-        Route::get('/chapters/{id?}', [NovelController::class, 'chapters'])->name('chapters');
+        Route::get('/{id?}', [NovelController::class, 'chapters'])->name('chapters');
         Route::get('/{novelId}/chapter/{chapterId}', [NovelController::class, 'chapterDetails'])->name('chapter-details');
     });
     
