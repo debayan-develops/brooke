@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
-public function index(Request $request)
+    public function index(Request $request)
     {
         // 1. Start Query
         $query = \App\Models\BlogModel::with('blogTags')->where('status', 1);
@@ -77,7 +77,7 @@ public function index(Request $request)
 
         return view('frontend.blog.index', compact('blogs', 'journals', 'categories'));
     }
- public function show($id)
+    public function show($id)
     {
         // 1. Fetch Blog with Relationships
         $blog = \App\Models\BlogModel::with(['blogTags', 'blogCategories', 'suggestedBlogs'])
@@ -113,6 +113,16 @@ public function index(Request $request)
         // 6. Increment Views
         //$blog->increment('view_count');
 
-return view('frontend.blog.details', compact('blog', 'sliderImages', 'relatedBlogs', 'categoryRelatedBlogs', 'categories'));
+    return view('frontend.blog.details', compact('blog', 'sliderImages', 'relatedBlogs', 'categoryRelatedBlogs', 'categories'));
+    }
+
+    public function freshest()
+    {
+        return view('frontend.blog.freshest');
+    }
+
+    public function freshestDetails()
+    {
+        return view('frontend.blog.freshest-details');
     }
 }
