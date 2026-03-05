@@ -36,5 +36,10 @@ class PageController extends Controller
     {
         return view('frontend.vod');
     }
+
+    public function register()
+    {
+        return view('frontend.register');
+    }
 }
 
