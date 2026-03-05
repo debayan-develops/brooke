@@ -317,35 +317,20 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+    
+
+    <script src="{{ asset('js/rich-editor.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize Choices.js
             new Choices('#tagType', { removeItemButton: true, searchEnabled: true });
             new Choices('#relatedNovels', { removeItemButton: true, searchEnabled: true });
             new Choices('#characters', { removeItemButton: true, searchEnabled: true });
 
-// CKEditor Configuration
-            const commonConfig = {
-                toolbar: {
-                    items: [
-                        'heading', '|', 
-                        'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
-                        'bulletedList', 'numberedList', '|',
-                        'outdent', 'indent', '|', 
-                        'blockQuote', 'insertTable', 'undo', 'redo'
-                    ]
-                },
-                language: 'en'
-            };
-
-            // 1. Short Description Editor
-            ClassicEditor.create(document.querySelector('.textarea.description'), commonConfig)
-                .catch(error => console.error(error));
-
-            // 2. About Story Editor
-            ClassicEditor.create(document.querySelector('.textarea.about_story'), commonConfig)
-                .catch(error => console.error(error));
+              // CKEditor Configuration
+            // Initialize Central Rich Editors
+        initializeRichEditor('.textarea.description');
+        initializeRichEditor('.textarea.about_story');
         });
     </script>
 @endsection

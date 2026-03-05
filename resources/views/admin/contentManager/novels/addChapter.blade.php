@@ -3,7 +3,60 @@
 @section('title', $title)
 
 <style>
-    /* --- FIX: FORCE BULLETS & NUMBERS TO SHOW IN EDITOR --- */
+   /* ---- CKEDITOR 5 NUCLEAR FIXES ---- */
+    .ck-editor__editable_inline {
+      min-height: 400px;
+    }
+
+    /* Target the exact internal structure of CKEditor to bypass all external resets */
+    div.ck.ck-editor__main > div.ck-editor__editable h2 {
+        display: block !important;
+        font-size: 28px !important;
+        font-weight: 900 !important;
+        margin: 20px 0 10px 0 !important;
+        line-height: 1.2 !important;
+        color: #000 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable h3 {
+        display: block !important;
+        font-size: 24px !important;
+        font-weight: 800 !important;
+        margin: 18px 0 8px 0 !important;
+        line-height: 1.2 !important;
+        color: #222 !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable h4 {
+        display: block !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        margin: 16px 0 8px 0 !important;
+        line-height: 1.2 !important;
+        color: #333 !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable p {
+        display: block !important;
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+        margin-bottom: 12px !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable ul {
+        list-style-type: disc !important;
+        padding-left: 24px !important;
+        margin-bottom: 16px !important;
+    }
+
+    div.ck.ck-editor__main > div.ck-editor__editable ol {
+        list-style-type: decimal !important;
+        padding-left: 24px !important;
+        margin-bottom: 16px !important;
+    }
+   /* --- FIX: FORCE BULLETS & NUMBERS TO SHOW IN EDITOR --- */
     .ck-content ol, .ck-content ul {
         margin-left: 20px !important;
         padding-left: 20px !important;
@@ -242,28 +295,22 @@
         </section>
     </div>
 
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="{{ asset('js/rich-editor.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let editorInstance; 
 
-            // Initialize Editor
-            ClassicEditor
-                .create(document.querySelector('.textarea.description'), {
-                    toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'undo', 'redo' ]
-                })
-                .then(editor => {
-                    editorInstance = editor;
-                })
-                .catch(error => { console.error(error); });
+            // Initialize Editor and link it to the reset button
+            initializeRichEditor('.textarea.description').then(editor => {
+                editorInstance = editor;
+            });
 
-            // Reset Button Logic
+            // Reset Button Logic - KEEP THIS
             const resetBtn = document.getElementById('resetBtn');
             if(resetBtn){
                 resetBtn.addEventListener('click', function () {
-                    if (editorInstance) {
-                        editorInstance.setData('');
-                    }
+                    if (editorInstance) editorInstance.setData('');
                 });
             }
         });
