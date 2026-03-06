@@ -42,6 +42,8 @@ Route::prefix('/')->name('frontend.')->group(function () {
     Route::get('/vod', [PageController::class, 'vod'])->name('page.vod');
     Route::get('/freshest', [BlogController::class, 'freshest'])->name('blog.freshest');
     Route::get('/register', [PageController::class, 'register'])->name('page.register');
+    Route::get('/login', [PageController::class, 'login'])->name('page.login');
+    Route::get('/packages', [PageController::class, 'packages'])->name('page.packages');
 });
 
 // Include the admin routes

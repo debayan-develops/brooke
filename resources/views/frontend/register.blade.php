@@ -84,7 +84,11 @@
               <p class="text-xs text-blue-600 mt-2 italic">* Payment details will be collected on the next screen.</p>
             </div>
     
-            
+            <div class="mt-6 mb-4 bg-blue-50 py-3 px-4 rounded-lg border border-blue-100 text-center transition-all duration-300 hover:shadow-sm">
+              <p class="text-sm text-blue-800 font-medium">
+                Wondering what you get? <a href="/packages" class="text-[#0ea5e9] font-bold hover:text-blue-700 hover:underline">Explore our Subscription Packages </a>
+              </p>
+            </div>
             <div class="mb-6">
               <label class="flex items-start cursor-pointer">
                 <input type="checkbox" id="tnc" class="form-checkbox h-4 w-4 text-blue-600 mt-1" onchange="toggleSubmitBtn()">
