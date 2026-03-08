@@ -29,48 +29,15 @@
                     </h3>
 
                     <div class="flex gap-2 flex-wrap">
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                         10-50
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        51-100
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        101-150
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        151-200
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        201-250
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        251-300
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        301-350
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        351-400
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        401-450
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        451-500
-                        </button>
-                        <!-- <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        501-550
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        550-600
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        601-650
-                        </button>
-                        <button class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-200 transition">
-                        651-700
-                        </button> -->
+                        @foreach($ranges as $range)
+                @php
+                    $isActive = ($currentRange == $range);
+                @endphp
+                <a href="{{ request()->fullUrlWithQuery(['range' => $range, 'page' => 1]) }}" 
+                   class="px-4 py-2 font-semibold rounded shadow transition {{ $isActive ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                    {{ $range }}
+                </a>
+            @endforeach
                     </div>
                 </div>
             </div>
@@ -108,12 +75,15 @@
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-semibold">Current Chapters</h3>
                 <span class="inline-block bg-blue-100 text-blue-700 text-sm font-medium px-3 py-1 rounded-lg shadow">
-                    {{ $novel->chapters->count() }} Chapters
+                    {{ $totalChaptersCount }} Chapters
                 </span>
             </div>
 
             <div class="mb-4">
-                <input type="text" id="chapterSearch" placeholder="Search chapters..." class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"/>
+                <form action="{{ url()->current() }}" method="GET">
+                    <input type="hidden" name="range" value="{{ $currentRange }}">
+                    <input type="text" name="chapter_search" value="{{ request('chapter_search') }}" id="chapterSearch" placeholder="Search chapters..." class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300" onchange="this.form.submit()"/>
+                </form>
             </div>
 
             <div class="overflow-x-auto">
@@ -127,7 +97,7 @@
                         </tr>
                     </thead>
                     <tbody id="chapterTableBody" class="text-gray-800">
-                        @forelse($novel->chapters as $chapter)
+                        @forelse($chapters as $chapter)
                         <tr>
                             <td class="px-4 py-2 border-b">
                             <a href="{{ route('frontend.novel.chapter-details', ['novelId' => $novel->id, 'chapterId' => $chapter->id]) }}" class="text-blue-600 hover:underline">
@@ -145,10 +115,53 @@
                 </table>
             </div>
             
-            <div id="pagination" class="flex justify-center items-center space-x-2 mt-8 text-sm select-none mb-7">
-                <button class="page-btn active-page px-3 py-1 rounded border bg-red-500 text-white font-semibold transition">1</button>
-                <button class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">Next</button>
-            </div>
+            @if ($chapters->hasPages())
+                <div id="pagination" class="flex justify-center items-center space-x-2 mt-8 text-sm select-none mb-7 px-4">
+                    
+                    {{-- Previous Page Link --}}
+                    @if ($chapters->onFirstPage())
+                        <span class="page-btn px-3 py-1 rounded border bg-gray-100 text-gray-400 cursor-not-allowed transition">Prev</span>
+                    @else
+                        <a href="{{ $chapters->previousPageUrl() }}" class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">Prev</a>
+                    @endif
+
+                    {{-- Sliding Window for Page Numbers --}}
+                    @php
+                        $start = max($chapters->currentPage() - 2, 1);
+                        $end = min($chapters->currentPage() + 2, $chapters->lastPage());
+                    @endphp
+
+                    @if($start > 1)
+                        <a href="{{ $chapters->url(1) }}" class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">1</a>
+                        @if($start > 2)
+                            <span class="page-btn px-3 py-1 rounded border bg-white text-gray-700">...</span>
+                        @endif
+                    @endif
+
+                    @for ($page = $start; $page <= $end; $page++)
+                        @if ($page == $chapters->currentPage())
+                            <span class="page-btn active-page px-3 py-1 rounded border bg-red-500 text-white font-semibold transition">{{ $page }}</span>
+                        @else
+                            <a href="{{ $chapters->url($page) }}" class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">{{ $page }}</a>
+                        @endif
+                    @endfor
+
+                    @if($end < $chapters->lastPage())
+                        @if($end < $chapters->lastPage() - 1)
+                            <span class="page-btn px-3 py-1 rounded border bg-white text-gray-700">...</span>
+                        @endif
+                        <a href="{{ $chapters->url($chapters->lastPage()) }}" class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">{{ $chapters->lastPage() }}</a>
+                    @endif
+
+                    {{-- Next Page Link --}}
+                    @if ($chapters->hasMorePages())
+                        <a href="{{ $chapters->nextPageUrl() }}" class="page-btn px-3 py-1 rounded border bg-white text-gray-700 hover:bg-gray-100 transition">Next</a>
+                    @else
+                        <span class="page-btn px-3 py-1 rounded border bg-gray-100 text-gray-400 cursor-not-allowed transition">Next</span>
+                    @endif
+
+                </div>
+            @endif
         </div>
         <!-- 📜 Older Drafts with Dropdowns -->
         <div class="md:col-span-3">

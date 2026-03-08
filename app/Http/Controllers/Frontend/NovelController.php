@@ -8,13 +8,17 @@ use Illuminate\Http\Request;
 class NovelController extends Controller
 {
     // FIX: Added 'Request $request' to handle Search & Sort
-    public function index(Request $request)
+    public function index(\Illuminate\Http\Request $request)
     {
-        // 1. Start Query with Relationships (Do not paginate yet)
-        $query = \App\Models\NovelModel::with(['tags', 'chapters'])
-                    ->where('status', 1);
+        // 1. Fetch the "categories" (which are actually Tags assigned to the 'novel' type)
+        $categories = \App\Models\Tag::whereHas('types', function ($query) {
+            $query->where('slug', 'novel')->orWhere('name', 'novel');
+        })->get();
 
-        // 2. Search Logic (Title or Description)
+        // 2. Start the query for active novels
+        $query = \App\Models\NovelModel::with(['tags', 'chapters'])->where('status', 1);
+
+        // 3. Apply Text Search (Searches title or description)
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -23,7 +27,16 @@ class NovelController extends Controller
             });
         }
 
-        // 3. Sorting Logic
+        // 4. Apply Category Filter (Using the tags relationship pivot)
+        if ($request->filled('category')) {
+            $categoryId = $request->category;
+            $query->whereHas('tags', function($q) use ($categoryId) {
+                // 'tags.id' refers to the id in the tags table
+                $q->where('tags.id', $categoryId); 
+            });
+        }
+
+        // 5. Apply Sorting
         switch ($request->sort) {
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
@@ -32,7 +45,6 @@ class NovelController extends Controller
                 $query->orderBy('updated_at', 'desc');
                 break;
             case 'popular': // Most Popular
-                // Sort by chapter count as a proxy for popularity
                 $query->withCount('chapters')->orderBy('chapters_count', 'desc');
                 break;
             default: // 'newest' (Default)
@@ -40,25 +52,61 @@ class NovelController extends Controller
                 break;
         }
 
-        // 4. Execute Query with Pagination & Keep Filters in Links
+        // 6. Execute Query with Pagination & Keep Filters in Links
         $novels = $query->paginate(12)->withQueryString();
 
-        return view('frontend.novel.index', compact('novels'));
+        return view('frontend.novel.index', compact('novels', 'categories'));
     }
-
-    public function chapters($id)
+   public function chapters(\Illuminate\Http\Request $request, $id)
     {
-        // Fetch the novel along with its relations
+        // 1. Fetch the novel and relations (exclude chapters here to save memory)
         $novel = \App\Models\NovelModel::with([
             'tags', 
-            'chapters' => function($query) {
-                $query->where('is_active', 1)->orderBy('chapter_number', 'asc');
-            }, 
             'relatedNovels', 
             'characters'
         ])->findOrFail($id);
 
-        return view('frontend.novel.chapters', compact('novel'));
+        // 2. Base query for active chapters
+        $baseQuery = \App\Models\NovelChapterModel::where('novel_id', $id)->where('is_active', 1);
+        
+        // Calculate the highest chapter number to generate ranges (before any searches are applied)
+        $highestChapter = (clone $baseQuery)->max('chapter_number') ?? 0;
+        $totalChaptersCount = (clone $baseQuery)->count();
+
+       // 3. Generate dynamic "Jump To" ranges (Minimum 10 ranges up to 500, extending if there are more chapters)
+        $ranges = [];
+        // Changed max limit from 250 to 500
+        $maxLimit = max(500, ceil($highestChapter / 50) * 50); 
+        for ($i = 0; $i < $maxLimit; $i += 50) {
+            $start = $i == 0 ? 0 : $i + 1;
+            $end = $i + 50;
+            $ranges[] = "{$start}-{$end}";
+        }
+
+        // 4. Apply the currently selected range
+        $currentRange = $request->get('range', '0-50');
+        $query = clone $baseQuery;
+        
+        if ($currentRange) {
+            $parts = explode('-', $currentRange);
+            if (count($parts) == 2) {
+                $query->whereBetween('chapter_number', [(int)$parts[0], (int)$parts[1]]);
+            }
+        }
+
+        // 5. Apply Optional Text Search
+        if ($request->filled('chapter_search')) {
+            $search = $request->chapter_search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('chapter_number', 'like', "%{$search}%");
+            });
+        }
+
+        // 6. Paginate (10 Chapters per page)
+        $chapters = $query->orderBy('chapter_number', 'asc')->paginate(10)->withQueryString();
+
+        return view('frontend.novel.chapters', compact('novel', 'chapters', 'ranges', 'currentRange', 'totalChaptersCount'));
     }
 
     public function chapterDetails($novelId, $chapterId)
