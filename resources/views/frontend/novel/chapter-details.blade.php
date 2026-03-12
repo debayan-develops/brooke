@@ -217,21 +217,23 @@
 
                     <div class="overflow-y-auto px-4 py-4 space-y-6 flex-1">
 
+                        @forelse($chapter->notes ?? [] as $note)
                         <div class="bg-gray-50 border rounded p-3">
                             <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
-                                <span>Chapter 12</span>
+                                <span class="font-semibold">Chapter {{ $chapter->chapter_number }}</span>
+                                
+                                <span class="text-xs text-gray-400">{{ $note->created_at->format('M d, Y - h:i A') }}</span>
                             </div>
-                            <div class="text-sm text-gray-800">Loved the pacing and buildup. Might want to revisit the cliffhanger ending.</div>
+                            
+                            <div class="text-sm text-gray-800">{{ $note->content }}</div>
                         </div>
+                        @empty
+                        <div class="text-center text-sm text-gray-500 mt-4">
+                            No notes added for this chapter yet.
+                        </div>
+                        @endforelse
 
-                        <div class="bg-gray-50 border rounded p-3">
-                            <div class="flex justify-between items-center text-sm text-gray-600 mb-1">
-                                <span>Chapter 11</span>
-                            </div>
-                            <div class="text-sm text-gray-800">Dialogue felt a bit rushed. Consider rephrasing Meera’s final line.</div>
-                        </div>
                     </div>
-
                     <div class="px-4 py-3 border-t shrink-0 bg-white">
                         <label for="noteInput" class="text-sm text-gray-600">Add a new note</label>
                         <textarea id="noteInput" class="w-full border rounded p-2 text-sm resize-none focus:outline-none focus:ring focus:border-blue-300 mt-1" rows="3" placeholder="Write your thoughts or reminders..."></textarea>

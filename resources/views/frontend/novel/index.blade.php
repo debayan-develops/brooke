@@ -84,11 +84,9 @@
     @include('frontend.includes.navbar')
     <section class="bg-gray-100 p-6 font-sans lg:mt-20">
 
-        <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6 relative">
+      <div class="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6 relative">
 
-            <!-- Flex Wrapper for horizontal centering -->
             <div class="flex justify-center px-4">
-                <!-- 🔍 Grid Search & Filter Container -->
                 <form id="novelSearchForm" action="{{ route('frontend.novel.index') }}" method="GET" class="hidden"></form>
 
 <div class="grid grid-cols-1 md:grid-cols-10 gap-6 mt-5 items-start w-full max-w-6xl">
@@ -136,13 +134,14 @@
                 name="category"
                 form="novelSearchForm"
                 class="p-2 border border-gray-300 rounded-lg text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 w-full sm:w-auto">
-                <option disabled {{ request('category') ? '' : 'selected' }}>-- Select category --</option>
-                <option value="cat1" {{ request('category') == 'cat1' ? 'selected' : '' }}>Category 1</option>
-                <option value="cat2" {{ request('category') == 'cat2' ? 'selected' : '' }}>Category 2</option>
-                <option value="cat3" {{ request('category') == 'cat3' ? 'selected' : '' }}>Category 3</option>
-                <option value="cat4" {{ request('category') == 'cat4' ? 'selected' : '' }}>Category 4</option>
-                <option value="cat5" {{ request('category') == 'cat5' ? 'selected' : '' }}>Category 5</option>
-                <option value="cat6" {{ request('category') == 'cat6' ? 'selected' : '' }}>Category 6</option>
+                
+                <option value="" {{ request('category') ? '' : 'selected' }}>-- All Categories --</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+
             </select>
         </div>
 
